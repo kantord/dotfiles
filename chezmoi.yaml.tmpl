@@ -1,16 +1,1 @@
 sourceDir: "{{ .chezmoi.sourceDir }}"
-defaultPackageManager: |
-  {{ $apt := "apt" }}
-  {{ $pacman := "pacman" }}
-  {{ $brew := "brew" }}
-
-  {{ if isExecutable $apt }}
-    {{ $apt }}
-  {{ else if isExecutable $pacman }}
-    {{ $pacman }}
-  {{ else if isExecutable $brew }}
-    {{ $brew }}
-  {{ else }}
-    pleaseSetPackageManager
-  {{ end }}
-

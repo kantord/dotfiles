@@ -1,13 +1,12 @@
 #!/bin/bash
 
+# Define the file containing the list of required packages
+readarray -t packages < <(cat "$HOME/.required-packages.txt" | grep -v "^$" | awk '{$1=$1};1')
+
 install_packages_apt() {
   # Update the package list using sudo
   sudo apt update
 
-  # Read the package names into an array
-  mapfile -t packages < "$package_file"
-
-  # Install all packages at once using sudo
   sudo apt install -y "${packages[@]}"
 
   # Cleanup
@@ -21,11 +20,8 @@ install_packages_pacman() {
   # Update the package list using sudo
   sudo pacman -Syu
 
-  # Read the package names into an array
-  mapfile -t packages < "$package_file"
-
   # Install all packages at once using sudo
-  sudo pacman -S --noconfirm "${packages[@]}"
+  sudo pacman -S --needed --noconfirm "${packages[@]}"
 
   echo "Package installation completed."
 }
@@ -36,8 +32,7 @@ install_lunarvim() {
   fi
 }
 
-# Define the file containing the list of required packages
-package_file="$HOME/.required-packages.txt"
+
 
 # Check if apt is available
 if command -v apt &>/dev/null; then
