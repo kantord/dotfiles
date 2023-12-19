@@ -12,10 +12,16 @@ install_chezmoi ()
   ~/.local/bin/chezmoi --source ~/.dotfiles init --apply --verbose
 }
 
+change_shell_to_zsh () {
+  # Set ZSH as the default shell. It won't apply to vscode, but there zsh is already default
+  sudo chsh "$(id -un)" --shell "/usr/bin/zsh"
+}
 
-main() {}
+
+main () {}
   # This function should execute all install steps in the correct order
   install_chezmoi
+  change_shell_to_zsh
 }
 
 # Calls main function. Otherwise the script will not do anything
