@@ -1,0 +1,1 @@
+export PATH=/home/kantord/.local/bin:$PATH
