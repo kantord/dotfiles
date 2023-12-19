@@ -1,2 +1,9 @@
 neovim
 tree
+
+
+
+{{/* Rustup can only be automatically installed on Arch Linux */}}
+{{ if eq .defaultPackageManager "pacman" }}
+  rustup
+{{ end }}
