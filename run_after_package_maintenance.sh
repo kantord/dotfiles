@@ -37,7 +37,7 @@ install_lunarvim() {
 }
 
 # Define the file containing the list of required packages
-package_file="./required-packages.txt"
+package_file="$HOME/.required-packages.txt"
 
 # Check if apt is available
 if command -v apt &>/dev/null; then
