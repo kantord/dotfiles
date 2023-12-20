@@ -3,6 +3,7 @@ neovim
 tree
 kitty-terminfo
 tig
+ripgrep
 
 
 {{/* Rustup can only be automatically installed on Arch Linux */}}
@@ -10,8 +11,3 @@ tig
   rustup
 {{ end }}
 
-
-{{/* Seems like it's not requried inside Codespaces */}}
-{{ if eq .chezmoi.osRelease.id "arch" }}
-  openssh-askpass
-{{ end }}

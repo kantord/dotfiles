@@ -36,14 +36,21 @@ install_lunarvim() {
   fi
 }
 
+maintain_lunarvim_plugins ()
+{
+  lvim --headless "+Lazy! sync" +qa
+}
+
 # Check if apt is available
 if command -v apt &>/dev/null; then
   install_packages_apt
-  install_lunarvim
 elif command -v pacman &>/dev/null; then
   install_packages_pacman
-  install_lunarvim
 else
   echo "Error: Neither apt nor pacman is available. This script is designed for systems with apt or pacman."
   exit 1
 fi
+
+
+install_lunarvim
+maintain_lunarvim_plugins
