@@ -2,6 +2,7 @@ Dockerfile
 .github/
 install.sh
 bootstrap.sh
+setup.sh
 LICENSE
 README.md
 .oh-my-zsh/cache/completions/
