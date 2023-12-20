@@ -5,7 +5,7 @@ readarray -t packages < <(cat "$HOME/.required-packages.txt" | grep -v "^$" | aw
 
 install_packages_apt() {
   # allows installing latest neovim 
-  sudo add-apt-repository ppa:neovim-ppa/stable
+  sudo add-apt-repository ppa:neovim-ppa/stable -y
 
   # Update the package list using sudo
   sudo apt update
