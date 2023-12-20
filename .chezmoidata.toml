@@ -1,1 +1,9 @@
+{{ if eq .chezmoi.os "darwin" }}
+defaultPackageManager = "brew"
+{{ else if eq .chezmoi.os "linux" }}
+{{   if eq .chezmoi.osRelease.id "debian" }}
+defaultPackageManager = "apt"
+{{   else if eq .chezmoi.osRelease.id "arch" }}
 defaultPackageManager = "pacman"
+{{   end }}
+{{ end }}
