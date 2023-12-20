@@ -17,4 +17,5 @@ lvim.plugins = {
       end, 100)
     end,
   },
+  { "roverdotcom/pawfect.nvim" },
 }
