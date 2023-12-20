@@ -18,6 +18,8 @@ install_packages_apt() {
   mv squashfs-root nvim
   rm nvim.appimage
   ln -s "$HOME/.local/nvim/usr/bin/nvim" "$HOME/.local/bin"
+  echo "This is the Neovim version installed:"
+  nvim --version
 
   echo "Package installation completed."
 }
