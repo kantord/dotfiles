@@ -12,8 +12,6 @@ install_packages_apt() {
   sudo apt autoremove -y
   sudo apt clean
 
-  sudo snap install --beta nvim --classic
-
   echo "This is the Neovim version installed:"
   nvim --version
 
@@ -38,7 +36,7 @@ install_lunarvim() {
 
 maintain_lunarvim_plugins ()
 {
-  lvim --headless "+Lazy! sync" +qa
+  $HOME/.local/bin/lvim --headless "+Lazy! sync" +qa
 }
 
 # Check if apt is available
