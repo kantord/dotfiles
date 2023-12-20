@@ -112,3 +112,6 @@ source $ZSH/oh-my-zsh.sh
 
 alias gpp="git push"
 alias gff="git push --force-with-lease"
+
+[[ -e /workspaces/web/profile ]] && source /workspaces/web/profile
+[[ -e $HOME/repos/web/profile ]] && source $HOME/repos/web/profile
