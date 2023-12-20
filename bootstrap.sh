@@ -11,4 +11,7 @@ DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # download and install chezmoi to ~/.local/bin
 [[ -e ~/.local/bin/chezmoi ]] || BINDIR=~/.local/bin sh -c "$(curl -fsSL get.chezmoi.io)"
 
+# Set default shell to zsh
+sudo chsh "$(id -un)" --shell "/usr/bin/zsh"
+
 ~/.local/bin/chezmoi --source ~/.dotfiles init --apply --verbose
