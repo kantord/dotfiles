@@ -27,12 +27,10 @@ install_packages_pacman() {
 }
 
 install_lunarvim() {
-  if ! command -v nvim &> /dev/null; then
+  if [ ! -d "$HOME/.local/share/lunarvim/lvim" ]; then
     yes no | LV_BRANCH='release-1.3/neovim-0.9' bash <(curl -s https://raw.githubusercontent.com/LunarVim/LunarVim/release-1.3/neovim-0.9/utils/installer/install.sh)
   fi
 }
-
-
 
 # Check if apt is available
 if command -v apt &>/dev/null; then
