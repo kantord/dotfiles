@@ -36,7 +36,20 @@ install_lunarvim() {
 
 maintain_lunarvim_plugins ()
 {
-  $HOME/.local/bin/lvim --headless "+Lazy! sync" +qa
+  lvim=$HOME/.local/bin/lvim
+  $lvim --headless "+Lazy! sync" +qa
+
+  # This is done automatically, but this way it will be done before LunarVim is opened 
+  # Mostly relevant in Codespaces as it will speed up the initial experience
+  $lvim --headless "+TSUpdateSync comment" +qa
+  $lvim --headless "+TSUpdateSync regex" +qa
+  $lvim --headless "+TSUpdateSync markdown_inline" +qa
+  $lvim --headless "+TSUpdateSync python" +qa
+  $lvim --headless "+TSUpdateSync tsx" +qa
+  $lvim --headless "+TSUpdateSync javascript" +qa
+  $lvim --headless "+TSUpdateSync typescript" +qa
+  $lvim --headless "+TSUpdateSync json" +qa
+  $lvim --headless "+TSUpdateSync bash" +qa
 }
 
 # Check if apt is available
