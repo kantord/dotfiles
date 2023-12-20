@@ -51,13 +51,6 @@ maintain_lunarvim_plugins ()
   $lvim --headless "+TSUpdateSync typescript" +qa
   $lvim --headless "+TSUpdateSync json" +qa
   $lvim --headless "+TSUpdateSync bash" +qa
-
-
-  # LSP
-  # This is done automatically, but this way it will be done before LunarVim is opened 
-  # Mostly relevant in Codespaces as it will speed up the initial experience
-  $lvim --headless "+LspInstall tsserver" +qa
-  $lvim --headless "+LspInstall pyright" +qa
 }
 
 # Check if apt is available
