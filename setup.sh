@@ -15,6 +15,6 @@ DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 sudo chsh "$(id -un)" --shell "/usr/bin/zsh"
 
 # Start Zsh to trigger any setup that would run when it's first opened
-zsh -i -c 'exit'
-
 ~/.local/bin/chezmoi --source ~/.dotfiles init --apply --verbose
+
+zsh -i -c 'exit'
