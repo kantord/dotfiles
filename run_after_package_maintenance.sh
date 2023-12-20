@@ -5,19 +5,15 @@ readarray -t packages < <(cat "$HOME/.required-packages.txt" | grep -v "^$" | aw
 
 install_packages_apt() {
   sudo apt update
+  sudo apt install -y software-properties-common
+  sudo add-apt-repository ppa:neovim-ppa/unstable -y
+  sudo apt update
   sudo apt install -y "${packages[@]}"
-
   sudo apt autoremove -y
   sudo apt clean
 
-  # install latest neovim
-  curl -fsLSO https://github.com/neovim/neovim/releases/download/stable/nvim.appimage
+  sudo snap install --beta nvim --classic
 
-  chmod 755 nvim.appimage
-  ./nvim.appimage --appimage-extract
-  mv squashfs-root nvim
-  rm nvim.appimage
-  ln -s "$HOME/.local/nvim/usr/bin/nvim" "$HOME/.local/bin"
   echo "This is the Neovim version installed:"
   nvim --version
 
