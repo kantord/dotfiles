@@ -4,6 +4,6 @@ kitty-terminfo
 
 
 {{/* Rustup can only be automatically installed on Arch Linux */}}
-{{ if eq .defaultPackageManager "pacman" }}
+{{ if eq .chezmoi.osRelease.id "arch" }}
   rustup
-{{ end }
+{{ end }}
