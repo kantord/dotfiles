@@ -17,5 +17,32 @@ lvim.plugins = {
       end, 100)
     end,
   },
+  { 'sainnhe/sonokai' },
+  { "mg979/vim-visual-multi" },
+  { 'MattesGroeger/vim-bookmarks' },
+  {
+    "nvim-neotest/neotest",
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+      "nvim-treesitter/nvim-treesitter",
+      "antoinemadec/FixCursorHold.nvim",
+      "nvim-neotest/neotest-python",
+      'haydenmeade/neotest-jest',
+    }
+  },
   -- { "roverdotcom/pawfect.nvim" },
 }
+
+
+require("neotest").setup({
+  adapters = {
+    require("neotest-python"),
+    -- require("neotest-plenary"),
+    require('neotest-jest')({
+      jestCommand = "jest --watch ",
+    }),
+  }
+})
+
+
+lvim.colorscheme = "sonokai"
