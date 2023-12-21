@@ -12,3 +12,7 @@ fzf
   rustup
 {{ end }}
 
+{{/* Should not be required on Ubuntu/MacOS */}}
+{{ if eq .chezmoi.osRelease.id "arch" }}
+  x11-ssh-askpass
+{{ end }}
