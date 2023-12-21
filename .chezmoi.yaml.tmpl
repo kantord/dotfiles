@@ -1,4 +1,6 @@
-{{- $gitEmail := promptStringOnce . "gitEmail" "Email address to use in Git" -}}
-{{- $fullName := promptStringOnce . "fullName" "Full name (used in Git for example)" -}}
+{{- $codespaces:= env "CODESPACES" | not | not -}}
 
 sourceDir: "{{ .chezmoi.sourceDir }}"
+
+data:
+    codespaces: {{ $codespaces }}
