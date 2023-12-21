@@ -5,11 +5,15 @@ kitty-terminfo
 tig
 ripgrep
 fzf
+python3-pip
+python3-venv
 
 
 {{/* Rustup can only be automatically installed on Arch Linux */}}
 {{ if eq .chezmoi.osRelease.id "arch" }}
   rustup
+{{ else}}
+  cargo
 {{ end }}
 
 {{/* Should not be required on Ubuntu/MacOS */}}

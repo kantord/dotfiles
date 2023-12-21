@@ -30,6 +30,14 @@ lvim.plugins = {
       'haydenmeade/neotest-jest',
     }
   },
+  {
+    "kantord/auto-save-format.nvim",
+    config = function()
+      require("auto-save").setup {
+        debounce_delay = 2000,
+      }
+    end,
+  },
   -- { "roverdotcom/pawfect.nvim" },
 }
 
@@ -46,3 +54,5 @@ require("neotest").setup({
 
 
 lvim.colorscheme = "sonokai"
+
+lvim.lsp.installer.setup.ensure_installed = { "tsserver", "eslint", "pyright", "eslint", "bashls", "rust_analyzer", "yamlls", "marksman" }
