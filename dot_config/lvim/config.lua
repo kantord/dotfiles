@@ -20,6 +20,7 @@ lvim.plugins = {
   { 'sainnhe/sonokai' },
   { "mg979/vim-visual-multi" },
   { 'MattesGroeger/vim-bookmarks' },
+  { 'ledger/vim-ledger' },
   {
     "nvim-neotest/neotest",
     dependencies = {
@@ -55,4 +56,5 @@ require("neotest").setup({
 
 lvim.colorscheme = "sonokai"
 
-lvim.lsp.installer.setup.ensure_installed = { "tsserver", "eslint", "pyright", "eslint", "bashls", "rust_analyzer", "yamlls", "marksman" }
+lvim.lsp.installer.setup.ensure_installed = { "tsserver", "eslint", "pyright", "eslint", "bashls", "rust_analyzer",
+  "yamlls", "marksman" }
