@@ -53,16 +53,30 @@ maintain_lunarvim_plugins ()
   $lvim --headless "+TSUpdateSync bash" +qa
 }
 
-# Check if apt is available
-if command -v apt &>/dev/null; then
-  install_packages_apt
-elif command -v pacman &>/dev/null; then
-  install_packages_pacman
-else
-  echo "Error: Neither apt nor pacman is available. This script is designed for systems with apt or pacman."
-  exit 1
-fi
+install_atuin ()
+{
+  bash <(curl https://raw.githubusercontent.com/atuinsh/atuin/main/install.sh)
+}
 
+install_system_packages ()
+{
+  # Check if apt is available
+  if command -v apt &>/dev/null; then
+    install_packages_apt
+  elif command -v pacman &>/dev/null; then
+    install_packages_pacman
+  else
+    echo "Error: Neither apt nor pacman is available. This script is designed for systems with apt or pacman."
+    exit 1
+  fi
+}
 
+install_cargo_packages () {
+  cargo install --features i3 wmfocus
+}
+
+install_system_packages
 install_lunarvim
 maintain_lunarvim_plugins
+install_atuin
+install_cargo_packages
