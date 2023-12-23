@@ -115,3 +115,5 @@ alias gff="git push --force-with-lease"
 
 [[ -e /workspaces/web/profile ]] && source /workspaces/web/profile
 [[ -e $HOME/repos/web/profile ]] && source $HOME/repos/web/profile
+
+eval "$(atuin init zsh)"

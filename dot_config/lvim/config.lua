@@ -29,6 +29,7 @@ lvim.plugins = {
       "antoinemadec/FixCursorHold.nvim",
       "nvim-neotest/neotest-python",
       'haydenmeade/neotest-jest',
+      'rouge8/neotest-rust',
     }
   },
   {
@@ -39,6 +40,8 @@ lvim.plugins = {
       }
     end,
   },
+  { 'antoinemadec/FixCursorHold.nvim' }, -- still needed: https://github.com/nvim-neotest/neotest?tab=readme-ov-file#installation
+  { "folke/neodev.nvim",              opts = {} }
   -- { "roverdotcom/pawfect.nvim" },
 }
 
@@ -56,5 +59,5 @@ require("neotest").setup({
 
 lvim.colorscheme = "sonokai"
 
-lvim.lsp.installer.setup.ensure_installed = { "tsserver", "eslint", "pyright", "eslint", "bashls", "rust_analyzer",
+lvim.lsp.installer.setup.ensure_installed = { "tsserver", "pyright", "bashls", "rust_analyzer",
   "yamlls", "marksman" }
