@@ -88,6 +88,7 @@ bindsym $mod+Shift+i workspace prev
 bindsym $mod+Escape exec rofi -show combi -matching fuzzy
 bindsym Mod1+space exec rofi -show combi -matching fuzzy
 bindsym Mod5+space exec rofi -show combi -matching fuzzy
+bindsym Mod5+Escape exec "/home/kantord/.cargo/bin/wmfocus --halign center --valign center --font 'Mono:128' --textcolor red"
 bindsym Mod1+Tab exec rofi -show "window" -matching fuzzy
 
 
