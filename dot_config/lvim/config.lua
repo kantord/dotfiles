@@ -5,6 +5,7 @@
 
 
 lvim.plugins = {
+  { 'simrat39/rust-tools.nvim' },
   {
     "zbirenbaum/copilot.lua",
     event = { "VimEnter" },
@@ -21,6 +22,7 @@ lvim.plugins = {
   { "mg979/vim-visual-multi" },
   { 'MattesGroeger/vim-bookmarks' },
   { 'ledger/vim-ledger' },
+  { 'folke/todo-comments.nvim' },
   {
     "nvim-neotest/neotest",
     dependencies = {
@@ -32,6 +34,7 @@ lvim.plugins = {
       'rouge8/neotest-rust',
     }
   },
+  { "rcarriga/nvim-dap-ui",           dependencies = { "mfussenegger/nvim-dap" } },
   {
     "kantord/auto-save-format.nvim",
     config = function()
@@ -46,6 +49,7 @@ lvim.plugins = {
 }
 
 
+-- testing
 require("neotest").setup({
   adapters = {
     require("neotest-python"),
@@ -56,8 +60,14 @@ require("neotest").setup({
   }
 })
 
+lvim.keys.normal_mode["<leader>tt"] = ':lua require("neotest").run.run()<CR>'
+lvim.keys.normal_mode["<leader>td"] = ':lua require("neotest").run.run({strategy = "dap"})<CR>'
+lvim.keys.normal_mode["<leader>ta"] = ':lua require("neotest").run.run(vim.fn.expand("%"))<CR>'
+lvim.keys.normal_mode["<leader>tA"] = ':lua require("neotest").run.run(vim.fn.getcwd())<CR>'
 
+-- colorscheme
 lvim.colorscheme = "sonokai"
 
+-- make sure lsps are installed
 lvim.lsp.installer.setup.ensure_installed = { "tsserver", "pyright", "bashls", "rust_analyzer",
   "yamlls", "marksman" }
