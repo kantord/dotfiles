@@ -53,9 +53,11 @@ maintain_lunarvim_plugins ()
   $lvim --headless "+TSUpdateSync bash" +qa
 }
 
-install_atuin ()
-{
-  bash <(curl https://raw.githubusercontent.com/atuinsh/atuin/main/install.sh)
+install_atuin() {
+    if ! command -v atuin &> /dev/null
+    then
+        bash <(curl https://raw.githubusercontent.com/atuinsh/atuin/main/install.sh)
+    fi
 }
 
 install_system_packages ()
@@ -71,12 +73,38 @@ install_system_packages ()
   fi
 }
 
+install_rustup() {
+    if ! command -v rustup &> /dev/null
+    then
+        curl https://sh.rustup.rs -sSf | bash -s -- -y
+
+        source "$HOME/.cargo/env"
+    fi
+}
+
+install_cargo() {
+    if ! command -v cargo &> /dev/null
+    then
+        rustup toolchain install stable
+        rustup default stable
+    fi
+}
+
+install_wmfocus () {
+  # Check if the 'i3' command is available
+  if command -v i3 >/dev/null 2>&1; then
+    cargo install --features i3 wmfocus
+  fi
+}
+
 install_cargo_packages () {
-  cargo install --features i3 wmfocus
+  install_wmfocus
 }
 
 install_system_packages
 install_lunarvim
 maintain_lunarvim_plugins
 install_atuin
+install_rustup
+install_cargo
 install_cargo_packages
