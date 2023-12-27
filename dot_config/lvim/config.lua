@@ -44,7 +44,8 @@ lvim.plugins = {
     end,
   },
   { 'antoinemadec/FixCursorHold.nvim' }, -- still needed: https://github.com/nvim-neotest/neotest?tab=readme-ov-file#installation
-  { "folke/neodev.nvim",              opts = {} }
+  { "folke/neodev.nvim",              opts = {} },
+  { 'eugen0329/vim-esearch' },
   -- { "roverdotcom/pawfect.nvim" },
 }
 
@@ -71,3 +72,10 @@ lvim.colorscheme = "sonokai"
 -- make sure lsps are installed
 lvim.lsp.installer.setup.ensure_installed = { "tsserver", "pyright", "bashls", "rust_analyzer",
   "yamlls", "marksman" }
+
+vim.g.esearch = {
+  live_update = true,
+}
+
+lvim.builtin.which_key.mappings.j = lvim.builtin.which_key.mappings.f
+lvim.builtin.which_key.mappings.f = nil
