@@ -101,6 +101,10 @@ install_cargo_packages () {
   install_wmfocus
 }
 
+install_or_update_nvm () {
+  curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+}
+
 install_system_packages
 install_lunarvim
 maintain_lunarvim_plugins
@@ -108,3 +112,4 @@ install_atuin
 install_rustup
 install_cargo
 install_cargo_packages
+install_or_update_nvm
