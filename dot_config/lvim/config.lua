@@ -71,7 +71,7 @@ lvim.colorscheme = "sonokai"
 
 -- make sure lsps are installed
 lvim.lsp.installer.setup.ensure_installed = { "tsserver", "pyright", "bashls", "rust_analyzer",
-  "yamlls", "marksman" }
+  "yamlls", "marksman", "eslint" }
 
 vim.g.esearch = {
   live_update = true,
