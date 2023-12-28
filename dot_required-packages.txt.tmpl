@@ -10,21 +10,21 @@ lshw
 curl
 cmake
 
-{{ if ne .chezmoi.osRelease.id "arch" }}
+{{ if ne .platform "arch" }}
   python3-pip
   python3-venv
 {{ end }}
 
 
 {{/* Rustup can only be automatically installed on Arch Linux */}}
-{{ if eq .chezmoi.osRelease.id "arch" }}
+{{ if eq .platform "arch" }}
   rustup
 {{ else}}
   cargo
 {{ end }}
 
 {{/* Should not be required on Ubuntu/MacOS */}}
-{{ if eq .chezmoi.osRelease.id "arch" }}
+{{ if eq .platform "arch" }}
   x11-ssh-askpass
 {{ end }}
 
