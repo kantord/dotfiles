@@ -1,1 +1,2 @@
 platform = "{{ if eq .chezmoi.os \"linux\" }}{{ with .chezmoi.osRelease.id }}{{ . }}{{ end }}{{ else if eq .chezmoi.os \"darwin\" }}mac{{ end }}"
+packageManager = "{{ if eq .platform \"arch\" }}pacman{{ else if eq .platform \"mac\" }}brew{{ else }}apt{{ end }}"

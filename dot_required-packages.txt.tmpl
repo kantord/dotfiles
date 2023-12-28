@@ -10,7 +10,7 @@ lshw
 curl
 cmake
 
-{{ if ne .platform "arch" }}
+{{ if eq .packageManager "apt" }}
   python3-pip
   python3-venv
 {{ end }}
@@ -31,8 +31,12 @@ cmake
 
 {{/* ===> EXTRAS <=== */}}
 {{/* These things are not needed or useful for work */}}
-ledger
+{{ if eq .platform "arch" }}
+  ledger
+{{ end }}
 
 {{/* ===> GUI ONLY <=== */}}
 {{/* These are not useful in remote servers/GitHub Codespaces */}}
-blueberry
+{{ if eq .platform "arch" }}
+  blueberry
+{{ end }}
