@@ -34,7 +34,7 @@ lvim.plugins = {
   --     'rouge8/neotest-rust',
   --   }
   -- },
-  { "rcarriga/nvim-dap-ui",           dependencies = { "mfussenegger/nvim-dap" } },
+  { "rcarriga/nvim-dap-ui",       dependencies = { "mfussenegger/nvim-dap" } },
   {
     "kantord/auto-save-format.nvim",
     config = function()
@@ -69,9 +69,9 @@ lvim.plugins = {
 -- colorscheme
 lvim.colorscheme = "sonokai"
 
--- -- make sure lsps are installed
--- lvim.lsp.installer.setup.ensure_installed = { "tsserver", "pyright", "bashls", "rust_analyzer",
---   "yamlls", "marksman", "eslint" }
+-- make sure lsps are installed
+lvim.lsp.installer.setup.ensure_installed = { "tsserver", "pyright", "bashls", "rust_analyzer",
+  "yamlls", "marksman", "eslint" }
 
 vim.g.esearch = {
   live_update = true,
