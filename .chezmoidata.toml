@@ -1,1 +1,1 @@
-platform = "{{ if eq .chezmoi.os \"linux\" }}{{ .chezmoi.osRelease.id }}{{ else if eq .chezmoi.os \"darwin\" }}mac{{ end }}"
+platform = "{{ if eq .chezmoi.os \"linux\" }}{{ with .chezmoi.osRelease.id }}{{ . }}{{ end }}{{ else if eq .chezmoi.os \"darwin\" }}mac{{ end }}"
