@@ -56,7 +56,7 @@ require("neotest").setup({
     require("neotest-python"),
     -- require("neotest-plenary"),
     require('neotest-jest')({
-      jestCommand = "jest --watch ",
+      jestCommand = "npx -y jest --watch",
     }),
   }
 })
