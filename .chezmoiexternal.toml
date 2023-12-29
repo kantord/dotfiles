@@ -11,3 +11,8 @@
     exact = true
     stripComponents = 1
     refreshPeriod = "168h"
+
+[".config/pawfect.nvim"]
+    type = "git-repo"
+    url = "https://github.com/roverdotcom/pawfect.nvim.git"
+    refreshPeriod = "168h"

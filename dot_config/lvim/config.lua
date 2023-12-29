@@ -47,6 +47,10 @@ lvim.plugins = {
   -- { "folke/neodev.nvim",              opts = {} },
   { 'eugen0329/vim-esearch' },
   -- { "roverdotcom/pawfect.nvim" },
+  {
+    dev = true,
+    dir = "$HOME/.config/pawfect.nvim"
+  },
 }
 
 
