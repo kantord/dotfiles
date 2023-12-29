@@ -41,6 +41,9 @@ maintain_lunarvim_plugins ()
   lvim=$HOME/.local/bin/lvim
   $lvim --headless "+Lazy! sync" +qa
 
+  # Plugins
+  $lvim --headless "+Lazy! sync" +qa
+
   # Parsers
   # This is done automatically, but this way it will be done before LunarVim is opened 
   # Mostly relevant in Codespaces as it will speed up the initial experience
