@@ -234,3 +234,6 @@ bindsym --release $mod+Next exec --no-startup-id /home/kantord/repos/config/apps
 bindsym --release $mod+Prior exec --no-startup-id /home/kantord/repos/config/apps/i3/scripts/radio_control.sh prev
 bindsym --release $mod+End exec --no-startup-id mpc stop
 bindsym --release $mod+Home exec --no-startup-id mpc toggle
+
+# autostart implementation
+exec dex -ae i3
