@@ -79,3 +79,31 @@ vim.g.esearch = {
 
 lvim.builtin.which_key.mappings.j = lvim.builtin.which_key.mappings.f
 lvim.builtin.which_key.mappings.f = nil
+
+
+-- local formatters = require "lvim.lsp.null-ls.formatters"
+-- formatters.setup { { name = "eslint", filetypes = { "typescript", "typescriptreact" }, args = { "-c", "/home/kantord/repos/web/src/frontend/.eslintrc.js" } } }
+
+-- local linters = require "lvim.lsp.null-ls.linters"
+
+
+local formatters = require "lvim.lsp.null-ls.formatters"
+formatters.setup {
+  {
+    name = "eslint",
+  }
+}
+
+local linters = require "lvim.lsp.null-ls.linters"
+linters.setup {
+  {
+    name = "eslint",
+  }
+}
+
+local code_actions = require "lvim.lsp.null-ls.code_actions"
+code_actions.setup {
+  {
+    name = "eslint",
+  },
+}
