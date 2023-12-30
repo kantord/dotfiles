@@ -22,6 +22,7 @@ lvim.plugins = {
   { "mg979/vim-visual-multi" },
   { 'MattesGroeger/vim-bookmarks' },
   { 'ledger/vim-ledger' },
+  { 'mcchrish/zenbones.nvim',     dependencies = { "rktjmp/lush.nvim" } },
   { 'folke/todo-comments.nvim' },
   -- {
   --   "nvim-neotest/neotest",
@@ -51,6 +52,7 @@ lvim.plugins = {
     dev = true,
     dir = "$HOME/.config/pawfect.nvim"
   },
+  { "levouh/tint.nvim" }, -- this should be the last thing to load
 }
 
 
@@ -71,7 +73,7 @@ lvim.plugins = {
 -- lvim.keys.normal_mode["<leader>tA"] = ':lua require("neotest").run.run(vim.fn.getcwd())<CR>'
 
 -- colorscheme
-lvim.colorscheme = "sonokai"
+lvim.colorscheme = "duckbones"
 
 -- make sure lsps are installed
 lvim.lsp.installer.setup.ensure_installed = { "tsserver", "pyright", "bashls", "rust_analyzer",
@@ -111,3 +113,5 @@ code_actions.setup {
     name = "eslint",
   },
 }
+
+require("tint").setup()

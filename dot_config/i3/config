@@ -207,9 +207,10 @@ bar {
 # new_window pixel 5
 # new_float pixel 5
 
-for_window [all] border normal 5
+for_window [all] border normal 1
 for_window [all] title_window_icon yes
 for_window [all] title_window_icon padding 1px
+gaps inner 4
 smart_borders on
 
 
@@ -237,3 +238,13 @@ bindsym --release $mod+Home exec --no-startup-id mpc toggle
 
 # autostart implementation
 exec dex -ae i3
+
+
+# class                 border  backgr. text    indicator child_border
+client.focused          #4c7899 #285577 #ffffff #2e9ef4   #285577
+client.focused_inactive #000000 #000000 #ffffff #484e50   #000000
+client.unfocused        #000000 #000000 #888888 #292d2e   #000000
+client.urgent           #2f343a #900000 #ffffff #900000   #900000
+client.placeholder      #000000 #0c0c0c #ffffff #000000   #0c0c0c
+
+client.background       #000000
