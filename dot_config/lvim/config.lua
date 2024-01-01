@@ -115,3 +115,41 @@ code_actions.setup {
 }
 
 require("tint").setup()
+
+
+
+
+
+
+
+local actions = require('telescope.actions')
+local conf = require('telescope.config').values
+local finders = require('telescope.finders')
+local pickers = require('telescope.pickers')
+local sorters = require('telescope.sorters')
+local make_entry = require('telescope.make_entry')
+
+function seagoat_lines(opts)
+  opts = opts or {}
+  opts.cwd = opts.cwd and vim.fn.expand(opts.cwd) or vim.loop.cwd()
+
+  local live_seagoat = finders.new_job(function(prompt)
+    if not prompt or prompt == "" then
+      return nil
+    end
+    return { "rg", "--vimgrep", "--", prompt }
+  end, opts.entry_maker or make_entry.gen_from_vimgrep(opts), opts.max_results, opts.cwd)
+
+  pickers.new(opts, {
+    prompt_title = "Seagoat Lines",
+    finder = live_seagoat,
+    previewer = conf.grep_previewer(opts),
+    sorter = sorters.highlighter_only(opts),
+    attach_mappings = function(_, map)
+      map("i", "<c-space>", actions.to_fuzzy_refine)
+      return true
+    end,
+  }):find()
+end
+
+vim.api.nvim_create_user_command('SeagoatLines', seagoat_lines, {})
