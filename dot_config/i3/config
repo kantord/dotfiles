@@ -245,10 +245,12 @@ exec xsetroot -solid "#0e101a"
 
 
 # class                 border  backgr. text    indicator child_border
-client.focused          #4c7899 #285577 #ffffff #2e9ef4   #285577
+client.focused          #F6A100 #285577 #ffffff #2e9ef4   #F6A100
 client.focused_inactive #0e101a #0e101a #ffffff #484e50   #0e101a
 client.unfocused        #0e101a #0e101a #888888 #292d2e   #0e101a
 client.urgent           #2f343a #900000 #ffffff #900000   #900000
 client.placeholder      #0e101a #0c0c0c #ffffff #0e101a   #0c0c0c
 
 client.background       #0e101a
+
+title_align center
