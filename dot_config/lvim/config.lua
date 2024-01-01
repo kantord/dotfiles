@@ -24,18 +24,18 @@ lvim.plugins = {
   { 'ledger/vim-ledger' },
   { 'mcchrish/zenbones.nvim',     dependencies = { "rktjmp/lush.nvim" } },
   { 'folke/todo-comments.nvim' },
-  -- {
-  --   "nvim-neotest/neotest",
-  --   dependencies = {
-  --     "nvim-lua/plenary.nvim",
-  --     "nvim-treesitter/nvim-treesitter",
-  --     "antoinemadec/FixCursorHold.nvim",
-  --     "nvim-neotest/neotest-python",
-  --     'haydenmeade/neotest-jest',
-  --     'rouge8/neotest-rust',
-  --   }
-  -- },
-  { "rcarriga/nvim-dap-ui",       dependencies = { "mfussenegger/nvim-dap" } },
+  {
+    "nvim-neotest/neotest",
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+      "nvim-treesitter/nvim-treesitter",
+      "antoinemadec/FixCursorHold.nvim",
+      "nvim-neotest/neotest-python",
+      'haydenmeade/neotest-jest',
+      'rouge8/neotest-rust',
+    }
+  },
+  { "rcarriga/nvim-dap-ui", dependencies = { "mfussenegger/nvim-dap" } },
   {
     "kantord/auto-save-format.nvim",
     config = function()
@@ -57,20 +57,20 @@ lvim.plugins = {
 
 
 -- testing
--- require("neotest").setup({
---   adapters = {
---     require("neotest-python"),
---     -- require("neotest-plenary"),
---     require('neotest-jest')({
---       jestCommand = "yarn test --watch",
---     }),
---   }
--- })
+require("neotest").setup({
+  adapters = {
+    require("neotest-python"),
+    -- require("neotest-plenary"),
+    require('neotest-jest')({
+      jestCommand = "yarn test --watch",
+    }),
+  }
+})
 
--- lvim.keys.normal_mode["<leader>tt"] = ':lua require("neotest").run.run()<CR>'
--- lvim.keys.normal_mode["<leader>td"] = ':lua require("neotest").run.run({strategy = "dap"})<CR>'
--- lvim.keys.normal_mode["<leader>ta"] = ':lua require("neotest").run.run(vim.fn.expand("%"))<CR>'
--- lvim.keys.normal_mode["<leader>tA"] = ':lua require("neotest").run.run(vim.fn.getcwd())<CR>'
+lvim.keys.normal_mode["<leader>tt"] = ':lua require("neotest").run.run()<CR>'
+lvim.keys.normal_mode["<leader>td"] = ':lua require("neotest").run.run({strategy = "dap"})<CR>'
+lvim.keys.normal_mode["<leader>ta"] = ':lua require("neotest").run.run(vim.fn.expand("%"))<CR>'
+lvim.keys.normal_mode["<leader>tA"] = ':lua require("neotest").run.run(vim.fn.getcwd())<CR>'
 
 -- colorscheme
 lvim.colorscheme = "duckbones"
