@@ -137,8 +137,8 @@ function seagoat_lines(opts)
     if not prompt or prompt == "" then
       return nil
     end
-    return { "rg", "--vimgrep", "--", prompt }
-  end, opts.entry_maker or make_entry.gen_from_vimgrep(opts), opts.max_results, opts.cwd)
+    return { "gt", prompt }
+  end, opts.entry_maker or make_entry.gen_from_string(opts), opts.max_results, opts.cwd)
 
   pickers.new(opts, {
     prompt_title = "Seagoat Lines",
