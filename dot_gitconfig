@@ -1,0 +1,23 @@
+[user]
+	email = git@daniel-kantor.com
+	name = Daniel Kantor
+[interactive]
+	diffFilter = diff-so-fancy --patch
+[core]
+	pager = diff-so-fancy | less --tabs=4 -RFX
+[pull]
+	rebase = true
+[merge]
+	tool = meld
+[push]
+	default = current
+[cola]
+	spellcheck = false
+[init]
+	defaultBranch = main
+[credential "https://github.com"]
+	helper = 
+	helper = !/usr/bin/gh auth git-credential
+[credential "https://gist.github.com"]
+	helper = 
+	helper = !/usr/bin/gh auth git-credential
