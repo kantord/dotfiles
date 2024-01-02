@@ -53,6 +53,7 @@ lvim.plugins = {
     dir = "$HOME/.config/pawfect.nvim"
   },
   { "levouh/tint.nvim" }, -- this should be the last thing to load
+  { "vimwiki/vimwiki" },
 }
 
 
@@ -153,3 +154,9 @@ function seagoat_lines(opts)
 end
 
 vim.api.nvim_create_user_command('SeagoatLines', seagoat_lines, {})
+
+
+vim.g.vimwiki_list = { {
+  syntax = "markdown",
+  ext = ".md",
+} }
