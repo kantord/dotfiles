@@ -143,8 +143,8 @@ install_or_update_nvm () {
   curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
 }
 
-install_rustup
 install_system_packages
+install_rustup
 install_lunarvim
 maintain_lunarvim_plugins
 install_atuin
