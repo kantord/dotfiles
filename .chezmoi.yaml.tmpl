@@ -1,6 +1,12 @@
-{{- $codespaces:= env "CODESPACES" | not | not -}}
+{{ $platform := "mac" }}
 
-sourceDir: "{{ .chezmoi.sourceDir }}"
+{{ if eq .chezmoi.os "linux" }}
+  {{ with .chezmoi.osRelease.id }}
+    {{ $platform = .}}
+  {{ end }}
+{{ end }}
+
 
 data:
-    codespaces: {{ $codespaces }}
+  platform: {{ $platform }}
+  packageManager: {{ if eq $platform "arch" }}pacman{{ else if eq $platform "mac" }}brew{{ else }}apt{{ end }}
