@@ -94,7 +94,6 @@ install_system_packages() {
 
   if [ "$os_type" = "Darwin" ]; then
     echo "Running on macOS"
-    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
     install_packages_homebrew
   elif [ "$os_type" = "Linux" ]; then
     echo "Running on Linux"
@@ -144,11 +143,11 @@ install_or_update_nvm () {
   curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
 }
 
+install_rustup
 install_system_packages
 install_lunarvim
 maintain_lunarvim_plugins
 install_atuin
-install_rustup
 install_cargo
 install_cargo_packages
 install_or_update_nvm
