@@ -143,11 +143,18 @@ install_or_update_nvm () {
   curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
 }
 
+display_template_info () {
+  echo "Detected platform: {{ .platform }}"
+  echo "Detected package manager: {{ .packageManager }}"
+  echo "Is Rover end: {{ .isRoverEnv }}"
+}
+
+display_template_info
 install_system_packages
+install_or_update_nvm
 install_rustup
 install_lunarvim
 maintain_lunarvim_plugins
 install_atuin
 install_cargo
 install_cargo_packages
-install_or_update_nvm
