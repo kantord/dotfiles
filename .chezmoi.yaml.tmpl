@@ -1,4 +1,5 @@
 {{ $platform := "mac" }}
+{{ $isWorkEnv := false }}
 
 {{ if eq .chezmoi.os "linux" }}
   {{ with .chezmoi.osRelease.id }}
@@ -6,7 +7,12 @@
   {{ end }}
 {{ end }}
 
+{{ if (joinPath .chezmoi.homeDir "/repos/web" | lstat) }}
+  {{ $isWorkEnv = true }}
+{{ end }}
+
 
 data:
   platform: {{ $platform }}
   packageManager: {{ if eq $platform "arch" }}pacman{{ else if eq $platform "mac" }}brew{{ else }}apt{{ end }}
+  isWorkEnv: {{ $isWorkEnv }}
