@@ -8,12 +8,14 @@ curl
 cmake
 unzip
 wget
-fd
 
 {{ if eq .packageManager "apt" }}
   kitty-terminfo
   python3-pip
   python3-venv
+  fd-find
+{{ else }}
+  fd
 {{ end }}
 
 
