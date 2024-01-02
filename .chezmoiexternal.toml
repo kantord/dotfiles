@@ -12,9 +12,7 @@
     stripComponents = 1
     refreshPeriod = "168h"
 
-{{ if eq .isRoverEnv "true" }}
 [".config/pawfect.nvim"]
     type = "git-repo"
     url = "https://github.com/roverdotcom/pawfect.nvim.git"
     refreshPeriod = "168h"
-{{ end }}

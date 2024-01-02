@@ -1,11 +1,2 @@
 platform = "{{ if eq .chezmoi.os \"linux\" }}{{ with .chezmoi.osRelease.id }}{{ . }}{{ end }}{{ else if eq .chezmoi.os \"darwin\" }}mac{{ end }}"
 packageManager = "{{ if eq .platform \"arch\" }}pacman{{ else if eq .platform \"mac\" }}brew{{ else }}apt{{ end }}"
-
-# Detect Rover organization
-isRoverEnv = """
-{{ $isRoverEnv := false }}
-{{ if (execute "gh" "repo" "list" "[organization-name]" "--limit" "1" "> /dev/null" "2>&1") }}
-  {{ $isRoverEnv = true }}
-{{ end }}
-{{ $isRoverEnv }}
-"""
