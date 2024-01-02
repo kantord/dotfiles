@@ -1,7 +1,31 @@
 #!/bin/bash
 
+set -e
+
 # Define the file containing the list of required packages
-readarray -t packages < <(cat "$HOME/.required-packages.txt" | grep -v "^$" | awk '{$1=$1};1')
+required_packages_file="$HOME/.required-packages.txt"
+
+# Use a read loop to read lines into an array
+while IFS= read -r line; do
+    # Skip empty lines
+    if [[ -n "$line" ]]; then
+        packages+=("$line")
+    fi
+done < <(grep -v "^$" "$required_packages_file" | awk '{$1=$1};1')
+
+
+install_packages_homebrew() {
+  brew update
+  brew tap neovim/neovim
+
+  brew install "${packages[@]}"
+
+  echo "This is the Neovim version installed:"
+  nvim --version
+
+  echo "Package installation completed."
+}
+
 
 install_packages_apt() {
   sudo apt update
@@ -65,15 +89,25 @@ install_atuin() {
     fi
 }
 
-install_system_packages ()
-{
-  # Check if apt is available
-  if command -v apt &>/dev/null; then
-    install_packages_apt
-  elif command -v pacman &>/dev/null; then
-    install_packages_pacman
+install_system_packages() {
+  os_type=$(uname -s)
+
+  if [ "$os_type" = "Darwin" ]; then
+    echo "Running on macOS"
+    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+    install_packages_homebrew
+  elif [ "$os_type" = "Linux" ]; then
+    echo "Running on Linux"
+    if command -v apt &>/dev/null; then
+      install_packages_apt
+    elif command -v pacman &>/dev/null; then
+      install_packages_pacman
+    else
+      echo "Error: Neither apt nor pacman is available. This script is designed for systems with apt or pacman."
+      exit 1
+    fi
   else
-    echo "Error: Neither apt nor pacman is available. This script is designed for systems with apt or pacman."
+    echo "Unsupported operating system: $os_type"
     exit 1
   fi
 }

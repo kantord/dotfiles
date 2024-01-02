@@ -1,11 +1,9 @@
 {{/* ===> ESSENTIALS <=== */}}
 neovim
 tree
-kitty-terminfo
 tig
 ripgrep
 fzf
-lshw
 curl
 cmake
 unzip
@@ -13,6 +11,7 @@ wget
 fd
 
 {{ if eq .packageManager "apt" }}
+  kitty-terminfo
   python3-pip
   python3-venv
 {{ end }}
@@ -22,11 +21,14 @@ fd
 {{ if eq .platform "arch" }}
   rustup
 {{ else}}
+	{{ if eq .packageManager "apt" }}
   cargo
+	{{ end }}
 {{ end }}
 
 {{/* Should not be required on Ubuntu/MacOS */}}
 {{ if eq .platform "arch" }}
+  lshw
   x11-ssh-askpass
 {{ end }}
 
