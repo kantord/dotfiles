@@ -12,4 +12,5 @@ jobs:
       - name: Set up Homebrew
         id: set-up-homebrew
         uses: Homebrew/actions/setup-homebrew@master
-
+      - run: '[[ -e ~/.local/bin/chezmoi ]] || BINDIR=~/.local/bin sh -c "$(curl -fsSL get.chezmoi.io)"'
+      - run: ~/.local/bin/chezmoi --source ~/.dotfiles init --apply --verbose
