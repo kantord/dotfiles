@@ -6,7 +6,7 @@ on:
 
 jobs:
   clone-and-install:
-    runs-on: macos-13-large
+    runs-on: macos-latest
     steps:
       - uses: actions/checkout@v2
       - run: ./setup.sh
