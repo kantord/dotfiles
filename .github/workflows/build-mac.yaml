@@ -9,7 +9,9 @@ jobs:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v2
-      - run: ./setup.sh
       - name: chezmoi data
         run: '"$HOME/.local/bin/chezmoi" data'
+      - name: Set up Homebrew
+        id: set-up-homebrew
+        uses: Homebrew/actions/setup-homebrew@master
 
