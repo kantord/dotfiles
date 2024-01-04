@@ -12,7 +12,10 @@ DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 [[ -e ~/.local/bin/chezmoi ]] || BINDIR=~/.local/bin sh -c "$(curl -fsSL get.chezmoi.io)"
 
 # Set default shell to zsh
-sudo chsh "$(id -un)" --shell "/usr/bin/zsh"
+if [ "$(uname)" != "Darwin" ]; then
+    # Set default shell to zsh
+    sudo chsh "$(id -un)" --shell "/usr/bin/zsh"
+fi
 
 # Start Zsh to trigger any setup that would run when it's first opened
 ~/.local/bin/chezmoi --source ~/.dotfiles init --apply --verbose
