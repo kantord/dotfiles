@@ -1,0 +1,15 @@
+name: ci
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  clone-and-install:
+    runs-on: macos-13-large
+    steps:
+      - uses: actions/checkout@v2
+      - run: ./setup.sh
+      - name: chezmoi data
+        run: '"$HOME/.local/bin/chezmoi" data'
+
