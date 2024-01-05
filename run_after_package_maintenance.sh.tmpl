@@ -149,6 +149,30 @@ display_template_info () {
   echo "Is Work env: {{ .isWorkEnv }}"
 }
 
+systemd_enable() {
+    local service_name="$1"
+    if ! systemctl is-enabled --quiet "$service_name" || ! systemctl is-active --quiet "$service_name"; then
+        echo "Enabling and starting system service: $service_name..."
+        sudo systemctl enable --now "$service_name"
+    fi
+}
+
+systemd_user_enable() {
+    local service_name="$1"
+    if ! systemctl --user is-enabled --quiet "$service_name" || ! systemctl --user is-active --quiet "$service_name"; then
+        echo "Enabling and starting user service: $service_name..."
+        systemctl --user enable --now "$service_name"
+    fi
+}
+
+configure_systemd_services() {
+    # Check if systemd is installed
+    if command -v systemctl &> /dev/null; then
+        systemd_user_enable "redshift-gtk"
+    fi
+}
+
+
 display_template_info
 install_system_packages
 install_or_update_nvm
@@ -158,3 +182,4 @@ maintain_lunarvim_plugins
 install_atuin
 install_cargo
 install_cargo_packages
+configure_systemd_services
