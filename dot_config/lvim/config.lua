@@ -54,6 +54,7 @@ lvim.plugins = {
   },
   { "levouh/tint.nvim" }, -- this should be the last thing to load
   { "vimwiki/vimwiki" },
+  { "kevinhwang91/rnvimr" },
 }
 
 
