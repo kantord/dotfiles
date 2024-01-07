@@ -130,15 +130,34 @@ local pickers = require('telescope.pickers')
 local sorters = require('telescope.sorters')
 local make_entry = require('telescope.make_entry')
 
+local function debounce(func, delay)
+  local timer_id = nil
+  return function(...)
+    local args = { ... }
+    if timer_id then
+      vim.fn.timer_stop(timer_id)
+    end
+    timer_id = vim.fn.timer_start(delay, function()
+      func(unpack(args))
+    end)
+  end
+end
+
 function seagoat_lines(opts)
   opts = opts or {}
   opts.cwd = opts.cwd and vim.fn.expand(opts.cwd) or vim.loop.cwd()
+
+  local debounce_delay = 1 -- Delay in milliseconds
+
+  local debounced_job = debounce(function(prompt)
+    return { "gt", "--vimgrep", prompt }
+  end, debounce_delay)
 
   local live_seagoat = finders.new_job(function(prompt)
     if not prompt or prompt == "" then
       return nil
     end
-    return { "gt", "--vimgrep", prompt }
+    return debounced_job(prompt)
   end, opts.entry_maker or make_entry.gen_from_string(opts), opts.max_results, opts.cwd)
 
   pickers.new(opts, {
