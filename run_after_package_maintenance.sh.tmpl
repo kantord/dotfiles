@@ -172,6 +172,20 @@ configure_systemd_services() {
     fi
 }
 
+verify_command_exists() {
+  if command -v "$1" >/dev/null 2>&1; then
+    echo "✅ $1 command found."
+  else
+    echo "❌ Error: $1 command not found."
+    exit 1
+  fi
+}
+
+check_health() {
+  verify_command_exists "atuin"
+  verify_command_exists "nvim"
+}
+
 
 display_template_info
 install_system_packages
@@ -183,3 +197,4 @@ install_cargo
 install_cargo_packages
 configure_systemd_services
 install_atuin
+check_health
