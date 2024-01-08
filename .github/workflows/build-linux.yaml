@@ -7,7 +7,7 @@ jobs:
   clone-and-install:
     strategy:
       matrix:
-        os: ["archlinux:latest"]
+        os: []
     runs-on: ubuntu-latest
     container:
       image: ${{ matrix. os }}
