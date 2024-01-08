@@ -16,3 +16,5 @@ jobs:
       - run: ./setup.sh
       - name: chezmoi data
         run: '"$HOME/.local/bin/chezmoi" data'
+      - name: print package list
+        run: cat ~/.required-packages.txt | tr -d ' ' | grep -v "^$" | sort -u
