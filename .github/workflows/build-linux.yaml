@@ -1,4 +1,4 @@
-name: build-codespaces
+name: build-linux
 on:
   push:
   pull_request:
@@ -7,7 +7,7 @@ jobs:
   clone-and-install:
     strategy:
       matrix:
-        os: ["ubuntu:latest", "archlinux:latest"]
+        os: ["archlinux:latest"]
     runs-on: ubuntu-latest
     container:
       image: ${{ matrix. os }}
