@@ -66,6 +66,9 @@ require("neotest").setup({
     require('neotest-jest')({
       jestCommand = "yarn test --watch",
     }),
+    require("neotest-rust") {
+      args = { "--no-capture" },
+    }
   }
 })
 
