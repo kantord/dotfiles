@@ -5,6 +5,7 @@
 
 
 lvim.plugins = {
+  { 'justinmk/vim-sneak' },
   { 'simrat39/rust-tools.nvim' },
   -- {
   --   "zbirenbaum/copilot.lua",
@@ -183,3 +184,6 @@ vim.g.vimwiki_list = { {
   syntax = "markdown",
   ext = ".md",
 } }
+
+vim.opt.number = true
+vim.opt.relativenumber = true
