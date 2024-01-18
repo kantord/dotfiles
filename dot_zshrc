@@ -118,7 +118,6 @@ alias gff="git push --force-with-lease"
 [[ -e /workspaces/web/profile ]] && source /workspaces/web/profile
 [[ -e $HOME/repos/web/profile ]] && source $HOME/repos/web/profile
 
-eval "$(atuin init zsh)"
 #
 # Use lunarvim as default editor, but only if it's installed
 if command -v lvim >/dev/null 2>&1; then
@@ -130,3 +129,4 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
+zvm_after_init_commands+=(eval "$(atuin init zsh)")
