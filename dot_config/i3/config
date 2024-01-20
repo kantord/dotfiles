@@ -242,7 +242,7 @@ bindsym --release $mod+Home exec --no-startup-id mpc toggle
 
 # autostart implementation
 exec dex -ae i3
-exec xsetroot -solid "#0e101a"
+exec hsetroot -solid "#0e101a"
 
 
 # class                 border  backgr. text    indicator child_border
