@@ -5,20 +5,21 @@
 
 
 lvim.plugins = {
-  { 'justinmk/vim-sneak' },
+  -- { 'justinmk/vim-sneak' }, -- no need for this, leap is more modern
+  { 'ggandor/leap.nvim' },
   { 'simrat39/rust-tools.nvim' },
-  -- {
-  --   "zbirenbaum/copilot.lua",
-  --   event = { "VimEnter" },
-  --   config = function()
-  --     vim.defer_fn(function()
-  --       require("copilot").setup {
-  --         suggestion = { enabled = false },
-  --         panel = { enabled = false },
-  --       }
-  --     end, 100)
-  --   end,
-  -- },
+  {
+    "zbirenbaum/copilot.lua",
+    cmd = "Copilot",
+    event = "InsertEnter",
+  },
+  {
+    "zbirenbaum/copilot-cmp",
+    after = { "copilot.lua" },
+    config = function()
+      require("copilot_cmp").setup()
+    end,
+  },
   { 'sainnhe/sonokai' },
   { "mg979/vim-visual-multi" },
   { 'MattesGroeger/vim-bookmarks' },
@@ -187,3 +188,23 @@ vim.g.vimwiki_list = { {
 
 vim.opt.number = true
 vim.opt.relativenumber = true
+
+
+local ok, copilot = pcall(require, "copilot")
+if not ok then
+  return
+end
+
+copilot.setup {
+  suggestion = {
+    keymap = {
+      accept = "<c-l>",
+      next = "<c-j>",
+      prev = "<c-k>",
+      dismiss = "<c-h>",
+    },
+  },
+}
+
+local opts = { noremap = true, silent = true }
+vim.api.nvim_set_keymap("n", "<c-s>", "<cmd>lua require('copilot.suggestion').toggle_auto_trigger()<CR>", opts)
