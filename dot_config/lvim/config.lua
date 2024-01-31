@@ -32,9 +32,9 @@ lvim.plugins = {
       "nvim-lua/plenary.nvim",
       "nvim-treesitter/nvim-treesitter",
       "antoinemadec/FixCursorHold.nvim",
-      -- "nvim-neotest/neotest-python",
-      -- 'haydenmeade/neotest-jest',
-      -- 'rouge8/neotest-rust',
+      "nvim-neotest/neotest-python",
+      'haydenmeade/neotest-jest',
+      'rouge8/neotest-rust',
     }
   },
   { "rcarriga/nvim-dap-ui", dependencies = { "mfussenegger/nvim-dap" } },
@@ -63,14 +63,14 @@ lvim.plugins = {
 -- testing
 require("neotest").setup({
   adapters = {
-    -- require("neotest-python"),
+    require("neotest-python"),
     -- require("neotest-plenary"),
-    -- require('neotest-jest')({
-    -- jestCommand = "yarn test --watch",
-    -- }),
-    -- require("neotest-rust") {
-    --   args = { "--no-capture" },
-    -- }
+    require('neotest-jest')({
+      jestCommand = "yarn test --watch",
+    }),
+    require("neotest-rust") {
+      args = { "--no-capture" },
+    }
   }
 })
 
