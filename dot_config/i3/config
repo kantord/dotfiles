@@ -255,3 +255,9 @@ client.placeholder      #0e101a #0c0c0c #ffffff #0e101a   #0c0c0c
 client.background       #0e101a
 
 title_align center
+
+
+# No title for browser windows and other windows that show tabs on top
+for_window [class="Google-chrome"] border pixel 1
+for_window [class="Chromium"] border pixel 1
+for_window [class="Firefox"] border pixel 1
