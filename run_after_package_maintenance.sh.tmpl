@@ -169,6 +169,7 @@ configure_systemd_services() {
     # Check if systemd is installed
     if command -v systemctl &> /dev/null; then
         systemd_user_enable "redshift-gtk"
+        systemd_enable bluetooth
     fi
 }
 
