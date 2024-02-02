@@ -12,6 +12,15 @@ settings:
     global: always
   content.pdfjs:
     global: true
+  editor.command:
+    global:
+    - kitty
+    - '-1'
+    - --class=KittyFloatingNeovim
+    - nvim
+    - '{file}'
+  editor.encoding:
+    global: utf-8
   qt.highdpi:
     global: false
   tabs.show:
