@@ -204,7 +204,8 @@ bindsym $mod+r mode "resize"
 bar {
         status_command "bash /home/kantord/.config/i3/status_command.sh"
         colors {
-          background #0e101a
+          # background #0e101a
+          background #000000
         }
 }
 
@@ -215,6 +216,8 @@ for_window [all] border normal 1
 for_window [all] title_window_icon yes
 for_window [all] title_window_icon padding 1px
 gaps inner 8
+gaps outer -8
+gaps bottom 0
 smart_borders on
 smart_gaps on
 
