@@ -6,6 +6,8 @@
 
 config_version: 2
 settings:
+  colors.webpage.darkmode.enabled:
+    global: false
   editor.command:
     global:
     - kitty
@@ -13,5 +15,7 @@ settings:
     - --class=KittyFloatingNeovim
     - nvim
     - '{file}'
+  tabs.show:
+    global: multiple
   tabs.tabs_are_windows:
     global: true
