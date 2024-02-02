@@ -265,3 +265,7 @@ title_align center
 for_window [class="Google-chrome"] border pixel 1
 for_window [class="Chromium"] border pixel 1
 for_window [class="Firefox"] border pixel 1
+
+
+# Floating editor for qutebrowser
+for_window [class="^KittyFloatingNeovim$" instance="^KittyFloatingNeovim$"] floating enable, sticky enable
