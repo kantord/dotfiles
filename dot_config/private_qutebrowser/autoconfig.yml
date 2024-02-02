@@ -12,3 +12,7 @@ settings:
     global: always
   content.pdfjs:
     global: true
+  qt.highdpi:
+    global: false
+  tabs.tabs_are_windows:
+    global: true
