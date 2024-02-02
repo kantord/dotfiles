@@ -14,5 +14,7 @@ settings:
     global: true
   qt.highdpi:
     global: false
+  tabs.show:
+    global: multiple
   tabs.tabs_are_windows:
     global: true
