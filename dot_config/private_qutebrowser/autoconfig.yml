@@ -23,6 +23,8 @@ settings:
     global: utf-8
   qt.highdpi:
     global: false
+  statusbar.show:
+    global: in-mode
   tabs.show:
     global: multiple
   tabs.tabs_are_windows:
