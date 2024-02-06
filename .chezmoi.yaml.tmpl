@@ -1,3 +1,4 @@
+{{- $gitEmail := promptStringOnce . "email" "Default Git email address" -}}
 {{ $platform := "mac" }}
 {{ $isWorkEnv := false }}
 
@@ -16,3 +17,4 @@ data:
   platform: {{ $platform }}
   packageManager: {{ if eq $platform "arch" }}pacman{{ else if eq $platform "mac" }}brew{{ else }}apt{{ end }}
   isWorkEnv: {{ $isWorkEnv }}
+  gitEmail: {{ $gitEmail }}
