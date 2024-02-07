@@ -29,3 +29,5 @@ settings:
     global: multiple
   tabs.tabs_are_windows:
     global: true
+  zoom.default:
+    global: 150%
