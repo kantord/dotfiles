@@ -10,6 +10,8 @@ settings:
     global: dark
   completion.show:
     global: always
+  content.notifications.presenter:
+    global: libnotify
   content.pdfjs:
     global: true
   content.register_protocol_handler:
