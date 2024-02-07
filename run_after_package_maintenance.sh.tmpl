@@ -173,6 +173,15 @@ configure_systemd_services() {
     fi
 }
 
+configure_docker() {
+  systemd_enable docker
+
+  if ! id -nG "$USER" | grep -qw "docker"; then
+    echo "Adding user to docker group. Reboot is needed to make docker work without sudo"
+    sudo usermod -aG docker $USER
+  fi
+}
+
 verify_command_exists() {
   if command -v "$1" >/dev/null 2>&1; then
     echo "✅ $1 command found."
@@ -199,3 +208,4 @@ install_atuin
 install_lunarvim
 maintain_lunarvim_plugins
 check_health
+configure_docker
