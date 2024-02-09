@@ -199,6 +199,10 @@ check_health() {
   verify_command_exists "nvim"
 }
 
+install_pipx_packages() {
+  pipx install i3-gnome-pomodoro
+}
+
 
 display_template_info
 install_system_packages
@@ -206,6 +210,7 @@ install_or_update_nvm
 install_rustup
 install_cargo
 install_cargo_packages
+install_pipx_packages
 configure_systemd_services
 install_atuin
 install_lunarvim
