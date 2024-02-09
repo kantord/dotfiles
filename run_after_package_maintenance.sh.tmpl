@@ -49,6 +49,9 @@ install_packages_pacman() {
   # Install all packages at once using sudo
   sudo pacman -S --needed --noconfirm "${packages[@]}"
 
+  # Maintain AUR packages using paru
+  paru
+
   echo "Package installation completed."
 }
 
