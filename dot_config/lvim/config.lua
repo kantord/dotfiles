@@ -7,7 +7,11 @@
 lvim.plugins = {
   -- { 'justinmk/vim-sneak' }, -- no need for this, leap is more modern
   { 'ggandor/leap.nvim' },
-  { 'simrat39/rust-tools.nvim' },
+  {
+    'mrcjkb/rustaceanvim',
+    version = '^4', -- Recommended
+    ft = { 'rust' },
+  },
   {
     "zbirenbaum/copilot.lua",
     cmd = "Copilot",
