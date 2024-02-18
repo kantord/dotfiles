@@ -4,4 +4,5 @@
 if command -v i3-msg >/dev/null 2>&1; then
     # If i3-msg exists, restart i3
     i3-msg restart
+    setxkbmap -layout mylayout -variant my_customizations
 fi
