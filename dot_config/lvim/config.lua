@@ -7,6 +7,11 @@
 lvim.plugins = {
   -- { 'justinmk/vim-sneak' }, -- no need for this, leap is more modern
   { 'ggandor/leap.nvim' },
+  -- make ui really nice
+  {
+    'stevearc/dressing.nvim',
+    opts = {},
+  },
   {
     'mrcjkb/rustaceanvim',
     version = '^4', -- Recommended
