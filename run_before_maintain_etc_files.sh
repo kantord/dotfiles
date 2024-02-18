@@ -9,6 +9,7 @@ function maintain_file() {
   if cmp --silent -- "$chezmoi_version" "$etc_version"; then
     echo "$etc_version is already up to date"
   else
+    sudo mkdir -p $(dirname "$etc_version")
     sudo cp $SCRIPT_DIR/$chezmoi_version $etc_version
   fi
 }
