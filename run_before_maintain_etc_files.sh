@@ -16,7 +16,4 @@ function maintain_file() {
 
 
 maintain_file .pacman.conf /etc/pacman.conf
-maintain_file .dual-function-keys.yaml /etc/interception/dual-function-keys/my-mappings.yaml
-maintain_file .udevmon.yaml /etc/interception/udevmon.yaml
 
-sudo systemctl restart udevmon || true

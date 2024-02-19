@@ -173,7 +173,6 @@ configure_systemd_services() {
     if command -v systemctl &> /dev/null; then
         systemd_user_enable "redshift-gtk"
         systemd_enable bluetooth
-        systemd_enable udevmon
     fi
 }
 
