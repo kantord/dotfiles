@@ -48,7 +48,7 @@ lvim.plugins = {
   },
   { "rcarriga/nvim-dap-ui", dependencies = { "mfussenegger/nvim-dap" } },
   {
-    "kantord/auto-save-format.nvim",
+    "pocco81/auto-save.nvim",
     config = function()
       require("auto-save").setup {
         debounce_delay = 2000,
