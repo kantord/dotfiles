@@ -12,6 +12,7 @@ lvim.plugins = {
     'stevearc/dressing.nvim',
     opts = {},
   },
+  {'NvChad/nvim-colorizer.lua'},
   {
     'mrcjkb/rustaceanvim',
     version = '^4', -- Recommended
