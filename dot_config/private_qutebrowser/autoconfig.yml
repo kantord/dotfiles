@@ -6,6 +6,8 @@
 
 config_version: 2
 settings:
+  auto_save.session:
+    global: false
   colors.webpage.preferred_color_scheme:
     global: dark
   completion.show:
@@ -17,6 +19,7 @@ settings:
   content.media.video_capture:
     https://meet.google.com: true
   content.notifications.enabled:
+    https://calendar.google.com: true
     https://meet.google.com: true
   content.notifications.presenter:
     global: libnotify
