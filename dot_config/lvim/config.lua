@@ -6,14 +6,14 @@
 
 lvim.plugins = {
   -- { 'justinmk/vim-sneak' }, -- no need for this, leap is more modern
-{ "catppuccin/nvim", name = "catppuccin", priority = 1000 },
+  { "catppuccin/nvim",  name = "catppuccin", priority = 1000 },
   { 'ggandor/leap.nvim' },
   -- make ui really nice
   {
     'stevearc/dressing.nvim',
     opts = {},
   },
-  {'NvChad/nvim-colorizer.lua'},
+  { 'NvChad/nvim-colorizer.lua' },
   {
     'mrcjkb/rustaceanvim',
     version = '^4', -- Recommended
@@ -78,6 +78,11 @@ require("neotest").setup({
     -- require("neotest-plenary"),
     require('neotest-jest')({
       jestCommand = "npm test --",
+      -- jestConfigFile = "custom.jest.config.ts",
+      env = { CI = true },
+      cwd = function(path)
+        return vim.fn.getcwd()
+      end,
     }),
     require("neotest-rust") {
       args = { "--no-capture" },
@@ -220,30 +225,30 @@ copilot.setup {
 local opts = { noremap = true, silent = true }
 vim.api.nvim_set_keymap("n", "<c-s>", "<cmd>lua require('copilot.suggestion').toggle_auto_trigger()<CR>", opts)
 
-  require("colorizer").setup {
-      filetypes = { "*" },
-      user_default_options = {
-        RGB = true, -- #RGB hex codes
-        RRGGBB = true, -- #RRGGBB hex codes
-        names = true, -- "Name" codes like Blue or blue
-        RRGGBBAA = false, -- #RRGGBBAA hex codes
-        AARRGGBB = false, -- 0xAARRGGBB hex codes
-        rgb_fn = false, -- CSS rgb() and rgba() functions
-        hsl_fn = false, -- CSS hsl() and hsla() functions
-        css = false, -- Enable all CSS features: rgb_fn, hsl_fn, names, RGB, RRGGBB
-        css_fn = false, -- Enable all CSS *functions*: rgb_fn, hsl_fn
-        -- Available modes for `mode`: foreground, background,  virtualtext
-        mode = "virtualtext", -- Set the display mode.
-        -- Available methods are false / true / "normal" / "lsp" / "both"
-        -- True is same as normal
-        tailwind = true, -- Enable tailwind colors
-        -- parsers can contain values used in |user_default_options|
-        sass = { enable = false, parsers = { "css" }, }, -- Enable sass colors
-        virtualtext = "■",
-        -- update color values even if buffer is not focused
-        -- example use: cmp_menu, cmp_docs
-        always_update = false
-      },
-      -- all the sub-options of filetypes apply to buftypes
-      buftypes = {},
-  }
+require("colorizer").setup {
+  filetypes = { "*" },
+  user_default_options = {
+    RGB = true,               -- #RGB hex codes
+    RRGGBB = true,            -- #RRGGBB hex codes
+    names = true,             -- "Name" codes like Blue or blue
+    RRGGBBAA = false,         -- #RRGGBBAA hex codes
+    AARRGGBB = false,         -- 0xAARRGGBB hex codes
+    rgb_fn = false,           -- CSS rgb() and rgba() functions
+    hsl_fn = false,           -- CSS hsl() and hsla() functions
+    css = false,              -- Enable all CSS features: rgb_fn, hsl_fn, names, RGB, RRGGBB
+    css_fn = false,           -- Enable all CSS *functions*: rgb_fn, hsl_fn
+    -- Available modes for `mode`: foreground, background,  virtualtext
+    mode = "virtualtext",     -- Set the display mode.
+    -- Available methods are false / true / "normal" / "lsp" / "both"
+    -- True is same as normal
+    tailwind = true,                                     -- Enable tailwind colors
+    -- parsers can contain values used in |user_default_options|
+    sass = { enable = false, parsers = { "css" }, },     -- Enable sass colors
+    virtualtext = "■",
+    -- update color values even if buffer is not focused
+    -- example use: cmp_menu, cmp_docs
+    always_update = false
+  },
+  -- all the sub-options of filetypes apply to buftypes
+  buftypes = {},
+}
