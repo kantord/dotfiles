@@ -77,7 +77,7 @@ require("neotest").setup({
     require("neotest-python"),
     -- require("neotest-plenary"),
     require('neotest-jest')({
-      -- jestCommand = " test --watch",
+      jestCommand = "npm test --",
     }),
     require("neotest-rust") {
       args = { "--no-capture" },
