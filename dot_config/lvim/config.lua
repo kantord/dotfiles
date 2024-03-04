@@ -46,6 +46,7 @@ lvim.plugins = {
       "nvim-neotest/neotest-python",
       'haydenmeade/neotest-jest',
       'rouge8/neotest-rust',
+      "thenbe/neotest-playwright",
     }
   },
   { "rcarriga/nvim-dap-ui", dependencies = { "mfussenegger/nvim-dap" } },
@@ -83,6 +84,12 @@ require("neotest").setup({
       cwd = function(path)
         return vim.fn.getcwd()
       end,
+    }),
+    require("neotest-playwright").adapter({
+      options = {
+        persist_project_selection = true,
+        enable_dynamic_test_discovery = true,
+      }
     }),
     require("neotest-rust") {
       args = { "--no-capture" },
@@ -228,22 +235,22 @@ vim.api.nvim_set_keymap("n", "<c-s>", "<cmd>lua require('copilot.suggestion').to
 require("colorizer").setup {
   filetypes = { "*" },
   user_default_options = {
-    RGB = true,               -- #RGB hex codes
-    RRGGBB = true,            -- #RRGGBB hex codes
-    names = true,             -- "Name" codes like Blue or blue
-    RRGGBBAA = false,         -- #RRGGBBAA hex codes
-    AARRGGBB = false,         -- 0xAARRGGBB hex codes
-    rgb_fn = false,           -- CSS rgb() and rgba() functions
-    hsl_fn = false,           -- CSS hsl() and hsla() functions
-    css = false,              -- Enable all CSS features: rgb_fn, hsl_fn, names, RGB, RRGGBB
-    css_fn = false,           -- Enable all CSS *functions*: rgb_fn, hsl_fn
+    RGB = true,           -- #RGB hex codes
+    RRGGBB = true,        -- #RRGGBB hex codes
+    names = true,         -- "Name" codes like Blue or blue
+    RRGGBBAA = false,     -- #RRGGBBAA hex codes
+    AARRGGBB = false,     -- 0xAARRGGBB hex codes
+    rgb_fn = false,       -- CSS rgb() and rgba() functions
+    hsl_fn = false,       -- CSS hsl() and hsla() functions
+    css = false,          -- Enable all CSS features: rgb_fn, hsl_fn, names, RGB, RRGGBB
+    css_fn = false,       -- Enable all CSS *functions*: rgb_fn, hsl_fn
     -- Available modes for `mode`: foreground, background,  virtualtext
-    mode = "virtualtext",     -- Set the display mode.
+    mode = "virtualtext", -- Set the display mode.
     -- Available methods are false / true / "normal" / "lsp" / "both"
     -- True is same as normal
-    tailwind = true,                                     -- Enable tailwind colors
+    tailwind = true,                                 -- Enable tailwind colors
     -- parsers can contain values used in |user_default_options|
-    sass = { enable = false, parsers = { "css" }, },     -- Enable sass colors
+    sass = { enable = false, parsers = { "css" }, }, -- Enable sass colors
     virtualtext = "■",
     -- update color values even if buffer is not focused
     -- example use: cmp_menu, cmp_docs
