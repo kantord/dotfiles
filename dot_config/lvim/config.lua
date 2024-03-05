@@ -87,7 +87,7 @@ require("neotest").setup({
     }),
     require("neotest-playwright").adapter({
       options = {
-        persist_project_selection = true,
+        persist_project_selection = false,
         enable_dynamic_test_discovery = true,
       }
     }),
