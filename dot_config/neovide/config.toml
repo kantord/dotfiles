@@ -1,0 +1,19 @@
+[font]
+size = 16
+
+
+[[font.normal]]
+family = "MonaspiceNe Nerd Font Mono"
+style = "Regular"
+
+[[font.bold]]
+family = "MonaspiceXe Nerd Font Mono"
+style = "Medium"
+
+[[font.italic]]
+family = "MonaspiceRn Nerd Font Mono"
+style = "Italic"
+
+[[font.bold_italic]]
+family = "MonaspiceRn Nerd Font Mono"
+style = "Medium Italic"
