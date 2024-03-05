@@ -14,6 +14,16 @@ lvim.plugins = {
     opts = {},
   },
   { 'NvChad/nvim-colorizer.lua' },
+  { 'rebelot/kanagawa.nvim' },
+  {
+    'AlexvZyl/nordic.nvim',
+    lazy = false,
+    priority = 1000,
+    config = function()
+      require 'nordic'.load()
+    end
+  },
+  { 'nyoom-engineering/oxocarbon.nvim' },
   {
     'mrcjkb/rustaceanvim',
     version = '^4', -- Recommended
@@ -35,7 +45,7 @@ lvim.plugins = {
   { "mg979/vim-visual-multi" },
   { 'MattesGroeger/vim-bookmarks' },
   { 'ledger/vim-ledger' },
-  { 'mcchrish/zenbones.nvim',     dependencies = { "rktjmp/lush.nvim" } },
+  { 'mcchrish/zenbones.nvim',          dependencies = { "rktjmp/lush.nvim" } },
   { 'folke/todo-comments.nvim' },
   {
     "nvim-neotest/neotest",
@@ -89,6 +99,9 @@ require("neotest").setup({
       options = {
         persist_project_selection = false,
         enable_dynamic_test_discovery = true,
+        get_playwright_config = function()
+          return vim.loop.cwd() + "/playwright.config.ts"
+        end,
       }
     }),
     require("neotest-rust") {
