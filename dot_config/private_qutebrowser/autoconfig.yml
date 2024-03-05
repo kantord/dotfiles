@@ -43,6 +43,8 @@ settings:
     global: bold 25px default_family
   qt.highdpi:
     global: false
+  scrolling.smooth:
+    global: false
   statusbar.show:
     global: in-mode
   tabs.show:
