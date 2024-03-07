@@ -1,19 +1,10 @@
 [font]
 size = 16
+normal = [{ family = "Monaspace Argon"}, "Symbols Nerd Font Mono"]
+italic = [{ family = "Monaspace Radon" }, "Symbols Nerd Font Mono"]
+bold = [{ family = "Monaspace Krypton" }, "Symbols Nerd Font Mono"]
 
-
-[[font.normal]]
-family = "MonaspiceNe Nerd Font Mono"
-style = "Regular"
-
-[[font.bold]]
-family = "MonaspiceXe Nerd Font Mono"
-style = "Medium"
-
-[[font.italic]]
-family = "MonaspiceRn Nerd Font Mono"
-style = "Italic"
-
-[[font.bold_italic]]
-family = "MonaspiceRn Nerd Font Mono"
-style = "Medium Italic"
+[font.features]
+"Monaspace Argon" = ["+calt", "+liga", "+dlig", "+ss01", "+ss02", "+ss03", "+ss04", "+ss05", "+ss06", "+ss07", "+ss08" ]
+"Monaspace Radon" = ["+calt", "+liga", "+dlig", "+ss01", "+ss02", "+ss03", "+ss04", "+ss05", "+ss06", "+ss07", "+ss08" ]
+"Monaspace Krypton" = ["+calt", "+liga", "+dlig", "+ss01", "+ss02", "+ss03", "+ss04", "+ss05", "+ss06", "+ss07", "+ss08" ]

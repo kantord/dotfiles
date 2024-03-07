@@ -273,4 +273,3 @@ require("colorizer").setup {
   buftypes = {},
 }
 
-vim.o.guifont = "MonaspiceNe Nerd Font"
