@@ -1,3 +1,5 @@
+neovim-bin = "/home/kantord/.local/bin/lvim"
+
 [font]
 size = 16
 normal = [{ family = "Monaspace Neon"}, "Symbols Nerd Font Mono"]
