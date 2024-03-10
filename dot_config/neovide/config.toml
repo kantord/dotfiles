@@ -2,11 +2,13 @@ neovim-bin = "/home/kantord/.local/bin/lvim"
 
 [font]
 size = 16
-normal = [{ family = "Monaspace Neon"}, "Symbols Nerd Font Mono"]
-italic = [{ family = "Monaspace Radon" }, "Symbols Nerd Font Mono"]
-bold = [{ family = "Monaspace Xenon" }, "Symbols Nerd Font Mono"]
+hinting = "none"
+edging = "subpixelantialias"
+normal = "MonaspiceNe NFM"
+italic = "MonaspiceRn NFM"
+bold = "MonaspiceXe NFM"
 
-[font.features]
-"Monaspace Neon" = ["+calt", "+liga", "+dlig", "+ss01", "+ss02", "+ss03", "+ss04", "+ss05", "+ss06", "+ss07", "+ss08" ]
-"Monaspace Radon" = ["+calt", "+liga", "+dlig", "+ss01", "+ss02", "+ss03", "+ss04", "+ss05", "+ss06", "+ss07", "+ss08" ]
-"Monaspace Xenon" = ["+calt", "+liga", "+dlig", "+ss01", "+ss02", "+ss03", "+ss04", "+ss05", "+ss06", "+ss07", "+ss08" ]
+# [font.features]
+# "Monaspace Neon" = ["+calt", "+liga", "+dlig", "+ss01", "+ss02", "+ss03", "+ss04", "+ss05", "+ss06", "+ss07", "+ss08" ]
+# "Monaspace Radon" = ["+calt", "+liga", "+dlig", "+ss01", "+ss02", "+ss03", "+ss04", "+ss05", "+ss06", "+ss07", "+ss08" ]
+# "Monaspace Xenon" = ["+calt", "+liga", "+dlig", "+ss01", "+ss02", "+ss03", "+ss04", "+ss05", "+ss06", "+ss07", "+ss08" ]
