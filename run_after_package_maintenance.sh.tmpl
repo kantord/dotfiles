@@ -83,6 +83,8 @@ maintain_lunarvim_plugins ()
   $lvim --headless "+TSUpdateSync typescript" +qa
   $lvim --headless "+TSUpdateSync json" +qa
   $lvim --headless "+TSUpdateSync bash" +qa
+
+  $lvim +LvimUpdate +LvimCacheReset +q
 }
 
 install_atuin() {
