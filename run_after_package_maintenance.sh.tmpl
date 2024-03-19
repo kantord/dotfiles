@@ -50,7 +50,7 @@ install_packages_pacman() {
   sudo pacman -S --needed --noconfirm "${packages[@]}"
 
   # Maintain AUR packages using paru
-  paru
+  paru || true
 
   echo "Package installation completed."
 }
