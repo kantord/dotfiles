@@ -77,10 +77,12 @@ lvim.plugins = {
   {
     dev = true,
     dir = "$HOME/.config/pawfect.nvim"
+
   },
-  { "levouh/tint.nvim" }, -- this should be the last thing to load
+
   { "vimwiki/vimwiki" },
   { "kevinhwang91/rnvimr" },
+  -- { "levouh/tint.nvim" }, -- this should be the last thing to load
 }
 
 
