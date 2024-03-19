@@ -161,7 +161,7 @@ code_actions.setup {
   },
 }
 
-require("tint").setup()
+-- require("tint").setup()
 
 
 
