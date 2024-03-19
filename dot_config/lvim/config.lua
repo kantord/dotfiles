@@ -6,6 +6,8 @@
 
 lvim.plugins = {
   -- { 'justinmk/vim-sneak' }, -- no need for this, leap is more modern
+  --
+  { "nvim-neotest/nvim-nio" }, -- required for neotest
   { "catppuccin/nvim",  name = "catppuccin", priority = 1000 },
   { 'ggandor/leap.nvim' },
   -- make ui really nice
