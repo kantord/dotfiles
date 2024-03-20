@@ -133,3 +133,5 @@ zvm_after_init_commands+=(eval "$(atuin init zsh)")
 
 
 export PATH=$HOME/.cargo/bin/:$PATH
+
+alias htop="btop"
