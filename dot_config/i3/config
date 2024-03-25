@@ -63,6 +63,7 @@ floating_modifier $mod
 # start a terminal
 # bindsym $mod+Return exec ~/.cargo/bin/enwiro wrap i3-sensible-terminal
 # bindsym $mod+Return exec zsh -c 'enwiro wrap i3-sensible-terminal >~/i3log 2>&1'
+# bindsym $mod+Return exec i3-sensible-terminal
 bindsym $mod+Return exec i3-sensible-terminal
 
 # kill focused window
