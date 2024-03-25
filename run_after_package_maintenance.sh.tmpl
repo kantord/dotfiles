@@ -205,6 +205,12 @@ install_pipx_packages() {
   pipx install i3-gnome-pomodoro
 }
 
+install_enwiro () {
+  cargo install enwiro
+  cargo install enwiro-cookbook-git
+  cargo install enwiro-adapter-i3wm
+}
+
 
 display_template_info
 install_system_packages

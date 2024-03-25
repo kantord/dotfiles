@@ -13,6 +13,7 @@ set_from_resource $DOTFILES_FOLDER echo "$DOTFILES_FOLDER"
 set $config_dir $DOTFILES_FOLDER/apps/i3
 set $scripts $config_dir/scripts/
 set $mod Mod4
+exec_always --no-startup-id export PATH=$PATH:/home/kantord/.cargo/bin
 
 # Font for window titles. Will also be used by the bar unless a different font
 # is used in the bar {} block below.
@@ -60,6 +61,8 @@ bindsym $mod+u fullscreen toggle
 floating_modifier $mod
 
 # start a terminal
+# bindsym $mod+Return exec ~/.cargo/bin/enwiro wrap i3-sensible-terminal
+# bindsym $mod+Return exec zsh -c 'enwiro wrap i3-sensible-terminal >~/i3log 2>&1'
 bindsym $mod+Return exec i3-sensible-terminal
 
 # kill focused window
