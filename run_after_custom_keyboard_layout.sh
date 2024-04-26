@@ -13,15 +13,15 @@ xkb_symbols "my_customizations" {
     include "level3(ralt_switch)" 
     
     // Swap Caps Lock and Escape
-    key <CAPS> { [ Escape ] }; 
-    key <ESC> { [ Caps_Lock ] };
+    // key <CAPS> { [ Escape ] }; 
+    // key <ESC> { [ Caps_Lock ] };
 
     // Swap Alt with Left Ctrl and Alt Gr with Right Ctrl
-    key <LALT> { [ Control_L, Control_L ] };
-    key <LCTL> { [ Alt_L ] };
-    key <RALT> { [ Control_R, Control_R ] };
-    key <RCTL> { [ ISO_Level3_Shift ] };
-    key <LSGT> { [ ISO_Level3_Shift ] };
+    //key <LALT> { [ Control_L, Control_L ] };
+    //key <LCTL> { [ Alt_L ] };
+    //key <RALT> { [ Control_R, Control_R ] };
+    //key <RCTL> { [ ISO_Level3_Shift ] };
+    //key <LSGT> { [ ISO_Level3_Shift ] };
     
     // Add any other custom key definitions here
     key <AD03> { [	  e,          E,        eacute,           Eacute ] };
