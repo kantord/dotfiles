@@ -305,3 +305,5 @@ for_window [title="Picture in picture"] fullscreen enable
 
 # Quickly switch to the PiP workspace
 bindsym $mod+period workspace .
+
+exec_always --no-startup-id bash -c "xinput --map-to-output $(xinput --list | grep MPI7003 | cut -f2 | cut -f2 -d'=') HDMI-0"
