@@ -286,4 +286,16 @@ require("colorizer").setup {
   buftypes = {},
 }
 
+-- Assuming <leader>e opens the default file explorer, swap to <leader>E
+lvim.builtin.which_key.mappings["E"] = lvim.builtin.which_key.mappings["e"]  -- Move existing mapping from e to E
+
+-- Assign Ranger toggle to <leader>e
+lvim.builtin.which_key.mappings["e"] = { ":RnvimrToggle<CR>", "Toggle Ranger" }
+
+-- use ranger as a file picker as well
+vim.g.rnvimr_enable_picker = 1
+
+-- when deleting file with ranger, delete the corresponding vim buffer
+vim.g.rnvimr_enable_bw = 1
+
 
