@@ -56,6 +56,7 @@ lvim.plugins = {
   { "mg979/vim-visual-multi" },
   { 'MattesGroeger/vim-bookmarks' },
   { 'ledger/vim-ledger' },
+  { "EdenEast/nightfox.nvim" },
   { 'mcchrish/zenbones.nvim',          dependencies = { "rktjmp/lush.nvim" } },
   { 'folke/todo-comments.nvim' },
   {
