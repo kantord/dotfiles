@@ -292,7 +292,6 @@ for_window [class="Firefox"] border pixel 1
 # Floating editor for qutebrowser
 for_window [class="^KittyFloatingNeovim$" instance="^KittyFloatingNeovim$"] floating enable, sticky enable
 
-
 # Magical picture in picture mode that uses a dedicated screen instead of the picture in picture mode when it is available
 # Set HDMI-0 as the output for the dedicated workspace '.'
 workspace . output HDMI-0
