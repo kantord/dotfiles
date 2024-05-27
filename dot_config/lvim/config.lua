@@ -300,4 +300,6 @@ vim.g.rnvimr_enable_picker = 1
 vim.g.rnvimr_enable_bw = 1
 
 
-
+require('lspconfig').tsserver.setup({
+  root_dir = require('lspconfig.util').root_pattern('.git')
+})
