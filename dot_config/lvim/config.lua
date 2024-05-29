@@ -26,6 +26,7 @@ lvim.plugins = {
     end
   },
   { 'nyoom-engineering/oxocarbon.nvim' },
+  { 'nvim-telescope/telescope-fzf-native.nvim', build = 'make' },
   {
     "linrongbin16/gitlinker.nvim",
     cmd = "GitLink",
@@ -303,3 +304,6 @@ vim.g.rnvimr_enable_bw = 1
 require('lspconfig').tsserver.setup({
   root_dir = require('lspconfig.util').root_pattern('.git')
 })
+
+
+require('telescope').load_extension('fzf')
