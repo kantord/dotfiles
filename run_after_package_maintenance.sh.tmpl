@@ -63,6 +63,11 @@ install_lunarvim() {
   fi
 }
 
+
+install_eslint_d() {
+  sudo npm install -g eslint_d
+}
+
 maintain_lunarvim_plugins ()
 {
   lvim=$HOME/.local/bin/lvim
@@ -225,3 +230,4 @@ install_lunarvim
 maintain_lunarvim_plugins
 check_health
 configure_docker
+install_eslint_d

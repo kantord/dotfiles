@@ -3,10 +3,10 @@ local options = {
     lua = { "stylua" },
     css = { "prettier" },
     html = { "prettier" },
-    javascript = { { "prettierd", "prettier" } },
-    typescript = { { "prettierd", "prettier" } },
-    javascriptreact = { { "prettierd", "prettier" } },
-    typescriptreact = { { "prettierd", "prettier" } },
+    javascript = { { "prettierd", "prettier" }, "eslint_d" },
+    typescript = { { "prettierd", "prettier" }, "eslint_d" },
+    javascriptreact = { { "prettierd", "prettier" }, "eslint_d" },
+    typescriptreact = { { "prettierd", "prettier" }, "eslint_d" },
   },
   format_on_save = {
     -- These options will be passed to conform.format()
