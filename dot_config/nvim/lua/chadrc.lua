@@ -13,4 +13,6 @@ M.ui = {
 	-- },
 }
 
+M.ui.lsp = {signature = false}
+
 return M
