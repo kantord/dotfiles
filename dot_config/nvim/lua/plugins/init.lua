@@ -45,6 +45,10 @@ return {
     },
   },
 
+  {
+    'eugen0329/vim-esearch',
+  },
+
   -- {
   --   "folke/noice.nvim",
   --   event = "VeryLazy",
