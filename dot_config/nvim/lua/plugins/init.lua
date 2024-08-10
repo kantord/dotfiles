@@ -16,28 +16,28 @@ return {
   },
 
   {
-  	"williamboman/mason.nvim",
-  	opts = {
-  		ensure_installed = {
-  			"lua-language-server", "stylua",
-  			"html-lsp", "css-lsp" , "prettier", "pyright"
-  		},
-  	},
+    "williamboman/mason.nvim",
+    opts = {
+      ensure_installed = {
+        "lua-language-server", "stylua",
+        "html-lsp", "css-lsp", "prettier", "pyright"
+      },
+    },
   },
 
   {
-  	"nvim-treesitter/nvim-treesitter",
-  	opts = {
-  		ensure_installed = {
-  			"vim", "lua", "vimdoc",
-       "html", "css"
-  		},
-  	},
+    "nvim-treesitter/nvim-treesitter",
+    opts = {
+      ensure_installed = {
+        "vim", "lua", "vimdoc",
+        "html", "css"
+      },
+    },
   },
 
   {
     "okuuva/auto-save.nvim",
-    cmd = "ASToggle", -- optional for lazy loading on command
+    cmd = "ASToggle",                         -- optional for lazy loading on command
     event = { "InsertLeave", "TextChanged" }, -- optional for lazy loading on trigger events
     opts = {
       -- your config goes here
@@ -47,7 +47,9 @@ return {
 
   {
     'eugen0329/vim-esearch',
+    lazy = false,
   },
+  { 'ledger/vim-ledger', lazy=false },
 
   -- {
   --   "folke/noice.nvim",
@@ -69,5 +71,3 @@ return {
     opts = {},
   }
 }
-
-
