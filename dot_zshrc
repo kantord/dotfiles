@@ -119,9 +119,9 @@ alias gff="git push --force-with-lease"
 [[ -e $HOME/repos/web/profile ]] && source $HOME/repos/web/profile
 
 #
-# Use lunarvim as default editor, but only if it's installed
-if command -v lvim >/dev/null 2>&1; then
-    export EDITOR=lvim
+# Use neovim as default editor, but only if it's installed
+if command -v nvim >/dev/null 2>&1; then
+    export EDITOR=nvim
     export VISUAL=$EDITOR
 fi
 
