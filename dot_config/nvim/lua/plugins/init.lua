@@ -50,6 +50,7 @@ return {
     lazy = false,
   },
   { 'ledger/vim-ledger', lazy=false },
+  { 'brenoprata10/nvim-highlight-colors' },
 
   -- {
   --   "folke/noice.nvim",
