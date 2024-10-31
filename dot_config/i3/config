@@ -263,6 +263,9 @@ bindsym $mod+M exec /home/kantord/repos/config/apps/i3/scripts/i3-cycle-workspac
 bindsym $mod+p exec kitty -1 --class=Vimwiki lvim -c VimwikiIndex
 for_window [class="^Vimwiki$" instance="^Vimwiki$"] floating enable, sticky enable
 
+# Zotero citation window
+for_window [title="^Quick Format Citation$"] floating enable, sticky enable
+
 
 bindsym --release $mod+Next exec --no-startup-id /home/kantord/repos/config/apps/i3/scripts/radio_control.sh next
 bindsym --release $mod+Prior exec --no-startup-id /home/kantord/repos/config/apps/i3/scripts/radio_control.sh prev
