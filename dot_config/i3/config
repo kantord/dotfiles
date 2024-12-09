@@ -260,7 +260,7 @@ bindsym $mod+M exec /home/kantord/repos/config/apps/i3/scripts/i3-cycle-workspac
 
 
 # vimwiki in floating window
-bindsym $mod+p exec kitty -1 --class=Vimwiki lvim -c VimwikiIndex
+bindsym $mod+p exec kitty -1 --class=Vimwiki nvim -c VimwikiIndex
 for_window [class="^Vimwiki$" instance="^Vimwiki$"] floating enable, sticky enable
 
 # Zotero citation window
