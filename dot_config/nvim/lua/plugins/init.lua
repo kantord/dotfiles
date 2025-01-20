@@ -46,6 +46,18 @@ return {
   },
 
   {
+    "zbirenbaum/copilot.lua",
+    cmd = "Copilot",
+    event = "InsertEnter",
+    config = function()
+      require("copilot").setup({
+        suggestion = { enabled = false },
+        panel = { enabled = false },
+      })
+    end,
+  },
+
+  {
     'eugen0329/vim-esearch',
     lazy = false,
   },
@@ -71,6 +83,33 @@ return {
     'stevearc/dressing.nvim',
     opts = {},
   },
+  {
+    "zbirenbaum/copilot-cmp",
+    lazy = false,
+    config = function()
+      require("copilot_cmp").setup()
+    end
+  },
+
+  {
+    "hrsh7th/nvim-cmp",
+    opts = function()
+      local opts = require "configs.cmp"
+      local cmp = require "cmp"
+
+      opts.sources = {
+        { name = "copilot" },
+        { name = "nvim_lsp" },
+        { name = "luasnip" },
+        { name = "buffer" },
+        { name = "nvim_lua" },
+        { name = "path" },
+      }
+
+
+      return opts
+    end,
+  },
 
   {
     "yetone/avante.nvim",
@@ -89,9 +128,9 @@ return {
       "nvim-lua/plenary.nvim",
       "MunifTanjim/nui.nvim",
       --- The below dependencies are optional,
-      "hrsh7th/nvim-cmp",          -- autocompletion for avante commands and mentions
+      "hrsh7th/nvim-cmp",            -- autocompletion for avante commands and mentions
       "nvim-tree/nvim-web-devicons", -- or echasnovski/mini.icons
-      "zbirenbaum/copilot.lua",    -- for providers='copilot'
+      "zbirenbaum/copilot.lua",      -- for providers='copilot'
       {
         -- support for image pasting
         "HakonHarnes/img-clip.nvim",
