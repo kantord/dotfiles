@@ -3,10 +3,10 @@ local options = {
     lua = { "stylua" },
     css = { "prettier" },
     html = { "prettier" },
-    javascript = { { "prettierd", "prettier" }, {"eslint_d"} },
-    typescript = { { "prettierd", "prettier" }, {"eslint_d"} },
-    javascriptreact = { { "prettierd", "prettier" }, {"eslint_d"} },
-    typescriptreact = { { "prettierd", "prettier" }, {"eslint_d"} },
+    javascript = { "prettierd", "prettier", stop_after_first = true },
+    typescript = { "prettierd", "prettier", stop_after_first = true },
+    javascriptreact = { "prettierd", "prettier", stop_after_first = true },
+    typescriptreact = { "prettierd", "prettier", stop_after_first = true },
   }
 }
 
