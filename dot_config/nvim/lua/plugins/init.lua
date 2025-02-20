@@ -46,6 +46,17 @@ return {
   },
 
   {
+    "stacklok/codegate.nvim",
+    dependencies = { "nvim-lua/plenary.nvim" },
+    lazy = false,
+    config = function()
+      require("codegate").setup({
+        base_url = "http://127.0.0.1:8989",
+      })
+    end,
+  },
+
+  {
     "zbirenbaum/copilot.lua",
     cmd = "Copilot",
     event = "InsertEnter",
@@ -122,8 +133,8 @@ return {
       openai = {
         endpoint = "http://localhost:8989/openai",
         model = "gpt-4o", -- your desired model (or use gpt-4o, etc.)
-        timeout = 30000, -- timeout in milliseconds
-        temperature = 0, -- adjust if needed
+        timeout = 30000,  -- timeout in milliseconds
+        temperature = 0,  -- adjust if needed
         max_tokens = 4096,
       },
     },
