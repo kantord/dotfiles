@@ -118,7 +118,14 @@ return {
     version = false, -- set this if you want to always pull the latest change
     opts = {
       -- add any opts here
-      provider = "openai"
+      provider = "openai",
+      openai = {
+        endpoint = "http://localhost:8989/openai",
+        model = "gpt-4o", -- your desired model (or use gpt-4o, etc.)
+        timeout = 30000, -- timeout in milliseconds
+        temperature = 0, -- adjust if needed
+        max_tokens = 4096,
+      },
     },
     -- if you want to build from source then do `make BUILD_FROM_SOURCE=true`
     build = "make",
