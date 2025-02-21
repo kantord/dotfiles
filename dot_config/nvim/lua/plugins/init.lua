@@ -46,17 +46,6 @@ return {
   },
 
   {
-    "stacklok/codegate.nvim",
-    dependencies = { "nvim-lua/plenary.nvim" },
-    lazy = false,
-    config = function()
-      require("codegate").setup({
-        base_url = "http://127.0.0.1:8989",
-      })
-    end,
-  },
-
-  {
     "zbirenbaum/copilot.lua",
     cmd = "Copilot",
     event = "InsertEnter",
@@ -123,15 +112,27 @@ return {
   },
 
   {
+    "stacklok/codegate.nvim",
+    dependencies = { "nvim-lua/plenary.nvim" },
+    lazy = false,
+    config = function()
+      require("codegate").setup({
+        base_url = "http://127.0.0.1:8989",
+      })
+    end,
+  },
+
+  {
     "yetone/avante.nvim",
     event = "VeryLazy",
     lazy = false,
+    debug = true,
     version = false, -- set this if you want to always pull the latest change
     opts = {
       -- add any opts here
       provider = "openai",
       openai = {
-        endpoint = "http://localhost:8989/openai",
+        endpoint = "http://localhost:8989/v1/mux",
         model = "gpt-4o", -- your desired model (or use gpt-4o, etc.)
         timeout = 30000,  -- timeout in milliseconds
         temperature = 0,  -- adjust if needed
