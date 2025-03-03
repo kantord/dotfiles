@@ -123,6 +123,14 @@ return {
   },
 
   {
+    dir="~/repos/seagoat.nvim",  -- path to your local plugin
+    lazy=false,
+    config = function()
+      require("seagoat")  -- This will load lua/seagoat.lua from your plugin directory.
+    end,
+  },
+
+  {
     "yetone/avante.nvim",
     event = "VeryLazy",
     lazy = false,
