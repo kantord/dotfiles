@@ -129,9 +129,6 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
-zvm_after_init_commands+=(eval "$(atuin init zsh)")
-
-
 export PATH=$HOME/.cargo/bin/:$PATH
 
 alias htop="btop"
@@ -146,4 +143,5 @@ export PYENV_ROOT="$HOME/.pyenv"
 [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
 eval "$(pyenv init - zsh)"
 
-# Restart your shell for the changes to take effect.
+alias pass="EDITOR='nvim -u NONE' pass"
+. "$HOME/.atuin/bin/env"
