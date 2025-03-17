@@ -144,4 +144,4 @@ export PYENV_ROOT="$HOME/.pyenv"
 eval "$(pyenv init - zsh)"
 
 alias pass="EDITOR='nvim -u NONE' pass"
-eval "$(atuin init zsh)"
+zvm_after_init_commands+=(eval "$(atuin init zsh)")
