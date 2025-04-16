@@ -123,7 +123,7 @@ return {
   },
 
   {
-    dir="~/repos/seagoat.nvim",  -- path to your local plugin
+    "kantord/seagoat.nvim",
     lazy=false,
     config = function()
       require("seagoat")  -- This will load lua/seagoat.lua from your plugin directory.
