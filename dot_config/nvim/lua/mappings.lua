@@ -17,4 +17,14 @@ if vim.g.neovide == true then
   vim.api.nvim_set_keymap("n", "<C-0>", ":lua vim.g.neovide_scale_factor = 1<CR>", { silent = true })
 end
 
+require("telescope").setup {
+  defaults = {
+    vimgrep_arguments = {
+      "zg",
+      "--column",
+      "--color=never",
+    },
+  },
+}
+
 -- map({ "n", "i", "v" }, "<C-s>", "<cmd> w <cr>")
