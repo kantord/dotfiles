@@ -1,0 +1,12 @@
+[global]
+monitor          = 0
+
+origin           = "bottom-center"      # bottom edge, centred
+width           = 2690                 # screen width
+height          = 21                    # auto height
+offset          = (0, 0)                    # no offset
+
+alignment       = center               # purely cosmetic
+frame_width      = 0                    # remove border
+background         = "#000000"            # black background
+foreground         = "#FFFFFF"            # white text
