@@ -14,3 +14,4 @@ ignore_newline = true                # ignore newlines
 history_length = 20                    # no history
 notification_limit = 1
 format = "<i>%a</i> <b>%s</b> %b"                # no formatting
+icon_position = off
