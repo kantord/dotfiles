@@ -10,3 +10,6 @@ alignment       = center               # purely cosmetic
 frame_width      = 0                    # remove border
 background         = "#000000"            # black background
 foreground         = "#FFFFFF"            # white text
+ignore_newline = true                # ignore newlines
+history_length = 20                    # no history
+notification_limit = 1
