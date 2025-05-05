@@ -145,3 +145,5 @@ eval "$(pyenv init - zsh)"
 
 alias pass="EDITOR='nvim -u NONE' pass"
 zvm_after_init_commands+=(eval "$(atuin init zsh)")
+
+source $HOME/.profile
