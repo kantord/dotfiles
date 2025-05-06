@@ -2,8 +2,8 @@
 monitor          = 0
 
 origin           = "bottom-center"      # bottom edge, centred
-width           = 2690                 # screen width
-height          = 21                    # auto height
+width           = 3840                 # screen width
+height          = 39                    # auto height
 offset          = (0, 0)                    # no offset
 
 alignment       = center               # purely cosmetic
@@ -15,4 +15,5 @@ history_length = 20                    # no history
 notification_limit = 1
 format = "<i>%a</i> <b>%s</b> %b"                # no formatting
 icon_position = right
-
+scale = 1.0
+font = "monospace 5"
