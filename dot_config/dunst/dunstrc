@@ -5,6 +5,7 @@ origin           = "bottom-center"      # bottom edge, centred
 width           = 3840                 # screen width
 height          = 39                    # auto height
 offset          = (0, 0)                    # no offset
+horizontal_padding = 1000
 
 alignment       = center               # purely cosmetic
 frame_width      = 0                    # remove border
