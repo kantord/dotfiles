@@ -17,4 +17,4 @@ notification_limit = 1
 format = "<i>%a</i> <b>%s</b> %b"                # no formatting
 icon_position = right
 scale = 1.0
-font = "monospace 5"
+font = "MonaspiceXe Nerd Font Mono 18px"
