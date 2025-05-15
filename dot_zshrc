@@ -144,3 +144,4 @@ alias pass="EDITOR='nvim -u NONE' pass"
 zvm_after_init_commands+=(eval "$(atuin init zsh)")
 
 source $HOME/.profile
+export PATH="$PATH:$(go env GOBIN):$(go env GOPATH)/bin"
