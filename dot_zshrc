@@ -114,6 +114,10 @@ source $ZSH/oh-my-zsh.sh
 
 alias gpp="git push"
 alias gff="git push --force-with-lease"
+alias gsww="git switch -"
+alias gswm="git switch main"
+alias tss="tig status"
+alias ggc="git commit"
 
 [[ -e /workspaces/web/profile ]] && source /workspaces/web/profile
 [[ -e $HOME/repos/web/profile ]] && source $HOME/repos/web/profile
