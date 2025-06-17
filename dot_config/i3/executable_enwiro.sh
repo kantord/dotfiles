@@ -2,4 +2,9 @@
 
 export RUST_PATH="/home/kantord/.cargo/bin/"
 export PATH="$PATH:$RUST_PATH"
-enwiro "$@"
+
+if command -v enwiro >/dev/null 2>&1; then
+    exec enwiro "$@"
+else
+    exec "$@"
+fi
