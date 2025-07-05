@@ -24,6 +24,7 @@ for ((i = 0; i < empty; i++)); do bar+=$DOT_EMPTY; done
 
 notify-send -a "" \
   -u critical \
+  -t 800 \
   -h "string:x-canonical-private-synchronous:i3wm.set-brightness.notification" \
   "Brightness" "$bar"
 
