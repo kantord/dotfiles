@@ -1,6 +1,7 @@
 [user]
 	email = {{ .gitEmail }}
 	name = Daniel Kantor
+	signingkey = .ssh/id_ed25519.pub
 [pull]
 	rebase = true
 [merge]
@@ -19,3 +20,9 @@
 	helper = !/usr/bin/gh auth git-credential
 [diff]
     external = difft
+[commit]
+	gpgsign = true
+[core]
+	excludesFile = ~/.gitignore
+[gpg]
+	format = ssh
