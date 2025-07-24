@@ -3,5 +3,5 @@
 -- Add any additional keymaps here
 
 -- Map Space+J to find files (same as <leader>f)
-vim.keymap.set("n", "<leader>j", "<cmd>Telescope find_files<cr>", { desc = "Find Files" })
+vim.keymap.set("n", "<leader>j", "<cmd>lua Snacks.picker.files()<cr>", { desc = "Find Files" })
 
