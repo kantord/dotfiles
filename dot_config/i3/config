@@ -256,7 +256,7 @@ bindsym $mod+F12 exec  --no-startup-id "/home/kantord/.local/bin/i3-gnome-pomodo
 
 
 
-bindsym $mod+M exec /home/kantord/repos/config/apps/i3/scripts/i3-cycle-workspace.sh
+bindsym $mod+M exec --no-startup-id ~/.config/i3/move_workspace_to_output.sh
 
 
 # vimwiki in floating window
