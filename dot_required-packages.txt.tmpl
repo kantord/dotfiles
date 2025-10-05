@@ -25,39 +25,38 @@ docker-compose
 
 {{/* Rustup can only be automatically installed on Arch Linux */}}
 {{ if eq .platform "arch" }}
-  rustup
+rustup
 {{ else}}
 	{{ if eq .packageManager "apt" }}
-  cargo
+cargo
 	{{ end }}
 {{ end }}
 
 {{/* Should not be required on Ubuntu/MacOS */}}
 {{ if eq .platform "arch" }}
-  lshw
-  x11-ssh-askpass
+lshw
+x11-ssh-askpass
 {{ end }}
 
 
 {{/* ===> EXTRAS <=== */}}
 {{/* These things are not needed or useful for work */}}
 {{ if eq .platform "arch" }}
-  ledger
+ledger
 {{ end }}
 
 {{/* ===> GUI ONLY <=== */}}
 {{/* These are not useful in remote servers/GitHub Codespaces */}}
 {{ if eq .platform "arch" }}
-  blueberry
+blueberry
 feh
 lxappearance
 gtk-chtheme
-arc-solid-gtk-theme
 gnome-settings-daemon
-dex {{/* autostart for systems that don't have it built in */}}
+dex
 xsettingsd
 gtk-engine-murrine
-gnome-themes-extra 
+gnome-themes-extra
 xorg-xsetroot
 vlc
 httpie
@@ -75,12 +74,12 @@ ueberzug
 perf
 jc
 openssl-1.1
-potrace  {{/* convert PNG to SVG by tracing */}}
+potrace
 imagemagick
 gnome-system-monitor
 firefox
 ipython
-piper {{/* support gaming mouses */}}
+piper
 hsetroot
 vulkan-icd-loader
 gamescope
@@ -113,7 +112,7 @@ typescript-language-server
 diff-so-fancy
 xcape
 light-locker
-lldb {{/* debugger */}}
+lldb
 ddcutil
 flatpak
 btop
@@ -163,7 +162,7 @@ browserpass-chromium
 browserpass
 xdotool
 v4l2loopback-dkms
-v4l2loopback-utils 
+v4l2loopback-utils
 polkit-gnome
 polkit
 git-lfs
