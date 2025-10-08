@@ -22,11 +22,20 @@ fi
 timestamp="$(date +'%Y-%m-%d_%H-%M-%S')"
 outfile="$OUTPUT_DIR/recording-${timestamp}.mp4"
 
+# Parse region: "X,Y WxH" -> extract W and H, ensure even dimensions for H.264
+size="${region#* }"  # "WxH"
+width="${size%x*}"
+height="${size#*x}"
+
+# Round down to even numbers (H.264 requires dimensions divisible by 2)
+width=$(( width & ~1 ))
+height=$(( height & ~1 ))
+
 # Start ffmpeg (no audio), backgrounded; store PID
 # -INT (stop) will finalize the file cleanly
 # Use ultrafast for low CPU, tweak as you wish.
 ffmpeg -y \
-  -f x11grab -video_size "${region#* }" -i ":0.0+${region%% *}" \
+  -f x11grab -video_size "${width}x${height}" -i ":0.0+${region%% *}" \
   -r 30 -c:v libx264 -preset ultrafast -crf 23 -pix_fmt yuv420p \
   "$outfile" >"$LOGFILE" 2>&1 &
 
