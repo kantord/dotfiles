@@ -52,6 +52,7 @@ bindsym XF86AudioPrev exec playerctl previous
 # Take screenshots
 bindsym --release $mod+Print exec scrot -e 'mv $f ~/Pictures/Screenshots'
 bindsym --release $mod+Shift+Print exec scrot -s -e 'mv $f ~/Pictures/Screenshots'
+bindsym $mod+Shift+s exec --no-startup-id ~/.config/i3/screenshot-region.sh
 
 # Type emoji using rofi
 bindsym XF86MenuKB exec --no-startup-id rofi -modi emoji -show emoji
