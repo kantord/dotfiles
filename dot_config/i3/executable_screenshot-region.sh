@@ -20,8 +20,8 @@ geometry="${size}+${x}+${y}"
 timestamp="$(date +'%Y-%m-%d_%H-%M-%S')"
 outfile="$OUTPUT_DIR/screenshot-${timestamp}.png"
 
-# Take screenshot using maim
-if maim -g "$geometry" "$outfile"; then
+# Take screenshot using scrot
+if scrot -a "${x},${y},${size%x*},${size#*x}" "$outfile"; then
   notify-send "📸 Screenshot saved" "$(basename "$outfile")"
 else
   notify-send "❌ Screenshot failed" "Could not capture region."
