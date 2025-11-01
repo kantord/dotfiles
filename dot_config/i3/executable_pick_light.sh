@@ -8,6 +8,11 @@ TARGET_FILE="$CACHE_DIR/target"
 
 mkdir -p "$CACHE_DIR"
 
+# Leave i3 mode while typing in rofi to avoid hotkeys firing
+i3-msg 'mode "default"' >/dev/null 2>&1 || true
+# Ensure we re-enter light mode after picking (or canceling)
+trap 'i3-msg "mode \"light-brightness\"" >/dev/null 2>&1 || true' EXIT
+
 if ! command -v rofi >/dev/null 2>&1; then
   notify-send -u low "Light picker" "rofi not found"
   exit 1
@@ -37,4 +42,3 @@ printf '%s\t%s\n' "$entity_id" "$label" > "$TARGET_FILE"
 
 notify-send -u low -t 800 -h "string:x-canonical-private-synchronous:i3wm.set-light-brightness.notification" \
   "Controlling" "$label"
-
