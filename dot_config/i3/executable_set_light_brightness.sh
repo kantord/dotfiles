@@ -52,9 +52,7 @@ notify-send -a "" \
 # 0% should turn light off for a crisp UX
 if [ "$value" -eq 0 ]; then
   /home/kantord/.local/bin/ha-i3 set "$ENTITY_ID" 0
-  i3-msg 'mode "default"' >/dev/null 2>&1 || true
   exit 0
 fi
 
 /home/kantord/.local/bin/ha-i3 set "$ENTITY_ID" "$value"
-i3-msg 'mode "default"' >/dev/null 2>&1 || true
