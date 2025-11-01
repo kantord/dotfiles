@@ -350,8 +350,45 @@ main() {
       # mireds = 1e6 / K
       MIR=$(( 1000000 / K ))
       url="${HASS_SERVER%/}/api/services/light/turn_on"
-      payload=$(printf '{"entity_id":"%s","color_temp_kelvin":%d,"color_temp":%d}' "$2" "$K" "$MIR")
-      curl_call POST "$url" "$payload" >/dev/null
+      # Strategy: try color_temp (mireds) first, then color_temp_kelvin, then turn_on+retry.
+      # If jq is present, verify by reading state after each try.
+      try_apply() {
+        local mode="$1"; shift
+        local data="$1"; shift
+        curl_call POST "$url" "$data" >/dev/null || true
+        if command -v jq >/dev/null 2>&1; then
+          sleep 0.15
+          local st out http_code
+          out="$(curl_call_code GET "${HASS_SERVER%/}/api/states/$2")"
+          http_code=$(cat "$CODE_FILE" 2>/dev/null || printf '')
+          if [ "$http_code" = "200" ]; then
+            if [ "$mode" = "mired" ]; then
+              printf '%s' "$out" | jq -e --argjson want "$MIR" '(.attributes.color_temp // -1) as $ct | ($ct >= 0 and (($ct - $want) | tonumber | abs) <= 2)' >/dev/null 2>&1 && return 0
+            else
+              # Accept either kelvin or mireds match
+              printf '%s' "$out" | jq -e --argjson wantk "$K" --argjson wantm "$MIR" '((.attributes.color_temp_kelvin // -1) as $k | $k == $wantk) or ((.attributes.color_temp // -1) as $m | ($m >= 0 and (($m - $wantm) | tonumber | abs) <= 2))' >/dev/null 2>&1 && return 0
+            fi
+          fi
+          return 1
+        else
+          return 0
+        fi
+      }
+
+      # 1) mireds
+      payload=$(printf '{"entity_id":"%s","color_temp":%d}' "$2" "$MIR")
+      if try_apply mired "$payload" "$2"; then exit 0; fi
+      # 2) kelvin
+      payload=$(printf '{"entity_id":"%s","color_temp_kelvin":%d}' "$2" "$K")
+      if try_apply kelvin "$payload" "$2"; then exit 0; fi
+      # 3) turn on, then mireds then kelvin
+      curl_call POST "$url" "$(printf '{"entity_id":"%s"}' "$2")" >/dev/null || true
+      payload=$(printf '{"entity_id":"%s","color_temp":%d}' "$2" "$MIR")
+      if try_apply mired "$payload" "$2"; then exit 0; fi
+      payload=$(printf '{"entity_id":"%s","color_temp_kelvin":%d}' "$2" "$K")
+      if try_apply kelvin "$payload" "$2"; then exit 0; fi
+      printf 'Warning: failed to set color temperature for %s to %sK\n' "$2" "$K" >&2
+      exit 1
       ;;
     refresh-token)
       rm -f "$TOKEN_FILE"
