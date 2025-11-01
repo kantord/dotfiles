@@ -43,5 +43,13 @@ fi
 
 printf '%s\t%s\n' "$entity_id" "$label" > "$TARGET_FILE"
 
-notify-send -u low -t 800 -h "string:x-canonical-private-synchronous:i3wm.set-light-brightness.notification" \
+notify-send -u low -t 0 -h "string:x-canonical-private-synchronous:i3wm.set-light-brightness.notification" \
   "Controlling" "$label"
+
+# After the short confirmation, restore the persistent mode banner
+(
+  sleep 0.8
+  notify-send -a "" -u low -t 0 \
+    -h "string:x-canonical-private-synchronous:i3wm.set-light-brightness.notification" \
+    "Lights" "$label (space to pick)"
+) >/dev/null 2>&1 &

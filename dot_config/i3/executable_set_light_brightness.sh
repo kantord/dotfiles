@@ -45,14 +45,26 @@ for ((i = 0; i < empty; i++)); do bar+=$DOT_EMPTY; done
 
 notify-send -a "" \
   -u critical \
-  -t 800 \
+  -t 0 \
   -h "string:x-canonical-private-synchronous:i3wm.set-light-brightness.notification" \
   "$LABEL" "$bar"
 
 # 0% should turn light off for a crisp UX
 if [ "$value" -eq 0 ]; then
   /home/kantord/.local/bin/ha-i3 set "$ENTITY_ID" 0
+  (
+    sleep 0.8
+    notify-send -a "" -u low -t 0 \
+      -h "string:x-canonical-private-synchronous:i3wm.set-light-brightness.notification" \
+      "Lights" "$LABEL (space to pick)"
+  ) >/dev/null 2>&1 &
   exit 0
 fi
 
 /home/kantord/.local/bin/ha-i3 set "$ENTITY_ID" "$value"
+(
+  sleep 0.8
+  notify-send -a "" -u low -t 0 \
+    -h "string:x-canonical-private-synchronous:i3wm.set-light-brightness.notification" \
+    "Lights" "$LABEL (space to pick)"
+) >/dev/null 2>&1 &
