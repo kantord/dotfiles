@@ -6,8 +6,27 @@
 
 set -euo pipefail
 
-ENTITY_ID="${ENTITY_ID:-light.tradfri_bulb_4}"
-LABEL="${LABEL:-Living room desk}"
+ENTITY_ID_DEFAULT="light.tradfri_bulb_4"
+LABEL_DEFAULT="Living room desk"
+
+# Resolve target from env override, then cached selection, else defaults
+CACHE_DIR="${XDG_CACHE_HOME:-$HOME/.cache}/ha-i3"
+TARGET_FILE="$CACHE_DIR/target"
+
+ENTITY_ID="${ENTITY_ID:-}"
+LABEL="${LABEL:-}"
+
+if [ -z "$ENTITY_ID" ] && [ -f "$TARGET_FILE" ]; then
+  # target file format: entity_id<TAB>friendly_name
+  IFS=$'\t' read -r cached_entity cached_label < "$TARGET_FILE" || true
+  if [ -n "${cached_entity:-}" ]; then
+    ENTITY_ID="$cached_entity"
+    if [ -z "$LABEL" ] && [ -n "${cached_label:-}" ]; then LABEL="$cached_label"; fi
+  fi
+fi
+
+[ -n "$ENTITY_ID" ] || ENTITY_ID="$ENTITY_ID_DEFAULT"
+[ -n "$LABEL" ] || LABEL="$LABEL_DEFAULT"
 
 value=${1:-50}
 ((value < 0)) && value=0

@@ -227,6 +227,7 @@ bindsym $mod+b mode "brightness"
 
 # Light control mode (living room desk)
 mode "light-brightness" {
+        bindsym space exec --no-startup-id bash /home/kantord/.config/i3/pick_light.sh
         bindsym a exec --no-startup-id bash /home/kantord/.config/i3/set_light_brightness.sh 10
         bindsym s exec --no-startup-id bash /home/kantord/.config/i3/set_light_brightness.sh 20
         bindsym d exec --no-startup-id bash /home/kantord/.config/i3/set_light_brightness.sh 30
@@ -343,4 +344,3 @@ for_window [title="Picture in picture"] fullscreen enable
 bindsym $mod+period workspace .
 
 exec_always --no-startup-id bash -c "xinput --map-to-output $(xinput --list | grep MPI7003 | cut -f2 | cut -f2 -d'=') HDMI-0"
-
