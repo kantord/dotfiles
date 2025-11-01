@@ -225,6 +225,24 @@ mode "brightness" {
 }
 bindsym $mod+b mode "brightness"
 
+# Light control mode (living room desk)
+mode "light-brightness" {
+        bindsym a exec --no-startup-id bash /home/kantord/.config/i3/set_light_brightness.sh 10
+        bindsym s exec --no-startup-id bash /home/kantord/.config/i3/set_light_brightness.sh 20
+        bindsym d exec --no-startup-id bash /home/kantord/.config/i3/set_light_brightness.sh 30
+        bindsym f exec --no-startup-id bash /home/kantord/.config/i3/set_light_brightness.sh 40
+        bindsym g exec --no-startup-id bash /home/kantord/.config/i3/set_light_brightness.sh 50
+        bindsym h exec --no-startup-id bash /home/kantord/.config/i3/set_light_brightness.sh 60
+        bindsym j exec --no-startup-id bash /home/kantord/.config/i3/set_light_brightness.sh 70
+        bindsym k exec --no-startup-id bash /home/kantord/.config/i3/set_light_brightness.sh 80
+        bindsym l exec --no-startup-id bash /home/kantord/.config/i3/set_light_brightness.sh 90
+        bindsym semicolon exec --no-startup-id bash /home/kantord/.config/i3/set_light_brightness.sh 100
+        bindsym Return mode "default"
+        bindsym Escape mode "default"
+        bindsym $mod+Shift+b mode "default"
+}
+bindsym $mod+Shift+b mode "light-brightness"
+
 # --- Recording mode ---
 mode "recording" {
     # Finish recording and return to normal
@@ -325,5 +343,4 @@ for_window [title="Picture in picture"] fullscreen enable
 bindsym $mod+period workspace .
 
 exec_always --no-startup-id bash -c "xinput --map-to-output $(xinput --list | grep MPI7003 | cut -f2 | cut -f2 -d'=') HDMI-0"
-
 
