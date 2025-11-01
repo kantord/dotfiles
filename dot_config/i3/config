@@ -240,9 +240,8 @@ mode "light-brightness" {
         bindsym semicolon exec --no-startup-id bash /home/kantord/.config/i3/set_light_brightness.sh 100
         bindsym Return mode "default"
         bindsym Escape mode "default"
-        bindsym $mod+Shift+b mode "default"
 }
-bindsym $mod+Shift+b mode "light-brightness"
+bindsym Hyper+F24 mode "light-brightness"
 
 # --- Recording mode ---
 mode "recording" {
