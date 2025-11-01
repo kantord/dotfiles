@@ -240,6 +240,17 @@ mode "light-brightness" {
         bindsym k exec --no-startup-id bash /home/kantord/.config/i3/set_light_brightness.sh 80
         bindsym l exec --no-startup-id bash /home/kantord/.config/i3/set_light_brightness.sh 90
         bindsym semicolon exec --no-startup-id bash /home/kantord/.config/i3/set_light_brightness.sh 100
+        # Color row (HS-tuned for TRÅDFRI): z x c v b n m , . /
+        bindsym z exec --no-startup-id bash /home/kantord/.config/i3/set_light_color.sh red
+        bindsym x exec --no-startup-id bash /home/kantord/.config/i3/set_light_color.sh orange
+        bindsym c exec --no-startup-id bash /home/kantord/.config/i3/set_light_color.sh amber
+        bindsym v exec --no-startup-id bash /home/kantord/.config/i3/set_light_color.sh green
+        bindsym b exec --no-startup-id bash /home/kantord/.config/i3/set_light_color.sh teal
+        bindsym n exec --no-startup-id bash /home/kantord/.config/i3/set_light_color.sh blue
+        bindsym m exec --no-startup-id bash /home/kantord/.config/i3/set_light_color.sh royal
+        bindsym comma exec --no-startup-id bash /home/kantord/.config/i3/set_light_color.sh purple
+        bindsym period exec --no-startup-id bash /home/kantord/.config/i3/set_light_color.sh magenta
+        bindsym slash exec --no-startup-id bash /home/kantord/.config/i3/set_light_color.sh pink
         bindsym Return exec --no-startup-id bash /home/kantord/.config/i3/light_mode_exit.sh
         bindsym Escape exec --no-startup-id bash /home/kantord/.config/i3/light_mode_exit.sh
         bindsym $mod+Shift+b exec --no-startup-id bash /home/kantord/.config/i3/light_mode_exit.sh

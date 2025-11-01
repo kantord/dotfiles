@@ -226,6 +226,15 @@ USAGE:
   ha-i3 adjust <entity_id> <+N|-N>
       Adjust brightness by N percent points. Requires jq for accuracy.
 
+  ha-i3 color <entity_id> <R> <G> <B>
+      Set RGB color (0..255 per component).
+
+  ha-i3 hs <entity_id> <H 0..360> <S 0..100>
+      Set color via HS (hue/saturation).
+
+  ha-i3 state <entity_id>
+      Print raw JSON state for the entity.
+
   ha-i3 refresh-token
       Drop cached token and refetch from pass.
 
@@ -291,6 +300,42 @@ main() {
     adjust)
       [ $# -eq 3 ] || die "Usage: ha-i3 adjust <entity_id> <+N|-N>"
       adjust_brightness_pct "$2" "$3"
+      ;;
+    color)
+      [ $# -eq 5 ] || die "Usage: ha-i3 color <entity_id> <R> <G> <B>"
+      if ! [[ "$3" =~ ^[0-9]+$ && "$4" =~ ^[0-9]+$ && "$5" =~ ^[0-9]+$ ]]; then
+        die "RGB components must be integers 0..255"
+      fi
+      if [ "$3" -gt 255 ] || [ "$4" -gt 255 ] || [ "$5" -gt 255 ]; then
+        die "RGB components must be 0..255"
+      fi
+      url="${HASS_SERVER%/}/api/services/light/turn_on"
+      payload=$(printf '{"entity_id":"%s","rgb_color":[%d,%d,%d]}' "$2" "$3" "$4" "$5")
+      curl_call POST "$url" "$payload" >/dev/null
+      ;;
+    hs)
+      [ $# -eq 4 ] || die "Usage: ha-i3 hs <entity_id> <H 0..360> <S 0..100>"
+      H="$3"; S="$4"
+      if ! [[ "$H" =~ ^[0-9]+$ && "$S" =~ ^[0-9]+$ ]]; then
+        die "H and S must be integers (H:0..360, S:0..100)"
+      fi
+      if [ "$H" -gt 360 ] || [ "$S" -gt 100 ]; then
+        die "H must be 0..360 and S 0..100"
+      fi
+      url="${HASS_SERVER%/}/api/services/light/turn_on"
+      payload=$(printf '{"entity_id":"%s","hs_color":[%d,%d]}' "$2" "$H" "$S")
+      curl_call POST "$url" "$payload" >/dev/null
+      ;;
+    state)
+      [ $# -eq 2 ] || die "Usage: ha-i3 state <entity_id>"
+      url="${HASS_SERVER%/}/api/states/$2"
+      out="$(curl_call_code GET "$url")"
+      http_code=$(cat "$CODE_FILE" 2>/dev/null || printf '')
+      if [ "$http_code" != "200" ]; then
+        printf '%s' "$out" >&2
+        exit 1
+      fi
+      printf '%s' "$out"
       ;;
     refresh-token)
       rm -f "$TOKEN_FILE"
