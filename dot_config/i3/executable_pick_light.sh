@@ -8,7 +8,10 @@ TARGET_FILE="$CACHE_DIR/target"
 
 mkdir -p "$CACHE_DIR"
 
-# Leave i3 mode while typing in rofi to avoid hotkeys firing
+# Leave i3 mode while typing in rofi to avoid hotkeys firing, and dismiss entry banner
+notify-send -a "" -u low -t 1 \
+  -h "string:x-canonical-private-synchronous:i3wm.set-light-brightness.notification" \
+  "" "" || true
 i3-msg 'mode "default"' >/dev/null 2>&1 || true
 # Re-enter light mode after picking (or canceling)
 trap 'i3-msg "mode \"light-brightness\"" >/dev/null 2>&1 || true' EXIT

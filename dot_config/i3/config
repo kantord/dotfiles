@@ -238,11 +238,11 @@ mode "light-brightness" {
         bindsym k exec --no-startup-id bash /home/kantord/.config/i3/set_light_brightness.sh 80
         bindsym l exec --no-startup-id bash /home/kantord/.config/i3/set_light_brightness.sh 90
         bindsym semicolon exec --no-startup-id bash /home/kantord/.config/i3/set_light_brightness.sh 100
-        bindsym Return mode "default"
-        bindsym Escape mode "default"
-        bindsym $mod+Shift+b mode "default"
+        bindsym Return exec --no-startup-id bash /home/kantord/.config/i3/light_mode_exit.sh
+        bindsym Escape exec --no-startup-id bash /home/kantord/.config/i3/light_mode_exit.sh
+        bindsym $mod+Shift+b exec --no-startup-id bash /home/kantord/.config/i3/light_mode_exit.sh
 }
-bindsym $mod+Shift+b mode "light-brightness"
+bindsym $mod+Shift+b exec --no-startup-id bash /home/kantord/.config/i3/light_mode_enter.sh
 
 # --- Recording mode ---
 mode "recording" {
