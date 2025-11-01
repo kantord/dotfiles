@@ -228,6 +228,8 @@ bindsym $mod+b mode "brightness"
 # Light control mode (living room desk)
 mode "light-brightness" {
         bindsym space exec --no-startup-id bash /home/kantord/.config/i3/pick_light.sh
+        bindsym i exec --no-startup-id bash /home/kantord/.config/i3/cycle_light.sh next
+        bindsym o exec --no-startup-id bash /home/kantord/.config/i3/cycle_light.sh prev
         bindsym a exec --no-startup-id bash /home/kantord/.config/i3/set_light_brightness.sh 10
         bindsym s exec --no-startup-id bash /home/kantord/.config/i3/set_light_brightness.sh 20
         bindsym d exec --no-startup-id bash /home/kantord/.config/i3/set_light_brightness.sh 30
