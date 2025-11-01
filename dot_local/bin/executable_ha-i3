@@ -141,6 +141,77 @@ set_brightness() {
   curl_call POST "$url" "$payload" >/dev/null
 }
 
+# Convert percentage [0-100] to brightness [0-255] with rounding
+pct_to_brightness() {
+  local pct="$1" b
+  if ! [[ "$pct" =~ ^[0-9]+$ ]]; then die "Percent must be 0..100"; fi
+  if [ "$pct" -lt 0 ] || [ "$pct" -gt 100 ]; then die "Percent must be 0..100"; fi
+  # Round: (pct*255 + 50)/100
+  b=$(( (pct * 255 + 50) / 100 ))
+  printf '%d' "$b"
+}
+
+# Convert brightness [0-255] to percentage [0-100] with rounding
+brightness_to_pct() {
+  local b="$1" p
+  if ! [[ "$b" =~ ^[0-9]+$ ]]; then die "Brightness must be 0..255"; fi
+  if [ "$b" -lt 0 ] || [ "$b" -gt 255 ]; then die "Brightness must be 0..255"; fi
+  # Round: (b*100 + 127)/255
+  p=$(( (b * 100 + 127) / 255 ))
+  printf '%d' "$p"
+}
+
+set_brightness_pct() {
+  local entity="$1" pct="$2"
+  if ! [[ "$pct" =~ ^[0-9]+$ ]]; then die "Percent must be 0..100"; fi
+  if [ "$pct" -lt 0 ] || [ "$pct" -gt 100 ]; then die "Percent must be 0..100"; fi
+  if [ "$pct" -eq 0 ]; then
+    # Turn off at 0%
+    local url_off="${HASS_SERVER%/}/api/services/light/turn_off"
+    local payload_off
+    payload_off=$(printf '{"entity_id":"%s"}' "$entity")
+    curl_call POST "$url_off" "$payload_off" >/dev/null
+    return
+  fi
+  local b
+  b=$(pct_to_brightness "$pct")
+  set_brightness "$entity" "$b"
+}
+
+get_current_brightness() {
+  local entity="$1" url out
+  url="${HASS_SERVER%/}/api/states/${entity}"
+  out="$(curl_call_code GET "$url")"
+  local http_code
+  http_code=$(cat "$CODE_FILE" 2>/dev/null || printf '')
+  if [ "$http_code" != "200" ]; then
+    die "Failed to read state (HTTP ${http_code:-unknown})"
+  fi
+  if command -v jq >/dev/null 2>&1; then
+    printf '%s' "$out" | jq -r '.attributes.brightness // 0'
+  else
+    # Fallback: naive extraction
+    printf '%s' "$out" | grep -o '"brightness":[0-9]\+' | head -n1 | cut -d: -f2 | tr -d '\n' | sed 's/^$/0/'
+  fi
+}
+
+adjust_brightness_pct() {
+  local entity="$1" delta="$2"
+  # Accept +N, -N, or N (treated as +N)
+  if ! [[ "$delta" =~ ^[+-]?[0-9]+$ ]]; then die "Delta must be an integer percent, e.g. +10 or -10"; fi
+  # Read current brightness (0..255) then to percent
+  local cur_b cur_pct new_pct
+  cur_b=$(get_current_brightness "$entity")
+  if ! [[ "$cur_b" =~ ^[0-9]+$ ]]; then cur_b=0; fi
+  cur_pct=$(brightness_to_pct "$cur_b")
+  # Normalize delta: strip leading + if present
+  if [[ "$delta" =~ ^\+ ]]; then delta="${delta:1}"; fi
+  new_pct=$(( cur_pct + delta ))
+  if [ "$new_pct" -lt 0 ]; then new_pct=0; fi
+  if [ "$new_pct" -gt 100 ]; then new_pct=100; fi
+  set_brightness_pct "$entity" "$new_pct"
+}
+
 usage() {
   cat <<EOF
 ha-i3 — minimal HA helper
@@ -149,8 +220,11 @@ USAGE:
   ha-i3 list
       List all light entities (entity_id and friendly name).
 
-  ha-i3 set <entity_id> <brightness 0..255>
-      Set brightness for one light.
+  ha-i3 set <entity_id> <0..100>
+      Set brightness as percent. 0% turns the light off. (Alias: set-pct)
+
+  ha-i3 adjust <entity_id> <+N|-N>
+      Adjust brightness by N percent points. Requires jq for accuracy.
 
   ha-i3 refresh-token
       Drop cached token and refetch from pass.
@@ -207,8 +281,16 @@ main() {
       list_lights
       ;;
     set)
-      [ $# -eq 3 ] || die "Usage: ha-i3 set <entity_id> <brightness>"
-      set_brightness "$2" "$3"
+      [ $# -eq 3 ] || die "Usage: ha-i3 set <entity_id> <0..100>"
+      set_brightness_pct "$2" "$3"
+      ;;
+    set-pct)
+      [ $# -eq 3 ] || die "Usage: ha-i3 set-pct <entity_id> <0..100>"
+      set_brightness_pct "$2" "$3"
+      ;;
+    adjust)
+      [ $# -eq 3 ] || die "Usage: ha-i3 adjust <entity_id> <+N|-N>"
+      adjust_brightness_pct "$2" "$3"
       ;;
     refresh-token)
       rm -f "$TOKEN_FILE"
