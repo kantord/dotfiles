@@ -1,0 +1,233 @@
+#!/usr/bin/env bash
+# ha-i3: minimal Home Assistant CLI for i3 keybinds
+# - Caches token in RAM file
+# - Fetches from pass on first use: homeassistant/i3wm_cli_token
+# - Requires: curl; jq (for clean output on `list`)
+set -euo pipefail
+
+# ====== CONFIG ======
+HASS_SERVER="${HASS_SERVER:-http://homeassistant.local:8123}"
+PASS_PATH="${PASS_PATH:-homeassistant/i3wm_cli_token}"
+RAM_DIR="/run/user/$(id -u)"
+TOKEN_FILE="${TOKEN_FILE:-$RAM_DIR/ha_token}"
+CODE_FILE="$RAM_DIR/ha_http_code"   # last HTTP status code (non-sensitive)
+# ====================
+
+die() { printf 'Error: %s\n' "$*" >&2; exit 1; }
+
+need() { command -v "$1" >/dev/null 2>&1 || die "Missing dependency: $1"; }
+need curl
+
+ensure_ramdir() { [ -d "$RAM_DIR" ] || die "No $RAM_DIR (no user tmpfs?)"; }
+
+load_or_fetch_token() {
+  ensure_ramdir
+  # If HASS_TOKEN is provided via env, skip pass entirely
+  if [ -n "${HASS_TOKEN:-}" ]; then
+    return
+  fi
+  if [ ! -f "$TOKEN_FILE" ]; then
+    need pass
+    umask 177
+    # read first line only (pass entries can have extra notes)
+    # write token without trailing newline characters
+    pass show "$PASS_PATH" | head -n1 | tr -d '\r\n' > "$TOKEN_FILE"
+    chmod 600 "$TOKEN_FILE"
+  fi
+}
+
+token() {
+  if [ -n "${HASS_TOKEN:-}" ]; then
+    printf '%s' "$HASS_TOKEN" | tr -d '\r\n \t'
+  else
+    tr -d '\r\n \t' < "$TOKEN_FILE"
+  fi
+}
+
+# Build a one-off curl config file in RAM to avoid leaking the token in argv.
+# Args: METHOD URL DATA_JSON(optional)
+curl_call() {
+  local method="$1" url="$2" data="${3:-}" conf
+  conf=$(mktemp -p "$RAM_DIR" ha_curl.XXXX)
+  umask 177
+  {
+    printf 'header = "Authorization: Bearer %s"\n' "$(token)"
+    printf 'header = "Content-Type: application/json"\n'
+    printf 'request = %s\n' "$method"
+    printf 'url = "%s"\n' "$url"
+    if [ -n "$data" ]; then
+      # Escape newlines and quotes safely
+      local data_escaped
+      data_escaped=$(printf '%s' "$data" | sed 's/"/\\"/g')
+      printf 'data = "%s"\n' "$data_escaped"
+    fi
+  } > "$conf"
+  chmod 600 "$conf"
+  curl -sS -K "$conf"
+  rm -f "$conf"
+}
+
+# Like curl_call, but also captures HTTP status into HAI3_HTTP_CODE and does not exit on HTTP errors.
+curl_call_code() {
+  local method="$1" url="$2" data="${3:-}" tmp_body http_code status conf
+  tmp_body="$(mktemp -p "$RAM_DIR" ha_body.XXXX)"
+  conf=$(mktemp -p "$RAM_DIR" ha_curl.XXXX)
+  umask 177
+  {
+    printf 'header = "Authorization: Bearer %s"\n' "$(token)"
+    printf 'header = "Content-Type: application/json"\n'
+    printf 'request = %s\n' "$method"
+    printf 'url = "%s"\n' "$url"
+    if [ -n "$data" ]; then
+      local data_escaped
+      data_escaped=$(printf '%s' "$data" | sed 's/"/\\"/g')
+      printf 'data = "%s"\n' "$data_escaped"
+    fi
+  } > "$conf"
+  chmod 600 "$conf"
+  set +e
+  http_code=$(curl -sS --fail-with-body -K "$conf" -w "%{http_code}" -o "$tmp_body")
+  status=$?
+  set -e
+  umask 177; printf '%s' "$http_code" > "$CODE_FILE"; chmod 600 "$CODE_FILE"
+  cat "$tmp_body"
+  rm -f "$tmp_body"
+  rm -f "$conf"
+  return 0
+}
+
+list_lights() {
+  # GET /api/states and filter light.*; pretty-print with jq if available
+  local url="${HASS_SERVER%/}/api/states"
+  local out http_code
+  out="$(curl_call_code GET "$url")"
+  http_code=$(cat "$CODE_FILE" 2>/dev/null || printf '')
+  if [ "$http_code" != "200" ]; then
+    printf 'Error: HTTP %s from Home Assistant when listing states.\n' "${http_code:-unknown}" >&2
+    printf 'Hint: check HASS_SERVER=%s and token. You can export HASS_TOKEN to test.\n' "$HASS_SERVER" >&2
+    printf 'Raw response (truncated):\n' >&2
+    printf '%s' "$out" | head -c 500 >&2; printf '\n' >&2
+    exit 1
+  fi
+  if command -v jq >/dev/null 2>&1; then
+    # Validate JSON before filtering to avoid jq parse errors on HTML/text errors
+    if ! printf '%s' "$out" | jq -e . >/dev/null 2>&1; then
+      printf 'Error: unexpected response from Home Assistant.\n' >&2
+      printf 'Hint: verify HASS_SERVER=%s and your token (pass show %s).\n' "$HASS_SERVER" "$PASS_PATH" >&2
+      printf 'Raw response (truncated):\n' >&2
+      printf '%s' "$out" | head -c 500 >&2; printf '\n' >&2
+      exit 1
+    fi
+    printf '%s' "$out" | jq -r '
+      .[] | select(.entity_id | startswith("light.")) |
+      "\(.entity_id)\t\(.attributes.friendly_name // "-")"
+    ' | sort
+  else
+    # basic fallback without jq
+    printf '%s\n' "Tip: install jq for nicer output."
+    printf '%s' "$out" | grep -o '"entity_id":"light\.[^"]*"\|"friendly_name":"[^"]*"' \
+      | sed 's/"entity_id"://;s/"friendly_name"://' | paste - - | sort
+  fi
+}
+
+set_brightness() {
+  local entity="$1" level="$2"
+  # clamp level 0..255
+  if ! [[ "$level" =~ ^[0-9]+$ ]]; then die "Brightness must be 0..255"; fi
+  if [ "$level" -lt 0 ] || [ "$level" -gt 255 ]; then die "Brightness must be 0..255"; fi
+  local url="${HASS_SERVER%/}/api/services/light/turn_on"
+  local payload
+  payload=$(printf '{"entity_id":"%s","brightness":%d}' "$entity" "$level")
+  curl_call POST "$url" "$payload" >/dev/null
+}
+
+usage() {
+  cat <<EOF
+ha-i3 — minimal HA helper
+
+USAGE:
+  ha-i3 list
+      List all light entities (entity_id and friendly name).
+
+  ha-i3 set <entity_id> <brightness 0..255>
+      Set brightness for one light.
+
+  ha-i3 refresh-token
+      Drop cached token and refetch from pass.
+
+  ha-i3 probe
+      Check connectivity and authentication against Home Assistant.
+
+ENV:
+  HASS_SERVER   (default: $HASS_SERVER)
+  PASS_PATH     (default: $PASS_PATH)
+  TOKEN_FILE    (default: $TOKEN_FILE)
+
+Examples:
+  ha-i3 list
+  ha-i3 set light.living_room 160
+  ha-i3 refresh-token
+  ha-i3 probe
+EOF
+}
+
+probe() {
+  local url_cfg="${HASS_SERVER%/}/api/config";
+  local out http_code
+  out="$(curl_call_code GET "$url_cfg")"
+  http_code=$(cat "$CODE_FILE" 2>/dev/null || printf '')
+  if [ "$http_code" = "200" ] && command -v jq >/dev/null 2>&1 && printf '%s' "$out" | jq -e . >/dev/null 2>&1; then
+    printf 'OK: Authenticated at %s (api/config reachable).\n' "$HASS_SERVER"
+    return 0
+  fi
+  printf 'Probe failed (HTTP %s). Raw response (truncated):\n' "${http_code:-unknown}" >&2
+  printf '%s' "$out" | head -c 500 >&2; printf '\n' >&2
+  exit 1
+}
+
+token_info() {
+  local t
+  t="$(token)"
+  if [ -z "$t" ]; then
+    printf 'No token loaded.\n'
+    return 1
+  fi
+  local len=${#t}
+  local head=${t:0:6}
+  local tail=${t: -4}
+  printf 'Token length: %d, fingerprint: %s…%s\n' "$len" "$head" "$tail"
+}
+
+main() {
+  [ $# -ge 1 ] || { usage; exit 1; }
+  load_or_fetch_token
+
+  case "$1" in
+    list)
+      list_lights
+      ;;
+    set)
+      [ $# -eq 3 ] || die "Usage: ha-i3 set <entity_id> <brightness>"
+      set_brightness "$2" "$3"
+      ;;
+    refresh-token)
+      rm -f "$TOKEN_FILE"
+      load_or_fetch_token
+      printf 'Token refreshed from pass path: %s\n' "$PASS_PATH"
+      ;;
+    probe)
+      probe
+      ;;
+    token-info)
+      token_info
+      ;;
+    -h|--help)
+      usage
+      ;;
+    *)
+      die "Unknown command: $1"
+      ;;
+  esac
+}
+
+main "$@"
