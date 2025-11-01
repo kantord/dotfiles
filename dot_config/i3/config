@@ -228,8 +228,8 @@ bindsym $mod+b mode "brightness"
 # Light control mode (living room desk)
 mode "light-brightness" {
         bindsym space exec --no-startup-id bash /home/kantord/.config/i3/pick_light.sh
-        bindsym i exec --no-startup-id bash /home/kantord/.config/i3/cycle_light.sh next
-        bindsym o exec --no-startup-id bash /home/kantord/.config/i3/cycle_light.sh prev
+        bindsym bracketright exec --no-startup-id bash /home/kantord/.config/i3/cycle_light.sh next
+        bindsym bracketleft exec --no-startup-id bash /home/kantord/.config/i3/cycle_light.sh prev
         bindsym a exec --no-startup-id bash /home/kantord/.config/i3/set_light_brightness.sh 10
         bindsym s exec --no-startup-id bash /home/kantord/.config/i3/set_light_brightness.sh 20
         bindsym d exec --no-startup-id bash /home/kantord/.config/i3/set_light_brightness.sh 30
@@ -240,6 +240,17 @@ mode "light-brightness" {
         bindsym k exec --no-startup-id bash /home/kantord/.config/i3/set_light_brightness.sh 80
         bindsym l exec --no-startup-id bash /home/kantord/.config/i3/set_light_brightness.sh 90
         bindsym semicolon exec --no-startup-id bash /home/kantord/.config/i3/set_light_brightness.sh 100
+        # White spectrum row (upper row: q w e r t y u i o p)
+        bindsym q exec --no-startup-id bash /home/kantord/.config/i3/set_light_white.sh 2200
+        bindsym w exec --no-startup-id bash /home/kantord/.config/i3/set_light_white.sh 2700
+        bindsym e exec --no-startup-id bash /home/kantord/.config/i3/set_light_white.sh 3000
+        bindsym r exec --no-startup-id bash /home/kantord/.config/i3/set_light_white.sh 3500
+        bindsym t exec --no-startup-id bash /home/kantord/.config/i3/set_light_white.sh 4000
+        bindsym y exec --no-startup-id bash /home/kantord/.config/i3/set_light_white.sh 4500
+        bindsym u exec --no-startup-id bash /home/kantord/.config/i3/set_light_white.sh 5000
+        bindsym i exec --no-startup-id bash /home/kantord/.config/i3/set_light_white.sh 5500
+        bindsym o exec --no-startup-id bash /home/kantord/.config/i3/set_light_white.sh 6000
+        bindsym p exec --no-startup-id bash /home/kantord/.config/i3/set_light_white.sh 6500
         # Color row (HS-tuned for TRÅDFRI): z x c v b n m , . /
         bindsym z exec --no-startup-id bash /home/kantord/.config/i3/set_light_color.sh red
         bindsym x exec --no-startup-id bash /home/kantord/.config/i3/set_light_color.sh orange

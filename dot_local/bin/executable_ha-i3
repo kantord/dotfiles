@@ -235,6 +235,9 @@ USAGE:
   ha-i3 state <entity_id>
       Print raw JSON state for the entity.
 
+  ha-i3 ct <entity_id> <kelvin>
+      Set white spectrum using color temperature in Kelvin.
+
   ha-i3 refresh-token
       Drop cached token and refetch from pass.
 
@@ -336,6 +339,19 @@ main() {
         exit 1
       fi
       printf '%s' "$out"
+      ;;
+    ct)
+      [ $# -eq 3 ] || die "Usage: ha-i3 ct <entity_id> <kelvin>"
+      K="$3"
+      if ! [[ "$K" =~ ^[0-9]+$ ]] || [ "$K" -lt 1000 ] || [ "$K" -gt 10000 ]; then
+        die "Kelvin must be an integer 1000..10000"
+      fi
+      # Also send color_temp (mireds) for broader compatibility
+      # mireds = 1e6 / K
+      MIR=$(( 1000000 / K ))
+      url="${HASS_SERVER%/}/api/services/light/turn_on"
+      payload=$(printf '{"entity_id":"%s","color_temp_kelvin":%d,"color_temp":%d}' "$2" "$K" "$MIR")
+      curl_call POST "$url" "$payload" >/dev/null
       ;;
     refresh-token)
       rm -f "$TOKEN_FILE"
