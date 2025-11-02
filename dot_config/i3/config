@@ -262,7 +262,7 @@ mode "light-brightness" {
         bindsym comma exec --no-startup-id bash /home/kantord/.config/i3/set_light_color.sh purple
         bindsym period exec --no-startup-id bash /home/kantord/.config/i3/set_light_color.sh magenta
         bindsym slash exec --no-startup-id bash /home/kantord/.config/i3/set_light_color.sh pink
-        bindsym Return exec --no-startup-id bash /home/kantord/.config/i3/light_mode_exit.sh
+        bindsym Return exec --no-startup-id bash /home/kantord/.config/i3/toggle_light.sh
         bindsym Escape exec --no-startup-id bash /home/kantord/.config/i3/light_mode_exit.sh
         bindsym $mod+Shift+b exec --no-startup-id bash /home/kantord/.config/i3/light_mode_exit.sh
 }
