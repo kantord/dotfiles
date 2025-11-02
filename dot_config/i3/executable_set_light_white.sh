@@ -49,6 +49,8 @@ fi
 
 # Fallback for bulbs without native color_temp support: approximate using HS
 # Convert Kelvin -> RGB -> HS and apply via ha-i3 hs
+# Tuning: make warmest warmer and coldest slightly less blue by remapping
+# requested range [2200..6500] -> [2000..6000] and scaling saturation by K.
 kelvin_to_rgb() {
   awk -v K="$1" '
     function clamp(x, a, b) { return x < a ? a : (x > b ? b : x) }
@@ -97,11 +99,42 @@ rgb_to_hs() {
   '
 }
 
-read -r R G B < <(kelvin_to_rgb "$K_IN")
+K_SRC_LOW=2200
+K_SRC_HIGH=6500
+# Remap extremes for color-only bulbs: make warmest warmer, coolest less blue
+K_MAP_LOW=1800
+K_MAP_HIGH=5600
+K_ADJ="$K_IN"
+if [ "$K_IN" -le "$K_SRC_LOW" ]; then
+  K_ADJ=$K_MAP_LOW
+elif [ "$K_IN" -ge "$K_SRC_HIGH" ]; then
+  K_ADJ=$K_MAP_HIGH
+else
+  # Linear remap within range
+  # K_adj = low + (K - src_low) * (map_span / src_span)
+  K_ADJ=$(( K_MAP_LOW + ( (K_IN - K_SRC_LOW) * (K_MAP_HIGH - K_MAP_LOW) ) / (K_SRC_HIGH - K_SRC_LOW) ))
+fi
+
+read -r R G B < <(kelvin_to_rgb "$K_ADJ")
 read -r H S < <(rgb_to_hs "$R" "$G" "$B")
 
-# Slightly reduce saturation to keep it looking white-ish
-if [ "$S" -gt 40 ]; then S=$(( (S*3)/5 )) ; fi
+# Scale saturation by temperature using a stronger curve:
+# - Warm end more saturated (closer to amber), cool end much less saturated
+# - Quadratic blend to aggressively desaturate near cool end
+warm_scale=100
+cold_scale=35
+span=$((K_MAP_HIGH - K_MAP_LOW))
+pos=$((K_ADJ - K_MAP_LOW))
+[ "$span" -le 0 ] && span=1
+[ "$pos" -lt 0 ] && pos=0
+[ "$pos" -gt "$span" ] && pos=$span
+# t in [0,1]; use t^2 for stronger cool-end effect
+t_num=$((pos * 10000 / span))   # fixed-point (x10000)
+t2=$(( (t_num * t_num) / 10000 ))
+scale_percent=$(( (warm_scale * (10000 - t2) + cold_scale * t2 + 5000) / 10000 ))
+S=$(( (S * scale_percent + 50) / 100 ))
+if [ "$S" -gt 100 ]; then S=100; fi
+if [ "$S" -lt 0 ]; then S=0; fi
 
 notify-send -a "" -u low -t 0 -h "$TAG" "White" "${K_IN}K (HS approx)"
 /home/kantord/.local/bin/ha-i3 hs "$ENTITY_ID" "$H" "$S"
