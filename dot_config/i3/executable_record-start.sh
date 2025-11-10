@@ -33,10 +33,10 @@ height=$(( height & ~1 ))
 
 # Start ffmpeg (no audio), backgrounded; store PID
 # -INT (stop) will finalize the file cleanly
-# Use ultrafast for low CPU, tweak as you wish.
+# Using NVENC hardware encoding for better performance
 ffmpeg -y \
-  -f x11grab -video_size "${width}x${height}" -i ":0.0+${region%% *}" \
-  -r 30 -c:v libx264 -preset ultrafast -crf 23 -pix_fmt yuv420p \
+  -f x11grab -framerate 60 -video_size "${width}x${height}" -i ":0.0+${region%% *}" \
+  -c:v h264_nvenc -preset p4 -tune hq -rc vbr -cq 23 -b:v 0 -pix_fmt yuv420p \
   "$outfile" >"$LOGFILE" 2>&1 &
 
 echo $! > "$PIDFILE"
