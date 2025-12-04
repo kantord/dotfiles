@@ -33,11 +33,11 @@ height=$(( height & ~1 ))
 
 # Start ffmpeg (no audio), backgrounded; store PID
 # -INT (stop) will finalize the file cleanly
-# Using HEVC NVENC hardware encoding with high quality settings
+# Using H.264 NVENC hardware encoding with high quality settings for compatibility
 ffmpeg -y \
   -f x11grab -framerate 60 -video_size "${width}x${height}" -i ":0.0+${region%% *}" \
-  -c:v hevc_nvenc -preset p7 -tune hq -rc vbr -cq 19 -b:v 0 -pix_fmt yuv420p \
-  -multipass fullres -spatial-aq 1 -temporal-aq 1 -rc-lookahead 32 \
+  -c:v h264_nvenc -preset p7 -tune hq -rc vbr -cq 19 -b:v 0 -pix_fmt yuv420p \
+  -profile:v high -multipass fullres -spatial-aq 1 -temporal-aq 1 -rc-lookahead 32 \
   "$outfile" >"$LOGFILE" 2>&1 &
 
 echo $! > "$PIDFILE"
