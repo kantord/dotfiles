@@ -331,6 +331,7 @@ bindsym --release $mod+Home exec --no-startup-id mpc toggle
 # autostart implementation
 exec dex -ae i3
 exec hsetroot -solid "#000000"
+exec --no-startup-id unclutter --timeout 650
 
 
 # class                 border  backgr. text    indicator child_border
