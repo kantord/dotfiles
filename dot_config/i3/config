@@ -338,6 +338,9 @@ client.placeholder      #0e101a #0c0c0c #ffffff #0e101a   #0c0c0c
 
 client.background       #0e101a
 
+# Override unfocused borders to match kitty theme background
+include /home/kantord/.config/i3/kitty-client-colors.conf
+
 title_align center
 
 
