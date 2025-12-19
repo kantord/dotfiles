@@ -1,0 +1,6 @@
+# Minimal Starship config. Customize as desired: https://starship.rs/config/
+add_newline = false
+
+[character]
+success_symbol = "❯"
+error_symbol = "❯"
