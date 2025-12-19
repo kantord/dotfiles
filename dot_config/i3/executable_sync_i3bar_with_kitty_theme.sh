@@ -74,6 +74,29 @@ bar {
 }
 EOF
 
-if command -v hsetroot >/dev/null 2>&1; then
-  hsetroot -solid "$kitty_bg" >/dev/null 2>&1 || true
-fi
+set_root_background() {
+  local color="$1"
+
+  if [[ -n "${DISPLAY:-}" ]]; then
+    if command -v hsetroot >/dev/null 2>&1 && hsetroot -solid "$color" >/dev/null 2>&1; then
+      return 0
+    fi
+    if command -v xsetroot >/dev/null 2>&1 && xsetroot -solid "$color" >/dev/null 2>&1; then
+      return 0
+    fi
+  fi
+
+  if command -v i3-msg >/dev/null 2>&1; then
+    if command -v hsetroot >/dev/null 2>&1; then
+      # i3 runs exec commands via sh; the color must be quoted since it starts with '#'.
+      i3-msg "exec --no-startup-id hsetroot -solid '$color'" >/dev/null 2>&1 && return 0
+    fi
+    if command -v xsetroot >/dev/null 2>&1; then
+      i3-msg "exec --no-startup-id xsetroot -solid '$color'" >/dev/null 2>&1 && return 0
+    fi
+  fi
+
+  return 1
+}
+
+set_root_background "$kitty_bg" || true
