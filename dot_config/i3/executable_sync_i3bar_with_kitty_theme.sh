@@ -87,6 +87,31 @@ kitty_yellow="$(
   printf '%s\n' '#F6A100'
 )"
 
+hex6() {
+  local c="${1:-}"
+  c="${c#\#}"
+  c="${c:0:6}"
+  printf '%s\n' "$c"
+}
+
+blend_hex() {
+  # Usage: blend_hex BG FG -> mostly BG, slightly FG (subtle border color)
+  local bg_hex fg_hex r g b br bg bb fr fg fb
+  bg_hex="$(hex6 "$1")"
+  fg_hex="$(hex6 "$2")"
+
+  br=$((16#${bg_hex:0:2})); bg=$((16#${bg_hex:2:2})); bb=$((16#${bg_hex:4:2}))
+  fr=$((16#${fg_hex:0:2})); fg=$((16#${fg_hex:2:2})); fb=$((16#${fg_hex:4:2}))
+
+  # 80% bg + 20% fg
+  r=$(((br * 4 + fr) / 5))
+  g=$(((bg * 4 + fg) / 5))
+  b=$(((bb * 4 + fb) / 5))
+  printf '#%02x%02x%02x\n' "$r" "$g" "$b"
+}
+
+kitty_ws_border="$(blend_hex "$kitty_bg" "$kitty_fg" 2>/dev/null || printf '%s\n' '#444444')"
+
 mkdir -p "$out_dir"
 
 umask 077
@@ -97,8 +122,10 @@ bar {
     background $kitty_bg
     statusline $kitty_fg
     separator  $kitty_fg
-    focused_workspace $kitty_yellow $kitty_yellow $kitty_bg
-    active_workspace  $kitty_fg     $kitty_fg     $kitty_bg
+    # Focused output's active workspace: filled (more prominent).
+    focused_workspace $kitty_ws_border $kitty_ws_border $kitty_fg
+    # Other outputs' active workspaces: outlined (less prominent).
+    active_workspace  $kitty_ws_border $kitty_bg $kitty_fg
     inactive_workspace $kitty_bg    $kitty_bg     $kitty_fg
     urgent_workspace  #ff0000      #ff0000      #ffffff
   }
