@@ -124,8 +124,10 @@ alias gswm="git switch main"
 alias tss="tig status"
 alias ggc="git commit"
 chtheme() {
-  kitten themes --config-file-name=current-theme.conf --reload-in=all "$@" \
-    && ~/.config/i3/sync_i3bar_with_kitty_theme.sh
+  kitten themes --config-file-name=themes.conf --reload-in=all "$@" || return
+  sed -i '/^include current-theme\.conf$/d' "${XDG_CONFIG_HOME:-$HOME/.config}/kitty/current-theme.conf" 2>/dev/null || true
+  ~/.config/i3/sync_i3bar_with_kitty_theme.sh
+  i3-msg reload >/dev/null 2>&1 || true
 }
 
 [[ -e /workspaces/web/profile ]] && source /workspaces/web/profile

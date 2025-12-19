@@ -38,7 +38,7 @@ exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork
 # and nm-applet is a desktop environment-independent system tray GUI for it.
 exec --no-startup-id nm-applet
 exec --no-startup-id /usr/lib/mate-polkit/polkit-mate-authentication-agent-1
-exec_always --no-startup-id ~/.config/i3/sync_i3bar_with_kitty_theme.sh
+exec --no-startup-id ~/.config/i3/sync_i3bar_with_kitty_theme.sh
 
 # Use pactl to adjust volume in PulseAudio.
 set $refresh_i3status killall -SIGUSR1 i3status
@@ -325,7 +325,7 @@ bindsym --release $mod+Home exec --no-startup-id mpc toggle
 
 # autostart implementation
 exec dex -ae i3
-exec hsetroot -solid "#000000"
+# Root background is set by ~/.config/i3/sync_i3bar_with_kitty_theme.sh
 exec --no-startup-id unclutter --timeout 0.65
 
 
