@@ -63,6 +63,19 @@ kitty_bg="$(
   extract_bg_from_file "$kitty_theme_primary" || extract_bg_from_file "$kitty_theme_fallback" || printf '%s\n' '#000000'
 )"
 
+kitty_fg="$(
+  if [[ -r "$kitty_config_dir/current-theme.conf" ]]; then
+    grep -m1 -E '^[[:space:]]*foreground[[:space:]]+#' "$kitty_config_dir/current-theme.conf" \
+      | awk '{print $2}' && exit 0
+  fi
+
+  if command -v kitty >/dev/null 2>&1; then
+    kitty @ get-colors 2>/dev/null | awk '$1 == "foreground" { print $2; exit }' && exit 0
+  fi
+
+  printf '%s\n' '#ffffff'
+)"
+
 kitty_yellow="$(
   if [[ -r "$kitty_config_dir/current-theme.conf" ]]; then
     # Prefer bright yellow (color11), fall back to yellow (color3)
@@ -82,6 +95,8 @@ bar {
   status_command "bash /home/kantord/.config/i3/status_command.sh"
   colors {
     background $kitty_bg
+    statusline $kitty_fg
+    separator  $kitty_fg
   }
 }
 EOF
