@@ -38,6 +38,7 @@ exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork
 # and nm-applet is a desktop environment-independent system tray GUI for it.
 exec --no-startup-id nm-applet
 exec --no-startup-id /usr/lib/mate-polkit/polkit-mate-authentication-agent-1
+exec_always --no-startup-id ~/.config/i3/sync_i3bar_with_kitty_theme.sh
 
 # Use pactl to adjust volume in PulseAudio.
 set $refresh_i3status killall -SIGUSR1 i3status
@@ -280,15 +281,9 @@ mode "recording" {
 # Enter recording mode + start capture (same key toggles on/off)
 bindsym $mod+Shift+v exec --no-startup-id ~/.config/i3/record-start.sh
 
-# Start i3bar to display a workspace bar (plus the system information i3status
-# finds out, if available)
-bar {
-        status_command "bash /home/kantord/.config/i3/status_command.sh"
-        colors {
-          # background #0e101a
-          background #000000
-        }
-}
+	# i3bar config is generated from kitty's current theme:
+	# ~/.config/i3/sync_i3bar_with_kitty_theme.sh
+	include /home/kantord/.config/i3/kitty-bar.conf
 
 # new_window pixel 5
 # new_float pixel 5

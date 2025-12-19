@@ -123,6 +123,10 @@ alias gsww="git switch -"
 alias gswm="git switch main"
 alias tss="tig status"
 alias ggc="git commit"
+chtheme() {
+  kitten themes --reload-in=all
+  ~/.config/i3/sync_i3bar_with_kitty_theme.sh
+}
 
 [[ -e /workspaces/web/profile ]] && source /workspaces/web/profile
 [[ -e $HOME/repos/web/profile ]] && source $HOME/repos/web/profile
