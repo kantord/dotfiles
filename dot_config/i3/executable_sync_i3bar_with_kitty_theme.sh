@@ -97,6 +97,10 @@ bar {
     background $kitty_bg
     statusline $kitty_fg
     separator  $kitty_fg
+    focused_workspace $kitty_yellow $kitty_yellow $kitty_bg
+    active_workspace  $kitty_fg     $kitty_fg     $kitty_bg
+    inactive_workspace $kitty_bg    $kitty_bg     $kitty_fg
+    urgent_workspace  #ff0000      #ff0000      #ffffff
   }
 }
 EOF
