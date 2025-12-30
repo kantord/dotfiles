@@ -66,6 +66,11 @@ bindsym $mod+u fullscreen toggle
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
 
+# Mouse button remapping (side buttons)
+bindsym --whole-window button8 exec xdotool key space
+bindsym --whole-window button9 exec xdotool key ctrl+i
+bindsym --whole-window button10 exec xdotool key Delete
+
 # start a terminal
 # bindsym $mod+Return exec ~/.cargo/bin/enwiro wrap i3-sensible-terminal
 # bindsym $mod+Return exec zsh -c 'enwiro wrap i3-sensible-terminal >~/i3log 2>&1'
