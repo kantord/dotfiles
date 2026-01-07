@@ -33,6 +33,7 @@ fi
 alias g="git"
 alias gpp="git push"
 alias gff="git push --force-with-lease"
+alias gsw="git switch"
 alias gsww="git switch -"
 alias gswm="git switch main"
 alias tss="tig status"
@@ -70,7 +71,7 @@ eval "$(pyenv init - zsh)"
 
 alias pass="EDITOR='nvim -u NONE' pass"
 # atuin must init after zsh-vi-mode to preserve keybindings
-zvm_after_init_commands+=('eval "$(atuin init zsh)"')
+zvm_after_init_commands+=('eval "$(atuin init zsh)"; bindkey "^P" atuin-up-search')
 
 source $HOME/.profile
 export PATH="$PATH:$(go env GOBIN):$(go env GOPATH)/bin"
