@@ -3,6 +3,7 @@
 
 # Use systemd ssh-agent (enable with: systemctl --user enable --now ssh-agent)
 export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/ssh-agent.socket"
+ssh-add -l &>/dev/null || ssh-add ~/.ssh/id_ed25519 2>/dev/null
 
 # zsh-vi-mode (for vi keybindings with Ctrl+P/N history navigation)
 source "$HOME/.oh-my-zsh/custom/plugins/zsh-vi-mode/zsh-vi-mode.plugin.zsh"
