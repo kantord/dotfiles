@@ -76,7 +76,7 @@ bindsym --whole-window button10 exec xdotool key Delete
 # bindsym $mod+Return exec zsh -c 'enwiro wrap i3-sensible-terminal >~/i3log 2>&1'
 # bindsym $mod+Return exec i3-sensible-terminal
 # bindsym $mod+Return exec i3-sensible-terminal
-bindsym $mod+Return exec ~/.config/i3/enwiro.sh wrap i3-sensible-terminal
+bindsym $mod+Return exec ~/.cargo/bin/enwiro wrap i3-sensible-terminal
 
 # kill focused window
 bindsym $mod+Shift+q kill
@@ -100,10 +100,10 @@ bindsym $mod+i workspace next
 bindsym $mod+Shift+i workspace prev
 
 # Open applications
-bindsym $mod+Escape exec ~/.config/i3/enwiro.sh wrap rofi -- -show combi -matching fuzzy
-bindsym Mod1+space exec ~/.config/i3/enwiro.sh wrap rofi -- -show combi -matching fuzzy
-bindsym Mod5+space exec ~/.config/i3/enwiro.sh wrap rofi -- -show combi -matching fuzzy
-bindsym Control+space exec ~/.config/i3/enwiro.sh wrap rofi -- -show combi -matching fuzzy
+bindsym $mod+Escape exec ~/.cargo/bin/enwiro wrap rofi -- -show combi -matching fuzzy
+bindsym Mod1+space exec ~/.cargo/bin/enwiro wrap rofi -- -show combi -matching fuzzy
+bindsym Mod5+space exec ~/.cargo/bin/enwiro wrap rofi -- -show combi -matching fuzzy
+bindsym Control+space exec ~/.cargo/bin/enwiro wrap rofi -- -show combi -matching fuzzy
 bindsym Control+Escape exec "/home/kantord/.cargo/bin/wmfocus --halign center --valign center --font 'Mono:128' --textcolor red"
 bindsym Mod1+Tab exec rofi -show "window" -matching fuzzy
 
