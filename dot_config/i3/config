@@ -106,7 +106,7 @@ bindsym Mod5+space exec ~/.cargo/bin/enwiro wrap rofi -- -show combi -matching f
 bindsym Control+space exec ~/.cargo/bin/enwiro wrap rofi -- -show combi -matching fuzzy
 bindsym Control+Escape exec "/home/kantord/.cargo/bin/wmfocus --halign center --valign center --font 'Mono:128' --textcolor red"
 bindsym Mod1+Tab exec rofi -show "window" -matching fuzzy
-bindsym $mod+Shift+Escape exec rofi -show enwiro -modi "enwiro:$HOME/.cargo/bin/enwiro-bridge-rofi"
+bindsym $mod+Shift+Escape exec rofi -show enwiro -modi "enwiro:$HOME/.cargo/bin/enwiro-bridge-rofi" -matching fuzzy
 
 
 
