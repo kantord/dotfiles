@@ -277,11 +277,6 @@ bindsym $mod+Shift+b exec --no-startup-id bash /home/kantord/.config/i3/light_mo
 
 # --- Recording mode ---
 mode "recording" {
-    # Finish recording and return to normal
-    bindsym Escape exec --no-startup-id ~/.config/i3/record-stop.sh
-    bindsym Return exec --no-startup-id ~/.config/i3/record-stop.sh
-
-    # Same key to stop as to start
     bindsym $mod+Shift+v exec --no-startup-id ~/.config/i3/record-stop.sh
 }
 # Enter recording mode + start capture (same key toggles on/off)
