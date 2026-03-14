@@ -10,3 +10,4 @@ README.md
 .config/nvim/lazy-lock.json
 .config/nvim/lua/chadrc.lua
 dot_config/kitty/current-theme.conf
+CLAUDE.md
