@@ -9,8 +9,18 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
+-- Options
+vim.o.expandtab = true
+vim.o.shiftwidth = 2
+vim.o.tabstop = 2
+vim.o.softtabstop = 2
+vim.o.smartindent = true
+vim.o.breakindent = true
+
 -- Plugins
 require('lazy').setup({
+  { 'NMAC427/guess-indent.nvim', opts = {} },
+
   {
     'neovim/nvim-lspconfig',
     dependencies = {
@@ -36,6 +46,31 @@ require('lazy').setup({
         vim.lsp.config(name, config)
         vim.lsp.enable(name)
       end
+    end,
+  },
+
+  {
+    'nvim-treesitter/nvim-treesitter',
+    branch = 'main',
+    build = ':TSUpdate',
+    config = function()
+      local parsers = {
+        'lua', 'python', 'rust', 'typescript', 'tsx',
+        'javascript', 'html', 'css', 'json', 'yaml',
+        'toml', 'bash', 'markdown', 'markdown_inline',
+        'vim', 'vimdoc',
+      }
+      require('nvim-treesitter').install(parsers)
+
+      vim.api.nvim_create_autocmd('FileType', {
+        callback = function(args)
+          local lang = vim.treesitter.language.get_lang(args.match)
+          if lang and vim.treesitter.language.add(lang) then
+            vim.treesitter.start(args.buf, lang)
+            vim.bo[args.buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+          end
+        end,
+      })
     end,
   },
 })
