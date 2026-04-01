@@ -52,6 +52,18 @@ require('lazy').setup({
     keys = {
       { '<C-p>', '<cmd>FzfLua files<cr>', desc = 'Find files' },
       { '<C-g>', '<cmd>FzfLua live_grep<cr>', desc = 'Live grep' },
+      {
+        '<leader>cs',
+        function()
+          local colors_dir = vim.fn.fnamemodify(vim.env.VIMRUNTIME .. '/colors', ':p')
+          local builtins = vim.tbl_map(
+            function(f) return '^' .. f:gsub('%..*$', '') .. '$' end,
+            vim.fn.readdir(colors_dir, function(f) return f ~= 'README' end)
+          )
+          require('fzf-lua').colorschemes({ ignore_patterns = builtins })
+        end,
+        desc = 'Colorschemes',
+      },
       -- { '<leader>sb', '<cmd>FzfLua buffers<cr>', desc = 'Search buffers' },
       -- { '<leader>sh', '<cmd>FzfLua help_tags<cr>', desc = 'Search help' },
       -- { '<leader>sr', '<cmd>FzfLua resume<cr>', desc = 'Search resume' },
@@ -102,6 +114,13 @@ require('lazy').setup({
       end
     end,
   },
+
+  -- Colorschemes
+  { 'rose-pine/neovim', name = 'rose-pine', priority = 1000, config = function() vim.cmd.colorscheme 'rose-pine' end },
+  { 'folke/tokyonight.nvim', lazy = true },
+  { 'catppuccin/nvim', name = 'catppuccin', lazy = true },
+  { 'rebelot/kanagawa.nvim', lazy = true },
+  { 'sainnhe/gruvbox-material', lazy = true },
 
   {
     'nvim-treesitter/nvim-treesitter',
