@@ -62,6 +62,17 @@ require('lazy').setup({
   { 'NMAC427/guess-indent.nvim', opts = {} },
 
   {
+    'mikavilpas/yazi.nvim',
+    event = 'VeryLazy',
+    dependencies = { 'nvim-lua/plenary.nvim' },
+    keys = {
+      { '-', '<cmd>Yazi<cr>', desc = 'Open yazi at current file' },
+      { '<leader>cw', '<cmd>Yazi cwd<cr>', desc = 'Open yazi in cwd' },
+    },
+    opts = {},
+  },
+
+  {
     'folke/which-key.nvim',
     event = 'VimEnter',
     opts = {
