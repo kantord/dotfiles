@@ -129,7 +129,10 @@ require('lazy').setup({
       }
 
       require('mason-tool-installer').setup {
-        ensure_installed = vim.tbl_keys(servers),
+        ensure_installed = vim.tbl_extend('force', vim.tbl_keys(servers), {
+          'stylua',
+          'black',
+        }),
       }
 
       for name, config in pairs(servers) do
@@ -164,15 +167,6 @@ require('lazy').setup({
       formatters_by_ft = {
         lua = { 'stylua' },
         python = { 'black' },
-        rust = { 'rustfmt' },
-        javascript = { 'prettierd', 'prettier', stop_after_first = true },
-        typescript = { 'prettierd', 'prettier', stop_after_first = true },
-        javascriptreact = { 'prettierd', 'prettier', stop_after_first = true },
-        typescriptreact = { 'prettierd', 'prettier', stop_after_first = true },
-        html = { 'prettierd', 'prettier', stop_after_first = true },
-        css = { 'prettierd', 'prettier', stop_after_first = true },
-        json = { 'prettierd', 'prettier', stop_after_first = true },
-        yaml = { 'prettierd', 'prettier', stop_after_first = true },
       },
     },
   },
