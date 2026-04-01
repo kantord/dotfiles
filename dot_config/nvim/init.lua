@@ -49,7 +49,10 @@ vim.o.softtabstop = 2
 vim.o.smartindent = true
 vim.o.breakindent = true
 
+vim.schedule(function() vim.o.clipboard = 'unnamedplus' end)
+
 -- Keymaps
+vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 vim.keymap.set('n', 'j', 'gj')
 vim.keymap.set('n', 'k', 'gk')
 vim.keymap.set('n', '<C-h>', '<C-w>h', { desc = 'Move to left window' })
@@ -60,6 +63,7 @@ vim.keymap.set('n', '<C-l>', '<C-w>l', { desc = 'Move to right window' })
 -- Plugins
 require('lazy').setup({
   { 'NMAC427/guess-indent.nvim', opts = {} },
+  { 'lewis6991/gitsigns.nvim', opts = {} },
 
   {
     'mikavilpas/yazi.nvim',
