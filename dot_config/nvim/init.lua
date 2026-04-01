@@ -1,3 +1,11 @@
+vim.g.loaded_netrw = 1
+vim.g.loaded_netrwPlugin = 1
+
+-- Leader
+vim.g.mapleader = ' '
+vim.g.maplocalleader = ' '
+vim.keymap.set({ 'n', 'v' }, '<Space>', '<Nop>')
+
 -- Bootstrap lazy.nvim
 local lazypath = vim.fn.stdpath 'data' .. '/lazy/lazy.nvim'
 if not (vim.uv or vim.loop).fs_stat(lazypath) then
@@ -17,9 +25,25 @@ vim.o.softtabstop = 2
 vim.o.smartindent = true
 vim.o.breakindent = true
 
+-- Keymaps
+vim.keymap.set('n', 'j', 'gj')
+vim.keymap.set('n', 'k', 'gk')
+vim.keymap.set('n', '<C-h>', '<C-w>h', { desc = 'Move to left window' })
+vim.keymap.set('n', '<C-j>', '<C-w>j', { desc = 'Move to lower window' })
+vim.keymap.set('n', '<C-k>', '<C-w>k', { desc = 'Move to upper window' })
+vim.keymap.set('n', '<C-l>', '<C-w>l', { desc = 'Move to right window' })
+
 -- Plugins
 require('lazy').setup({
   { 'NMAC427/guess-indent.nvim', opts = {} },
+
+  {
+    'folke/which-key.nvim',
+    event = 'VimEnter',
+    opts = {
+      delay = 300,
+    },
+  },
 
   {
     'ibhagwan/fzf-lua',
@@ -27,13 +51,27 @@ require('lazy').setup({
     opts = {},
     keys = {
       { '<C-p>', '<cmd>FzfLua files<cr>', desc = 'Find files' },
-      -- { '<leader>sg', '<cmd>FzfLua live_grep<cr>', desc = 'Search by grep' },
+      { '<C-g>', '<cmd>FzfLua live_grep<cr>', desc = 'Live grep' },
       -- { '<leader>sb', '<cmd>FzfLua buffers<cr>', desc = 'Search buffers' },
       -- { '<leader>sh', '<cmd>FzfLua help_tags<cr>', desc = 'Search help' },
       -- { '<leader>sr', '<cmd>FzfLua resume<cr>', desc = 'Search resume' },
       -- { '<leader>sd', '<cmd>FzfLua diagnostics_document<cr>', desc = 'Search diagnostics' },
       -- { '<leader>sw', '<cmd>FzfLua grep_cword<cr>', desc = 'Search current word' },
       -- { '<leader>/', '<cmd>FzfLua grep_curbuf<cr>', desc = 'Grep current buffer' },
+    },
+  },
+
+  {
+    'saghen/blink.cmp',
+    dependencies = { 'rafamadriz/friendly-snippets' },
+    version = '1.*',
+    opts = {
+      keymap = { preset = 'default' },
+      completion = { documentation = { auto_show = false } },
+      sources = {
+        default = { 'lsp', 'path', 'snippets', 'buffer' },
+      },
+      fuzzy = { implementation = 'prefer_rust_with_warning' },
     },
   },
 
