@@ -21,11 +21,17 @@ vim.opt.rtp:prepend(lazypath)
 vim.o.number = true
 vim.o.relativenumber = true
 
+local no_line_numbers = { gitcommit = true, gitrebase = true, help = true, man = true, checkhealth = true }
+
 vim.api.nvim_create_autocmd('InsertEnter', {
   callback = function() vim.wo.relativenumber = false end,
 })
 vim.api.nvim_create_autocmd('InsertLeave', {
-  callback = function() vim.wo.relativenumber = true end,
+  callback = function()
+    if not no_line_numbers[vim.bo.filetype] then
+      vim.wo.relativenumber = true
+    end
+  end,
 })
 
 vim.api.nvim_create_autocmd('FileType', {
