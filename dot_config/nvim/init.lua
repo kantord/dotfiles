@@ -50,6 +50,13 @@ vim.o.smartindent = true
 vim.o.breakindent = true
 
 vim.o.scrolloff = 10
+vim.o.ignorecase = true
+vim.o.smartcase = true
+vim.o.inccommand = 'nosplit'
+vim.o.splitright = true
+vim.o.splitbelow = true
+vim.o.signcolumn = 'yes'
+vim.o.undofile = true
 
 vim.schedule(function() vim.o.clipboard = 'unnamedplus' end)
 
