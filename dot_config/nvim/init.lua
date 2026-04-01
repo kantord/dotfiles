@@ -22,6 +22,22 @@ require('lazy').setup({
   { 'NMAC427/guess-indent.nvim', opts = {} },
 
   {
+    'ibhagwan/fzf-lua',
+    dependencies = { 'nvim-tree/nvim-web-devicons' },
+    opts = {},
+    keys = {
+      { '<C-p>', '<cmd>FzfLua files<cr>', desc = 'Find files' },
+      -- { '<leader>sg', '<cmd>FzfLua live_grep<cr>', desc = 'Search by grep' },
+      -- { '<leader>sb', '<cmd>FzfLua buffers<cr>', desc = 'Search buffers' },
+      -- { '<leader>sh', '<cmd>FzfLua help_tags<cr>', desc = 'Search help' },
+      -- { '<leader>sr', '<cmd>FzfLua resume<cr>', desc = 'Search resume' },
+      -- { '<leader>sd', '<cmd>FzfLua diagnostics_document<cr>', desc = 'Search diagnostics' },
+      -- { '<leader>sw', '<cmd>FzfLua grep_cword<cr>', desc = 'Search current word' },
+      -- { '<leader>/', '<cmd>FzfLua grep_curbuf<cr>', desc = 'Grep current buffer' },
+    },
+  },
+
+  {
     'neovim/nvim-lspconfig',
     dependencies = {
       { 'mason-org/mason.nvim', opts = {} },
