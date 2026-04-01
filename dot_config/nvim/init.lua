@@ -18,6 +18,24 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 -- Options
+vim.o.number = true
+vim.o.relativenumber = true
+
+vim.api.nvim_create_autocmd('InsertEnter', {
+  callback = function() vim.wo.relativenumber = false end,
+})
+vim.api.nvim_create_autocmd('InsertLeave', {
+  callback = function() vim.wo.relativenumber = true end,
+})
+
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = { 'gitcommit', 'gitrebase', 'help', 'man', 'checkhealth' },
+  callback = function()
+    vim.wo.number = false
+    vim.wo.relativenumber = false
+  end,
+})
+
 vim.o.expandtab = true
 vim.o.shiftwidth = 2
 vim.o.tabstop = 2
