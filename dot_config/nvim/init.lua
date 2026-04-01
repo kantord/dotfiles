@@ -49,7 +49,13 @@ vim.o.softtabstop = 2
 vim.o.smartindent = true
 vim.o.breakindent = true
 
+vim.o.scrolloff = 10
+
 vim.schedule(function() vim.o.clipboard = 'unnamedplus' end)
+
+vim.api.nvim_create_autocmd('TextYankPost', {
+  callback = function() vim.hl.on_yank() end,
+})
 
 -- Keymaps
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
