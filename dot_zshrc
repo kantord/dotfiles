@@ -71,6 +71,14 @@ export PYENV_ROOT="$HOME/.pyenv"
 eval "$(pyenv init - zsh)"
 
 alias pass="EDITOR='nvim -u NONE' pass"
+
+# Claude Code ACP token for codecompanion.nvim (lazy-loaded)
+nvim() {
+  if [[ -z "$CLAUDE_CODE_OAUTH_TOKEN" ]]; then
+    export CLAUDE_CODE_OAUTH_TOKEN="$(secret-tool lookup service claude-acp type oauth 2>/dev/null)"
+  fi
+  command nvim "$@"
+}
 # atuin must init after zsh-vi-mode to preserve keybindings
 zvm_after_init_commands+=('eval "$(atuin init zsh)"; bindkey "^P" atuin-up-search')
 

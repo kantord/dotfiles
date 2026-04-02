@@ -200,6 +200,25 @@ require('lazy').setup({
   },
 
   {
+    'olimorris/codecompanion.nvim',
+    dependencies = {
+      'nvim-lua/plenary.nvim',
+      'nvim-treesitter/nvim-treesitter',
+    },
+    keys = {
+      { '<C-a>', '<cmd>CodeCompanionActions<cr>', mode = { 'n', 'v' }, desc = 'CodeCompanion actions' },
+      { '<leader>cc', '<cmd>CodeCompanionChat Toggle<cr>', mode = { 'n', 'v' }, desc = 'CodeCompanion chat' },
+      { 'ga', '<cmd>CodeCompanionChat Add<cr>', mode = 'v', desc = 'Add to CodeCompanion chat' },
+    },
+    opts = {
+      strategies = {
+        chat = { adapter = 'claude_code' },
+        inline = { adapter = 'claude_code' },
+      },
+    },
+  },
+
+  {
     'nvim-treesitter/nvim-treesitter',
     branch = 'main',
     build = ':TSUpdate',
