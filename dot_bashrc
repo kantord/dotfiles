@@ -3,3 +3,11 @@
 [[ -f ~/.bash-preexec.sh ]] && source ~/.bash-preexec.sh
 eval "$(atuin init bash)"
 export PATH="$HOME/.local/bin:$PATH"
+
+# Added by ToolHive Studio - do not modify this block
+export PATH="$HOME/.toolhive/bin:$PATH"
+# End ToolHive Studio
+
+# Added by ToolHive UI - do not modify this block
+export PATH="$HOME/.toolhive/bin:$PATH"
+# End ToolHive UI
