@@ -327,7 +327,8 @@ bindsym --release $mod+Home exec --no-startup-id mpc toggle
 # autostart implementation
 exec dex -ae i3
 # Root background is set by ~/.config/i3/sync_i3bar_with_kitty_theme.sh
-exec --no-startup-id unclutter --timeout 0.65
+# Hide trackball cursor after inactivity (seconds)
+exec --no-startup-id unclutter --timeout 0.5
 
 
 # class                 border  backgr. text    indicator child_border
