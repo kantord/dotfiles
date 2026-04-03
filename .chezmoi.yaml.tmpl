@@ -1,6 +1,6 @@
 {{- $gitEmail := promptStringOnce . "email" "Default Git email address" -}}
 {{ $platform := "mac" }}
-{{ $isWorkEov := false }}
+{{ $isWorkEnv := false }}
 
 {{ if eq .chezmoi.os "linux" }}
   {{ with .chezmoi.osRelease.id }}
