@@ -200,10 +200,43 @@ require('lazy').setup({
   },
 
   {
+    'MeanderingProgrammer/render-markdown.nvim',
+    ft = { 'markdown', 'codecompanion' },
+    opts = {
+      -- Conservative defaults for regular markdown: no character replacement
+      bullet = { enabled = false },
+      checkbox = { enabled = false },
+      link = { enabled = false },
+      heading = { sign = false, icons = {} },
+      win_options = {
+        conceallevel = { default = vim.o.conceallevel, rendered = 0 },
+      },
+      -- Purely additive decorations: fine everywhere
+      -- (callout has no enabled flag — entries in the table = enabled by default)
+      code = { enabled = true, conceal_delimiters = false, border = 'none', language = false },
+      dash = { enabled = true },
+      -- Full rendering only in codecompanion (read-mostly chat buffer)
+      overrides = {
+        filetype = {
+          codecompanion = {
+            render_modes = { 'n', 'i', 'v', 'c', 't' },
+            sign = { enabled = false },
+            bullet = { enabled = true },
+            checkbox = { enabled = true },
+            link = { enabled = true },
+            heading = { sign = false, icons = { '󰲡 ', '󰲣 ', '󰲥 ', '󰲧 ', '󰲩 ', '󰲫 ' } },
+          },
+        },
+      },
+    },
+  },
+
+  {
     'olimorris/codecompanion.nvim',
     dependencies = {
       'nvim-lua/plenary.nvim',
       'nvim-treesitter/nvim-treesitter',
+      'MeanderingProgrammer/render-markdown.nvim',
     },
     keys = {
       { '<C-a>', '<cmd>CodeCompanionActions<cr>', mode = { 'n', 'v' }, desc = 'CodeCompanion actions' },
@@ -214,6 +247,9 @@ require('lazy').setup({
       strategies = {
         chat = { adapter = 'claude_code' },
         inline = { adapter = 'claude_code' },
+      },
+      display = {
+        chat = { render_headers = false },
       },
     },
   },
