@@ -68,6 +68,15 @@ vim.api.nvim_create_autocmd('TextYankPost', {
 })
 
 -- Keymaps
+-- LSP keymaps (set automatically by Neovim 0.10+ when a client attaches):
+--   gd        go to definition
+--   K         hover
+--   grr       references
+--   grn       rename
+--   gra       code action
+--   gri       implementation
+--   gO        document symbols
+--   <C-s>     signature help (insert mode)
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 vim.keymap.set('n', 'j', 'gj')
 vim.keymap.set('n', 'k', 'gk')
