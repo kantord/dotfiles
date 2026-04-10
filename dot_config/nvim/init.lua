@@ -46,7 +46,6 @@ vim.o.expandtab = true
 vim.o.shiftwidth = 2
 vim.o.tabstop = 2
 vim.o.softtabstop = 2
-vim.o.smartindent = true
 vim.o.breakindent = true
 
 vim.o.scrolloff = 10
@@ -59,6 +58,10 @@ vim.o.signcolumn = 'yes'
 vim.o.undofile = true
 
 vim.schedule(function() vim.o.clipboard = 'unnamedplus' end)
+
+vim.diagnostic.config {
+  update_in_insert = false,
+}
 
 vim.api.nvim_create_autocmd('TextYankPost', {
   callback = function() vim.hl.on_yank() end,
@@ -131,7 +134,8 @@ require('lazy').setup({
     version = '1.*',
     opts = {
       keymap = { preset = 'default' },
-      completion = { documentation = { auto_show = false } },
+      completion = { documentation = { auto_show = true } },
+      signature = { enabled = true },
       sources = {
         default = { 'lsp', 'path', 'snippets', 'buffer' },
       },
@@ -143,7 +147,6 @@ require('lazy').setup({
     'neovim/nvim-lspconfig',
     dependencies = {
       { 'mason-org/mason.nvim', opts = {} },
-      'mason-org/mason-lspconfig.nvim',
       'WhoIsSethDaniel/mason-tool-installer.nvim',
     },
     config = function()
