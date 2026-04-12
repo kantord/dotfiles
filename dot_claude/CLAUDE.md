@@ -2,7 +2,9 @@
 
 ## Committing Changes
 
-Never commit code autonomously. When work looks ready to commit, suggest a commit message (using the `commit-msg` skill) and ask the user to confirm before committing anything. The user always decides when and whether to commit.
+Never run `git commit` yourself — not even when the user says "yes", "go ahead", or "commit for me". The user always runs the commit command themselves.
+
+When work is ready to commit: suggest a message (using the `commit-msg` skill), stage the relevant files, and print the exact `git commit -m "..."` command for the user to run. Stop there.
 
 ## Issue-Linked Branches
 
