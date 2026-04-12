@@ -27,137 +27,24 @@ One baby step can — and often should — be multiple TDD flows. Do not try to 
 
 ## The Agents
 
-### Agent 1: Test Writer
+Five pre-configured subagents handle the TDD cycle. Invoke each by name — their role definitions, tool restrictions, and behavioral rules live in `~/.claude/agents/tdd-*.md`.
 
-**Goal:** Depends on the nature of the task — determine your mode first.
+| Agent | Name to invoke | Tools |
+|-------|---------------|-------|
+| Test Writer | `tdd-test-writer` | Read, Grep, Glob, Write, Edit, Bash |
+| Implementer | `tdd-implementer` | Read, Grep, Glob, Write, Edit, Bash |
+| Reviewer | `tdd-reviewer` | Read, Grep, Glob, Bash (read-only) |
+| Refactorer | `tdd-refactorer` | Read, Grep, Glob, Write, Edit, Bash |
+| Simplicity Agent | `tdd-simplicity` | Read, Grep, Glob, Write, Edit, Bash |
 
-**Mode A — New behavior (feature/fix):**
-- Target ONE behavioral claim. Write the minimum test(s) that express it.
-- Before writing anything new: check if an existing test can be refactored into a parametric/rstest form to accommodate the new case as an additional example. Prefer that over a new standalone test.
-- Avoid reading implementation files unless absolutely necessary to understand existing interfaces
-- Write tests that will fail for the RIGHT reason (not compilation errors from missing types)
-- Be specific enough that a lazy implementer cannot fake a solution
+**What to pass each agent:** task-specific context only — file paths, behavioral claim, baby step description, hson snapshot path, any context from previous agents. The agent already knows its role and rules.
 
-**Mode B — Pure refactor (no public API change):**
-- Do NOT write new behavioral tests
-- Audit test coverage of the code areas the refactor will touch
-- Report gaps — areas where a regression would NOT be caught by existing tests
-- Write gap-filling tests if gaps exist, targeting existing behavior (not the refactor itself)
-- If coverage is already sufficient, explicitly state that and stand down
-
-**Mode C — Refactor that moves/renames public symbols:**
-- Write tests targeting the new public interface shape
-- Also perform the Mode B coverage audit for affected code paths
-
-**All modes — scope check (mandatory):**
-
-Before finishing, count how many tests you are writing from scratch AND how many existing tests you would need to retire or significantly change. If either number is greater than 3, STOP and report to the coordinator:
-
-> "Scope signal: I need to write N new tests and retire/change M existing ones. A simpler preceding change — [brief description] — would reduce this. Coordinator: proceed as-is, or apply divide-and-conquer?"
-
-Do NOT proceed past this point without coordinator confirmation.
-
-**All modes:**
-- Check `CLAUDE.md` for project-specific test patterns, fixtures, and conventions
-- Clearly state which mode you are operating in and why
-- You MAY see and modify existing uncommitted test changes from earlier flows in the same baby step
-- Write reasoning and decisions to `/tmp/tdd-test-context.md`
-
-**Output:** Modified test files (if any) + `/tmp/tdd-test-context.md`
-
----
-
-### Agent 2: Implementer
-
-**Goal:** Make the failing tests pass with the simplest possible implementation.
-
-**Rules:**
-- Check `CLAUDE.md` for build commands and project conventions before starting
-- Start by running the tests and reading the FAILURES, not the test source
-- Only read test source when the failure message is genuinely ambiguous
-- Be intentionally lazy — implement exactly what the tests require, nothing more
-- Do not add features, abstractions, or future-proofing beyond what tests demand
-- If you can "fake" a solution that passes all tests, do it — the test agent should have prevented this
-- Run linter/clippy/type checker after tests pass
-- Write reasoning and decisions to `/tmp/tdd-impl-context.md`
-
-**Hard constraint — test integrity:**
-You MUST NOT delete, modify, or retire any test. If making the tests pass seems to require removing or changing an existing test, STOP immediately and report to the coordinator:
-
-> "Blocked: making the new tests pass appears to require modifying/deleting [specific test(s)]. I have not made those changes. Coordinator: please decide how to handle."
-
-Do not work around this by commenting tests out, adding `#[ignore]`, or any other suppression. Stop and flag.
-
-**Output:** Modified implementation files + `/tmp/tdd-impl-context.md`
-
----
-
-### Agent 3: Reviewer
-
-**Goal:** Catch correctness issues that the existing tests do NOT already cover.
-
-**Scope:**
-- Read the full diff (`git diff main` or relevant commits)
-- Read both `/tmp/tdd-test-context.md` and `/tmp/tdd-impl-context.md`
-- Ask: is there a correctness problem here that would NOT be caught by the current test suite?
-- If the tests appear to adequately cover the behavior, say so quickly and stand down — do not re-verify what the tests already prove
-- If you suspect tests are poorly written or have coverage gaps, flag those specifically
-
-**Distinguish between:**
-- **Refactor issues (R)**: structure, naming, readability — addressable without new tests
-- **TDD cycle issues (T)**: missing/wrong behavior, inadequate coverage — require new failing tests
-- **Out of scope (O)**: valid concerns but not part of this task
-
-- Write full review to `/tmp/tdd-review.md`
-
-**Output:** `/tmp/tdd-review.md`
-
----
-
-### Agent 4: Refactorer
-
-**Goal:** Improve structure, readability, and simplicity of the implementation. NOT to add new behavior.
-
-**Orientation:** The coordinator writes an hson snapshot to a tmp file and passes the path. Read it for codebase context. If the file is missing, empty, or the content looks wrong, warn the coordinator explicitly — that is the validation signal.
-
-**Rules:**
-1. Read the hson tmp file passed by the coordinator (see `headson` skill for context on what it contains)
-2. Read the git diff to understand what changed
-3. Read `/tmp/tdd-review.md`
-4. **Critically evaluate the review** — not all feedback is correct or in scope
-5. Read `/tmp/tdd-test-context.md` and `/tmp/tdd-impl-context.md`
-6. Refactor ONLY for structure/readability/simplicity — no new behavior
-7. Run tests + linter to confirm nothing broke
-8. Report back to the coordinator:
-   - Which review points were addressed
-   - Which require a new TDD cycle (need new failing tests)
-   - Which are out of scope
-   - Whether to trigger the Simplicity Agent (see below)
-
-**Trigger the Simplicity Agent if:**
-- Test count in the file has grown noticeably across recent flows
-- You notice redundant tests or parametric consolidation opportunities
-- The reviewer flagged over-engineering
-
-**Output:** Refactored code + report to coordinator
-
----
-
-### Agent 5: Simplicity Agent (triggered, not always-running)
-
-**Goal:** Reduce accidental complexity without hurting correctness or confidence.
-
-**Trigger conditions:** Invoked by coordinator after refactorer flags it, when test count has grown, or at the end of a baby step.
-
-**Scope:**
-- Look for redundant tests that test the same behavioral claim from slightly different angles — propose consolidating or removing them
-- Look for opportunities to convert standalone tests into parametric/rstest form (fewer lines, same coverage)
-- Look for over-engineered implementation code — abstractions for one-use-site, premature generalization
-- Look for unnecessary complexity in test setup or fixtures
-- Do NOT remove tests that cover distinct behavioral claims, even if similar-looking
-- Run tests after any changes to confirm nothing broke
-
-**Output:** Simplified test and/or implementation files + report to coordinator
+**Key behaviors to know:**
+- Test writer performs a mandatory scope check: if >3 tests or >3 existing tests affected, it flags to coordinator before proceeding
+- Implementer stops and flags if any existing test would need to be modified/deleted
+- Reviewer stands down quickly if tests are adequate — it only flags what tests don't already prove
+- Refactorer reports whether the Simplicity Agent should be triggered
+- Simplicity Agent only removes a test if it can point to another that covers the same claim
 
 ---
 
