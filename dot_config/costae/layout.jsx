@@ -34,7 +34,7 @@ function WorkspaceName({ name, focused }) {
     return (
       <container tw="flex flex-row items-center gap-[8px] w-full">
         <KeyBadge label={key} focused={focused} />
-        <text tw={focused ? "text-[16px] text-white font-bold" : "text-[16px] text-[rgba(255,255,255,0.95)]"}>
+        <text tw={focused ? "text-[16px] text-white font-bold truncate min-w-0" : "text-[16px] text-[rgba(255,255,255,0.95)] truncate min-w-0"}>
           {label}
         </text>
       </container>
@@ -48,7 +48,7 @@ function WorkspaceName({ name, focused }) {
     );
   }
   return (
-    <text tw={focused ? "text-[16px] text-white font-bold" : "text-[16px] text-[rgba(255,255,255,0.95)]"}>
+    <text tw={focused ? "text-[16px] text-white font-bold truncate" : "text-[16px] text-[rgba(255,255,255,0.95)] truncate"}>
       {name}
     </text>
   );
