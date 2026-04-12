@@ -73,3 +73,23 @@ Force-include all public type definitions, bias remaining budget toward frecency
 - Combine with `--tree` for directory structure context
 - Use `--weak-grep` with recently changed file names to bias toward the diff area
 - You never need to apply `hson` multiple times with a strict global budget — one call gives you everything that fits, optimally distributed
+
+## Passing hson context to sub-agents (without polluting coordinator context)
+
+Instead of embedding hson output inline in your context (which costs tokens and is wasteful), write it to a tmp file and pass the path to the sub-agent:
+
+```bash
+# Coordinator: run hson into a tmp file, sanity-check inline
+hson --recursive src -C 50000 --tree > /tmp/hson-ctx-$(date +%s%N).txt
+head -3 /tmp/hson-ctx-$(date +%s%N).txt   # inline verify it's non-empty
+
+# Better: capture the name
+HSON_TMP=$(mktemp /tmp/hson-ctx-XXXXXX.txt)
+hson --recursive src -C 50000 --tree > "$HSON_TMP" && head -3 "$HSON_TMP"
+```
+
+Then in the sub-agent prompt, include the path and tell it to:
+1. Read the file at the given path for codebase context
+2. **Warn you explicitly** if the hson context was absent, malformed, or unhelpful — this is the real signal that something went wrong
+
+The sub-agent's warning is your testing/validation mechanism — much cheaper than embedding the full output in every agent prompt. Silent success means the context loaded correctly.

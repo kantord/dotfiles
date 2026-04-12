@@ -88,17 +88,10 @@ This skill implements a strict Red-Green-Refactor TDD cycle using 4 subagents. T
 ### Agent 4: Refactorer
 **Goal:** Improve structure, readability, and simplicity. NOT to add new behavior.
 
-**Orientation:** Use `hson` (see the `headson` skill) to get a codebase overview before looking at the diff:
-```bash
-# Broad structural overview
-hson --recursive src -C 50000 --tree
-
-# Bias toward changed areas
-hson --recursive src -C 50000 --tree --weak-grep "<changed_module>"
-```
+**Orientation:** The coordinator writes an hson snapshot to a tmp file and passes the path. Read it for codebase context. If the file is missing, empty, or the content looks wrong, warn the coordinator explicitly — that is the validation signal.
 
 **Rules:**
-1. Run `hson` for codebase orientation (see `headson` skill)
+1. Read the hson tmp file passed by the coordinator (see `headson` skill for context on what it contains)
 2. Read the git diff to understand what changed
 3. Read `/tmp/tdd-review.md`
 4. **Critically evaluate the review** — not all feedback is correct or in scope
@@ -151,3 +144,15 @@ When invoking this skill, specify:
 - The exact sub-task for this cycle
 - Any relevant context from previous cycles
 - Any project-specific overrides found in `CLAUDE.md`
+
+### hson context for agents
+
+Before launching agents that need codebase orientation (Refactorer, and optionally Implementer), write an hson snapshot to a tmp file:
+
+```bash
+HSON_TMP=$(mktemp /tmp/hson-ctx-XXXXXX.txt)
+hson --recursive src -C 50000 --tree --weak-grep "<changed_module>" > "$HSON_TMP" \
+  && head -3 "$HSON_TMP"   # inline sanity check
+```
+
+Pass `$HSON_TMP` in the agent prompt. The agent reads it for context and **must warn you** if it was absent or unhelpful — that warning is the validation signal. Never embed the full hson output in your own context.

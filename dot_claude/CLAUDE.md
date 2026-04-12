@@ -1,5 +1,9 @@
 # Global Claude Code Instructions
 
+## Committing Changes
+
+Never commit code autonomously. When work looks ready to commit, suggest a commit message (using the `commit-msg` skill) and ask the user to confirm before committing anything. The user always decides when and whether to commit.
+
 ## Issue-Linked Branches
 
 When starting work in a git repository, check the current branch name. If the branch name contains an issue number (e.g. `issue-4612`, `fix/issue-123`, `feature-456`, `bugfix-789`), use the `gh` CLI to fetch the issue and understand its context before proceeding.
