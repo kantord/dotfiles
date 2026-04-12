@@ -58,6 +58,8 @@ After reading each agent's output, do a quick soft-signal scan before proceeding
 - Any "blocked" reports from the implementer? → stop, decide
 - Test count growing unexpectedly? → consider triggering Simplicity Agent
 
+**After the test-writer specifically:** run `git diff --stat` and check for non-test production file changes that are not type definitions. If the test-writer touched function bodies, control flow, or logic in production files, revert those hunks (`git checkout -- <file>` or a targeted `git restore -p`) before launching the implementer. Note what was reverted in your handoff prompt so the implementer knows what it needs to write. This keeps the red-green gap honest.
+
 You can be mostly passive when agents are operating cleanly. The agents will push back when something is wrong — your job is to notice those pushbacks and route them correctly.
 
 ### After each full cycle
@@ -77,6 +79,40 @@ Always:
    - **User-facing feature** → suggest commit + PR + consider release
 4. Never auto-commit or auto-merge — the user always decides
 5. Consider running the Simplicity Agent one final time across the whole baby step's changes
+
+---
+
+## Working in Low-Coverage / Legacy Code
+
+Standard TDD assumes a working test baseline. In areas with zero or near-zero test coverage, two additional baby step types precede the normal A→B→C→D cycle:
+
+### Make-it-testable baby step
+
+If the test-writer reports a "Testability signal" (code can't be unit-tested without extraction), the right response is a dedicated extraction baby step before any behavioral work:
+
+1. Extract the untestable code into a pure function or injectable dependency — no behavior change, no new tests yet
+2. Run the test-writer in **Mode B** to confirm the extraction didn't regress anything
+3. Only then start the Mode A or Mode D cycle on the extracted, now-testable unit
+
+This is a baby step in its own right — independently reviewable and committable. Do not skip it by writing an integration test that can't be easily extended.
+
+### Characterize-first baby step (Mode D)
+
+If the code area has no tests at all, run the test-writer in **Mode D** first:
+
+1. The test-writer pins existing behavior as-is — not what should be true, what currently is true
+2. Review the Mode D output: are there behaviors being pinned that are actually wrong? Those are T-category findings for later cycles, not things to bake in.
+3. Only after a Mode D baseline exists, start the normal Mode A cycle for the new behavior
+
+**Important:** Mode D tests are not the goal — they are scaffolding. Once Mode A tests exist that cover the same claims, Mode D tests become candidates for the Simplicity Agent.
+
+### Routing signals
+
+| Test-writer report | Coordinator action |
+|---|---|
+| "Testability signal" | Plan a make-it-testable baby step; ask user to confirm before proceeding |
+| "Mode D complete" | Review pinned behaviors; ask user: run Mode A now, or pin more first? |
+| "Fixture signal" | Ask user: add a builder/factory baby step before continuing, or proceed and accept the debt? |
 
 ---
 

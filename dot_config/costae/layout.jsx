@@ -56,22 +56,28 @@ function WorkspaceName({ name, focused, urgent }) {
   );
 }
 
-function WorkspaceList({ workspaces, events }) {
+function WorkspaceList({ workspaces, notifications, events }) {
   return (
     <container tw="flex flex-col gap-[8px] pt-[16px] w-full">
-      {(workspaces ?? []).map(ws => (
+      {(workspaces ?? []).map(ws => {
+        const hasNotif = notifications.some(n =>
+          n.enwiro_env && (ws.name.endsWith(": " + n.enwiro_env) || ws.name === n.enwiro_env)
+        );
+        const urgent = ws.urgent || hasNotif;
+        return (
         <container
           tw={ws.focused
             ? "flex flex-col gap-[2px] px-3 py-2 rounded-lg border border-[#cba6f7] bg-[rgba(255,255,255,0.08)] backdrop-blur-md w-full"
-            : ws.urgent
+            : urgent
             ? "flex flex-col gap-[2px] px-3 py-2 rounded-lg border border-[#f38ba8] bg-[rgba(255,255,255,0.08)] backdrop-blur-md w-full"
             : "flex flex-col gap-[2px] px-3 py-2 rounded-lg border border-[rgba(255,255,255,0.2)] bg-[rgba(255,255,255,0.08)] backdrop-blur-md w-full"
           }
           on_click={{ ...events.switchWorkspace, workspace: ws.name }}
         >
-          <WorkspaceName name={ws.name} focused={ws.focused} urgent={ws.urgent} />
+          <WorkspaceName name={ws.name} focused={ws.focused} urgent={urgent} />
         </container>
-      ))}
+        );
+      })}
     </container>
   );
 }
@@ -99,7 +105,7 @@ const NOTIF_MARGIN = 16;
     >
       <container tw="flex-1 flex flex-col w-full">
         <Module bin="/home/kantord/.cargo/bin/costae-i3">
-          {(data, events) => <WorkspaceList workspaces={data?.workspaces} events={events} />}
+          {(data, events) => <WorkspaceList workspaces={data?.workspaces} notifications={notifications} events={events} />}
         </Module>
       </container>
       <container tw="flex flex-col gap-[10px] w-full">
