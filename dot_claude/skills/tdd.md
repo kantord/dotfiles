@@ -113,6 +113,7 @@ If the code area has no tests at all, run the test-writer in **Mode D** first:
 | "Testability signal" | Plan a make-it-testable baby step; ask user to confirm before proceeding |
 | "Mode D complete" | Review pinned behaviors; ask user: run Mode A now, or pin more first? |
 | "Fixture signal" | Ask user: add a builder/factory baby step before continuing, or proceed and accept the debt? |
+| "Cannot reproduce" (Mode E) | Stop — the user's assumption may be wrong or the area needs Mode D first. Report back before proceeding. |
 
 ---
 
@@ -149,6 +150,7 @@ When invoking this skill, specify:
 - The exact sub-task / behavioral claim for this cycle
 - Any relevant context from previous cycles
 - Any project-specific overrides found in `CLAUDE.md`
+- **For bug reports or behavior change requests:** use Mode E. Tell the test-writer the user's claim, not the desired fix. The first cycle proves the problem exists; only then does the implementer fix it.
 
 ### hson context for agents
 
