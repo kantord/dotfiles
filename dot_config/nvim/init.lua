@@ -169,10 +169,16 @@ require('lazy').setup({
       }
 
       require('mason-tool-installer').setup {
-        ensure_installed = vim.tbl_extend('force', vim.tbl_keys(servers), {
+        ensure_installed = {
+          'lua-language-server',
+          'pyright',
+          'rust-analyzer',
+          'typescript-language-server',
+          'html-lsp',
+          'css-lsp',
           'stylua',
           'black',
-        }),
+        },
       }
 
       for name, config in pairs(servers) do

@@ -54,3 +54,20 @@ Use the issue title, description, and any linked comments to understand:
 - Related issues or PRs referenced in the thread
 
 Apply this context when answering questions, writing code, or suggesting changes — so your work is aligned with the stated goal of the issue.
+
+## Personal Profile
+
+A compressed personality and expertise profile lives at `/home/kantord/repos/kd-personality-profile/`. It describes who Daniel Kantor is — his role, employer, interests, expertise areas, and work patterns — as structured working memory for AI agents.
+
+**Load the profile when personal context would improve your answer.** Typical triggers:
+- "What's relevant to me in this?" / "What should I care about here?"
+- "How does this relate to my work?"
+- Explaining or summarizing something where knowing his background changes what to emphasize
+- Any question where the best answer depends on his role, expertise, or priorities
+
+**How to load it:**
+1. Read `profile/identity.md` — who he is, attribution rules, what to extract vs. ignore
+2. Read `profile/index.md` — narrative summary, active topic index, miscellaneous context
+3. Load relevant topic files from `profile/topics/` if the question touches a specific area
+
+Do not answer relevance or filtering questions from generic first principles. Using the profile is what distinguishes a personalized answer from a generic one.
