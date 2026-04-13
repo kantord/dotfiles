@@ -151,7 +151,7 @@ const NOTIF_MARGIN = 16;
 
   {notifications.map((n, i) => (
     <panel
-      id={`notif-${n.id}`}
+      id={`notif-pos-${i}`}
       above={true}
       x={ctx.screen_width - NOTIF_W - NOTIF_MARGIN}
       y={NOTIF_MARGIN + i * (NOTIF_H + NOTIF_GAP)}
