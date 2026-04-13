@@ -112,13 +112,20 @@ blend_hex() {
 
 kitty_ws_border="$(blend_hex "$kitty_bg" "$kitty_fg" 2>/dev/null || printf '%s\n' '#444444')"
 
+# Build output lines for all connected non-primary monitors
+primary_output="$(xrandr --query | awk '/ connected primary/ {print $1}')"
+bar_outputs=""
+while IFS= read -r output; do
+  [[ "$output" != "$primary_output" ]] && bar_outputs+="  output $output"$'\n'
+done < <(xrandr --query | awk '/ connected/ {print $1}')
+
 mkdir -p "$out_dir"
 
 umask 077
 cat >"$bar_out_file" <<EOF
 bar {
   status_command "bash /home/kantord/.config/i3/status_command.sh"
-  colors {
+${bar_outputs}  colors {
     background $kitty_bg
     statusline $kitty_fg
     separator  $kitty_fg
