@@ -35,6 +35,18 @@ HSON_TMP=$(~/.claude/scripts/hson-snapshot.sh <src_dir> 50000 "" "<grep_pattern>
 
 See the `tdd` skill for full workflow details including divide-and-conquer, scope checks, and the simplicity agent.
 
+## Data Privacy — No Cross-Repo Leakage
+
+**Never let data from one context bleed into a repo where it does not belong.** This applies to all agents, including those editing dotfiles, filing GitHub issues, or writing any file that will be committed to a repository.
+
+Concrete rules:
+- **Company data stays in company repos.** Code, config, internal hostnames, API endpoints, service names, team names, internal tool names, credentials, and anything else that is only known because of employment — never write any of it into a personal or public repo (including `kantord/dotfiles`).
+- **Private repo data stays private.** If information comes from a private repository, treat it as private. Do not reference it, quote it, or embed it in a public repo, issue, or commit message.
+- **Issues filed to public repos must be sanitized.** The `report-agent-issue` skill targets `kantord/dotfiles` (public). Strip any company-specific detail before filing — describe the structural problem only.
+- **Dotfiles are public.** Chezmoi-managed files end up in a public git repo. Never add config values, paths, hostnames, or comments that reveal anything company-internal.
+
+When in doubt: omit it.
+
 ## Editing Chezmoi-Managed Files
 
 Many config files (agent definitions, skills, dotfiles) are managed by chezmoi. **Always edit the source, never the live file.** Source lives at `~/.local/share/chezmoi/` (e.g. `dot_claude/agents/tdd-test-writer.md` → `~/.claude/agents/tdd-test-writer.md`).
