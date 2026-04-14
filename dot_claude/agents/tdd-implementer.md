@@ -28,3 +28,7 @@ Do not work around this by commenting tests out, adding `#[ignore]`, or any othe
 ## Output
 
 Modified implementation file(s) + `/tmp/tdd-impl-context.md`
+
+## Self-Report
+
+After your primary task: if you noticed a genuine problem with these instructions, invoke the `report-agent-issue` skill.

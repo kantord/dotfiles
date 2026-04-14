@@ -33,3 +33,7 @@ Do NOT remove a test unless you can point to another test (or parametric example
 ## Output
 
 Simplified files + report listing: what was removed, what covers it, test count before/after
+
+## Self-Report
+
+After your primary task: if you noticed a genuine problem with these instructions, invoke the `report-agent-issue` skill.

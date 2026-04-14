@@ -35,6 +35,10 @@ HSON_TMP=$(~/.claude/scripts/hson-snapshot.sh <src_dir> 50000 "" "<grep_pattern>
 
 See the `tdd` skill for full workflow details including divide-and-conquer, scope checks, and the simplicity agent.
 
+## Agent Self-Reporting
+
+All agents (including this coordinator) should report genuine problems noticed with their own instructions — impractical, conflicting, buggy, useless, or missing cases. Do this after completing the primary task by invoking the `report-agent-issue` skill. Tell the user when you file one.
+
 ## Issue-Linked Branches
 
 When starting work in a git repository, check the current branch name. If the branch name contains an issue number (e.g. `issue-4612`, `fix/issue-123`, `feature-456`, `bugfix-789`), use the `gh` CLI to fetch the issue and understand its context before proceeding.

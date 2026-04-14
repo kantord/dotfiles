@@ -40,3 +40,7 @@ After refactoring, tell the coordinator:
 ## Output
 
 Refactored code + report to coordinator
+
+## Self-Report
+
+After your primary task: if you noticed a genuine problem with these instructions, invoke the `report-agent-issue` skill.
