@@ -71,6 +71,8 @@ export PYENV_ROOT="$HOME/.pyenv"
 eval "$(pyenv init - zsh)"
 
 alias pass="EDITOR='nvim -u NONE' pass"
+alias task='go-task'
+alias t='/usr/bin/task'
 
 # Claude Code ACP token for codecompanion.nvim
 export CLAUDE_CODE_OAUTH_TOKEN="$(secret-tool lookup service claude-acp type oauth 2>/dev/null)"
