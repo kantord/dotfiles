@@ -1,6 +1,6 @@
 #!/bin/bash
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+SCRIPT_DIR="${CHEZMOI_SOURCE_DIR}"
 
 function maintain_file() {
   chezmoi_version=$1

@@ -35,6 +35,17 @@ HSON_TMP=$(~/.claude/scripts/hson-snapshot.sh <src_dir> 50000 "" "<grep_pattern>
 
 See the `tdd` skill for full workflow details including divide-and-conquer, scope checks, and the simplicity agent.
 
+## Editing Chezmoi-Managed Files
+
+Many config files (agent definitions, skills, dotfiles) are managed by chezmoi. **Always edit the source, never the live file.** Source lives at `~/.local/share/chezmoi/` (e.g. `dot_claude/agents/tdd-test-writer.md` → `~/.claude/agents/tdd-test-writer.md`).
+
+After editing the source, apply just that file — no password required:
+```bash
+chezmoi apply ~/.claude/agents/tdd-test-writer.md
+```
+
+Use the `chezmoi` skill for full source-path mapping and workflow details.
+
 ## Agent Self-Reporting
 
 All agents (including this coordinator) should report genuine problems noticed with their own instructions — impractical, conflicting, buggy, useless, or missing cases. Do this after completing the primary task by invoking the `report-agent-issue` skill. Tell the user when you file one.
