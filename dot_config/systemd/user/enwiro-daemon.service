@@ -1,0 +1,11 @@
+[Unit]
+Description=Enwiro workspace environment daemon
+After=default.target
+
+[Service]
+ExecStart=%h/.cargo/bin/enwiro daemon
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=default.target
