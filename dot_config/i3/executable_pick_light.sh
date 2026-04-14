@@ -2,7 +2,7 @@
 # Pick a Home Assistant light via rofi and cache selection
 set -euo pipefail
 
-HA_CLI="/home/kantord/.local/bin/ha-i3"
+HA_CLI="$HOME/.local/bin/ha-i3"
 CACHE_DIR="${XDG_CACHE_HOME:-$HOME/.cache}/ha-i3"
 TARGET_FILE="$CACHE_DIR/target"
 

@@ -3,7 +3,7 @@
 # Accepts a Kelvin value (e.g., 2700 3000 4000 ...)
 set -euo pipefail
 
-. /home/kantord/.config/i3/ha_light_common.sh
+. $HOME/.config/i3/ha_light_common.sh
 
 resolve_target
 
@@ -18,7 +18,7 @@ kelvin_to_mireds() { printf '%d' $(( 1000000 / $1 )); }
 supports_ct=false
 st_json=""
 if command -v jq >/dev/null 2>&1; then
-  st_json=$(/home/kantord/.local/bin/ha-i3 state "$ENTITY_ID") || st_json=""
+  st_json=$($HOME/.local/bin/ha-i3 state "$ENTITY_ID") || st_json=""
   if [ -n "$st_json" ] && printf '%s' "$st_json" | jq -e '.attributes.supported_color_modes | map(ascii_downcase) | any(. == "color_temp")' >/dev/null 2>&1; then
     supports_ct=true
   fi
@@ -42,7 +42,7 @@ if $supports_ct; then
   # Show white selection replacing banner, then restore
   notify-send -a "" -u low -t 0 -h "$TAG" "White" "${K_IN}K"
   # Apply via ha-i3 ct (sends both kelvin and color_temp)
-  /home/kantord/.local/bin/ha-i3 ct "$ENTITY_ID" "$K_APPLY"
+  $HOME/.local/bin/ha-i3 ct "$ENTITY_ID" "$K_APPLY"
   show_temp_then_restore "Lights" "$LABEL (space to pick)" 0.8
   exit 0
 fi
@@ -137,5 +137,5 @@ if [ "$S" -gt 100 ]; then S=100; fi
 if [ "$S" -lt 0 ]; then S=0; fi
 
 notify-send -a "" -u low -t 0 -h "$TAG" "White" "${K_IN}K (HS approx)"
-/home/kantord/.local/bin/ha-i3 hs "$ENTITY_ID" "$H" "$S"
+$HOME/.local/bin/ha-i3 hs "$ENTITY_ID" "$H" "$S"
 show_temp_then_restore "Lights" "$LABEL (space to pick)" 0.8

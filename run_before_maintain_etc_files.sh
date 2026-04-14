@@ -1,6 +1,6 @@
 #!/bin/bash
 
-SCRIPT_DIR="/home/kantord/.local/share/chezmoi"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 function maintain_file() {
   chezmoi_version=$1

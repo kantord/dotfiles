@@ -2,7 +2,7 @@
 # Shared helpers for i3 HA light control scripts
 set -euo pipefail
 
-HA_CLI="/home/kantord/.local/bin/ha-i3"
+HA_CLI="$HOME/.local/bin/ha-i3"
 
 ENTITY_ID_DEFAULT="light.tradfri_bulb_4"
 LABEL_DEFAULT="Living room desk"

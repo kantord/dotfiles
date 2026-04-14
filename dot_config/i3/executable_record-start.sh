@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-OUTPUT_DIR="/home/kantord/Videos"
+OUTPUT_DIR="$HOME/Videos"
 PIDFILE="/tmp/ffmpeg-recording.pid"
 LOGFILE="/tmp/ffmpeg-recording.log"
 

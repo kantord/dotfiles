@@ -5,7 +5,7 @@
 # - Reuses shared helpers to manage target + banner
 set -euo pipefail
 
-. /home/kantord/.config/i3/ha_light_common.sh
+. $HOME/.config/i3/ha_light_common.sh
 
 resolve_target
 
@@ -28,10 +28,10 @@ notify-send -a "" -u critical -t 0 -h "$TAG" "$LABEL" "$bar"
 
 # 0% should turn light off for a crisp UX
 if [ "$value" -eq 0 ]; then
-  /home/kantord/.local/bin/ha-i3 set "$ENTITY_ID" 0
+  $HOME/.local/bin/ha-i3 set "$ENTITY_ID" 0
   show_temp_then_restore "Lights" "$LABEL (space to pick)" 0.8
   exit 0
 fi
 
-/home/kantord/.local/bin/ha-i3 set "$ENTITY_ID" "$value"
+$HOME/.local/bin/ha-i3 set "$ENTITY_ID" "$value"
 show_temp_then_restore "Lights" "$LABEL (space to pick)" 0.8

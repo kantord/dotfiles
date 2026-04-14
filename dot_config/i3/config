@@ -13,7 +13,7 @@ set_from_resource $DOTFILES_FOLDER echo "$DOTFILES_FOLDER"
 set $config_dir $DOTFILES_FOLDER/apps/i3
 set $scripts $config_dir/scripts/
 set $mod Mod4
-exec_always --no-startup-id export PATH=$PATH:/home/kantord/.cargo/bin
+exec_always --no-startup-id export PATH=$PATH:$HOME/.cargo/bin
 
 # Font for window titles. Will also be used by the bar unless a different font
 # is used in the bar {} block below.
@@ -104,7 +104,7 @@ bindsym $mod+Escape exec ~/.cargo/bin/enwiro wrap rofi -- -show combi -matching 
 bindsym Mod1+space exec ~/.cargo/bin/enwiro wrap rofi -- -show combi -matching fuzzy
 bindsym Mod5+space exec ~/.cargo/bin/enwiro wrap rofi -- -show combi -matching fuzzy
 bindsym Control+space exec ~/.cargo/bin/enwiro wrap rofi -- -show combi -matching fuzzy
-bindsym Control+Escape exec "/home/kantord/.cargo/bin/wmfocus --halign center --valign center --font 'Mono:128' --textcolor red"
+bindsym Control+Escape exec "$HOME/.cargo/bin/wmfocus --halign center --valign center --font 'Mono:128' --textcolor red"
 bindsym Mod1+Tab exec rofi -show "window" -matching fuzzy
 bindsym $mod+Shift+Escape exec rofi -show enwiro -modi "enwiro:$HOME/.cargo/bin/enwiro-bridge-rofi" -matching fuzzy
 
@@ -216,16 +216,16 @@ bindsym $mod+r mode "resize"
 
 # resize window (you can also use the mouse for that)
 mode "brightness" {
-        bindsym a exec --no-startup-id bash /home/kantord/.config/i3/set_brightness.sh 10
-        bindsym s exec --no-startup-id bash /home/kantord/.config/i3/set_brightness.sh 20
-        bindsym d exec --no-startup-id bash /home/kantord/.config/i3/set_brightness.sh 30
-        bindsym f exec --no-startup-id bash /home/kantord/.config/i3/set_brightness.sh 40
-        bindsym g exec --no-startup-id bash /home/kantord/.config/i3/set_brightness.sh 50
-        bindsym h exec --no-startup-id bash /home/kantord/.config/i3/set_brightness.sh 60
-        bindsym j exec --no-startup-id bash /home/kantord/.config/i3/set_brightness.sh 70
-        bindsym k exec --no-startup-id bash /home/kantord/.config/i3/set_brightness.sh 80
-        bindsym l exec --no-startup-id bash /home/kantord/.config/i3/set_brightness.sh 90
-        bindsym semicolon exec --no-startup-id bash /home/kantord/.config/i3/set_brightness.sh 100
+        bindsym a exec --no-startup-id bash $HOME/.config/i3/set_brightness.sh 10
+        bindsym s exec --no-startup-id bash $HOME/.config/i3/set_brightness.sh 20
+        bindsym d exec --no-startup-id bash $HOME/.config/i3/set_brightness.sh 30
+        bindsym f exec --no-startup-id bash $HOME/.config/i3/set_brightness.sh 40
+        bindsym g exec --no-startup-id bash $HOME/.config/i3/set_brightness.sh 50
+        bindsym h exec --no-startup-id bash $HOME/.config/i3/set_brightness.sh 60
+        bindsym j exec --no-startup-id bash $HOME/.config/i3/set_brightness.sh 70
+        bindsym k exec --no-startup-id bash $HOME/.config/i3/set_brightness.sh 80
+        bindsym l exec --no-startup-id bash $HOME/.config/i3/set_brightness.sh 90
+        bindsym semicolon exec --no-startup-id bash $HOME/.config/i3/set_brightness.sh 100
         bindsym Return mode "default"
         bindsym Escape mode "default"
         bindsym $mod+b mode "default"
@@ -234,46 +234,46 @@ bindsym $mod+b mode "brightness"
 
 # Light control mode (living room desk)
 mode "light-brightness" {
-        bindsym space exec --no-startup-id bash /home/kantord/.config/i3/pick_light.sh
-        bindsym bracketright exec --no-startup-id bash /home/kantord/.config/i3/cycle_light.sh next
-        bindsym bracketleft exec --no-startup-id bash /home/kantord/.config/i3/cycle_light.sh prev
-        bindsym a exec --no-startup-id bash /home/kantord/.config/i3/set_light_brightness.sh 10
-        bindsym s exec --no-startup-id bash /home/kantord/.config/i3/set_light_brightness.sh 20
-        bindsym d exec --no-startup-id bash /home/kantord/.config/i3/set_light_brightness.sh 30
-        bindsym f exec --no-startup-id bash /home/kantord/.config/i3/set_light_brightness.sh 40
-        bindsym g exec --no-startup-id bash /home/kantord/.config/i3/set_light_brightness.sh 50
-        bindsym h exec --no-startup-id bash /home/kantord/.config/i3/set_light_brightness.sh 60
-        bindsym j exec --no-startup-id bash /home/kantord/.config/i3/set_light_brightness.sh 70
-        bindsym k exec --no-startup-id bash /home/kantord/.config/i3/set_light_brightness.sh 80
-        bindsym l exec --no-startup-id bash /home/kantord/.config/i3/set_light_brightness.sh 90
-        bindsym semicolon exec --no-startup-id bash /home/kantord/.config/i3/set_light_brightness.sh 100
+        bindsym space exec --no-startup-id bash $HOME/.config/i3/pick_light.sh
+        bindsym bracketright exec --no-startup-id bash $HOME/.config/i3/cycle_light.sh next
+        bindsym bracketleft exec --no-startup-id bash $HOME/.config/i3/cycle_light.sh prev
+        bindsym a exec --no-startup-id bash $HOME/.config/i3/set_light_brightness.sh 10
+        bindsym s exec --no-startup-id bash $HOME/.config/i3/set_light_brightness.sh 20
+        bindsym d exec --no-startup-id bash $HOME/.config/i3/set_light_brightness.sh 30
+        bindsym f exec --no-startup-id bash $HOME/.config/i3/set_light_brightness.sh 40
+        bindsym g exec --no-startup-id bash $HOME/.config/i3/set_light_brightness.sh 50
+        bindsym h exec --no-startup-id bash $HOME/.config/i3/set_light_brightness.sh 60
+        bindsym j exec --no-startup-id bash $HOME/.config/i3/set_light_brightness.sh 70
+        bindsym k exec --no-startup-id bash $HOME/.config/i3/set_light_brightness.sh 80
+        bindsym l exec --no-startup-id bash $HOME/.config/i3/set_light_brightness.sh 90
+        bindsym semicolon exec --no-startup-id bash $HOME/.config/i3/set_light_brightness.sh 100
         # White spectrum row (upper row: q w e r t y u i o p)
-        bindsym q exec --no-startup-id bash /home/kantord/.config/i3/set_light_white.sh 2200
-        bindsym w exec --no-startup-id bash /home/kantord/.config/i3/set_light_white.sh 2700
-        bindsym e exec --no-startup-id bash /home/kantord/.config/i3/set_light_white.sh 3000
-        bindsym r exec --no-startup-id bash /home/kantord/.config/i3/set_light_white.sh 3500
-        bindsym t exec --no-startup-id bash /home/kantord/.config/i3/set_light_white.sh 4000
-        bindsym y exec --no-startup-id bash /home/kantord/.config/i3/set_light_white.sh 4500
-        bindsym u exec --no-startup-id bash /home/kantord/.config/i3/set_light_white.sh 5000
-        bindsym i exec --no-startup-id bash /home/kantord/.config/i3/set_light_white.sh 5500
-        bindsym o exec --no-startup-id bash /home/kantord/.config/i3/set_light_white.sh 6000
-        bindsym p exec --no-startup-id bash /home/kantord/.config/i3/set_light_white.sh 6500
+        bindsym q exec --no-startup-id bash $HOME/.config/i3/set_light_white.sh 2200
+        bindsym w exec --no-startup-id bash $HOME/.config/i3/set_light_white.sh 2700
+        bindsym e exec --no-startup-id bash $HOME/.config/i3/set_light_white.sh 3000
+        bindsym r exec --no-startup-id bash $HOME/.config/i3/set_light_white.sh 3500
+        bindsym t exec --no-startup-id bash $HOME/.config/i3/set_light_white.sh 4000
+        bindsym y exec --no-startup-id bash $HOME/.config/i3/set_light_white.sh 4500
+        bindsym u exec --no-startup-id bash $HOME/.config/i3/set_light_white.sh 5000
+        bindsym i exec --no-startup-id bash $HOME/.config/i3/set_light_white.sh 5500
+        bindsym o exec --no-startup-id bash $HOME/.config/i3/set_light_white.sh 6000
+        bindsym p exec --no-startup-id bash $HOME/.config/i3/set_light_white.sh 6500
         # Color row (HS-tuned for TRÅDFRI): z x c v b n m , . /
-        bindsym z exec --no-startup-id bash /home/kantord/.config/i3/set_light_color.sh red
-        bindsym x exec --no-startup-id bash /home/kantord/.config/i3/set_light_color.sh orange
-        bindsym c exec --no-startup-id bash /home/kantord/.config/i3/set_light_color.sh amber
-        bindsym v exec --no-startup-id bash /home/kantord/.config/i3/set_light_color.sh green
-        bindsym b exec --no-startup-id bash /home/kantord/.config/i3/set_light_color.sh teal
-        bindsym n exec --no-startup-id bash /home/kantord/.config/i3/set_light_color.sh blue
-        bindsym m exec --no-startup-id bash /home/kantord/.config/i3/set_light_color.sh royal
-        bindsym comma exec --no-startup-id bash /home/kantord/.config/i3/set_light_color.sh purple
-        bindsym period exec --no-startup-id bash /home/kantord/.config/i3/set_light_color.sh magenta
-        bindsym slash exec --no-startup-id bash /home/kantord/.config/i3/set_light_color.sh pink
-        bindsym Return exec --no-startup-id bash /home/kantord/.config/i3/toggle_light.sh
-        bindsym Escape exec --no-startup-id bash /home/kantord/.config/i3/light_mode_exit.sh
-        bindsym $mod+Shift+b exec --no-startup-id bash /home/kantord/.config/i3/light_mode_exit.sh
+        bindsym z exec --no-startup-id bash $HOME/.config/i3/set_light_color.sh red
+        bindsym x exec --no-startup-id bash $HOME/.config/i3/set_light_color.sh orange
+        bindsym c exec --no-startup-id bash $HOME/.config/i3/set_light_color.sh amber
+        bindsym v exec --no-startup-id bash $HOME/.config/i3/set_light_color.sh green
+        bindsym b exec --no-startup-id bash $HOME/.config/i3/set_light_color.sh teal
+        bindsym n exec --no-startup-id bash $HOME/.config/i3/set_light_color.sh blue
+        bindsym m exec --no-startup-id bash $HOME/.config/i3/set_light_color.sh royal
+        bindsym comma exec --no-startup-id bash $HOME/.config/i3/set_light_color.sh purple
+        bindsym period exec --no-startup-id bash $HOME/.config/i3/set_light_color.sh magenta
+        bindsym slash exec --no-startup-id bash $HOME/.config/i3/set_light_color.sh pink
+        bindsym Return exec --no-startup-id bash $HOME/.config/i3/toggle_light.sh
+        bindsym Escape exec --no-startup-id bash $HOME/.config/i3/light_mode_exit.sh
+        bindsym $mod+Shift+b exec --no-startup-id bash $HOME/.config/i3/light_mode_exit.sh
 }
-bindsym $mod+Shift+b exec --no-startup-id bash /home/kantord/.config/i3/light_mode_enter.sh
+bindsym $mod+Shift+b exec --no-startup-id bash $HOME/.config/i3/light_mode_enter.sh
 
 # --- Recording mode ---
 mode "recording" {
@@ -284,7 +284,7 @@ bindsym $mod+Shift+v exec --no-startup-id ~/.config/i3/record-start.sh
 
 	# i3bar config is generated from kitty's current theme:
 	# ~/.config/i3/sync_i3bar_with_kitty_theme.sh
-	include /home/kantord/.config/i3/kitty-bar.conf
+	include ~/.config/i3/kitty-bar.conf
 
 # new_window pixel 5
 # new_float pixel 5
@@ -301,10 +301,10 @@ smart_borders on
 
 
 # i3-gnome-pomodoro
-bindsym $mod+F9 exec   --no-startup-id "/home/kantord/.local/bin/i3-gnome-pomodoro start"
-bindsym $mod+F10 exec  --no-startup-id "/home/kantord/.local/bin/i3-gnome-pomodoro toggle"
-bindsym $mod+F11 exec  --no-startup-id "/home/kantord/.local/bin/i3-gnome-pomodoro skip"
-bindsym $mod+F12 exec  --no-startup-id "/home/kantord/.local/bin/i3-gnome-pomodoro stop"
+bindsym $mod+F9 exec   --no-startup-id "$HOME/.local/bin/i3-gnome-pomodoro start"
+bindsym $mod+F10 exec  --no-startup-id "$HOME/.local/bin/i3-gnome-pomodoro toggle"
+bindsym $mod+F11 exec  --no-startup-id "$HOME/.local/bin/i3-gnome-pomodoro skip"
+bindsym $mod+F12 exec  --no-startup-id "$HOME/.local/bin/i3-gnome-pomodoro stop"
 
 
 
@@ -319,8 +319,8 @@ for_window [class="^Vimwiki$" instance="^Vimwiki$"] floating enable, sticky enab
 for_window [title="^Quick Format Citation$"] floating enable, sticky enable
 
 
-bindsym --release $mod+Next exec --no-startup-id /home/kantord/repos/config/apps/i3/scripts/radio_control.sh next
-bindsym --release $mod+Prior exec --no-startup-id /home/kantord/repos/config/apps/i3/scripts/radio_control.sh prev
+bindsym --release $mod+Next exec --no-startup-id $HOME/repos/config/apps/i3/scripts/radio_control.sh next
+bindsym --release $mod+Prior exec --no-startup-id $HOME/repos/config/apps/i3/scripts/radio_control.sh prev
 bindsym --release $mod+End exec --no-startup-id mpc stop
 bindsym --release $mod+Home exec --no-startup-id mpc toggle
 
@@ -341,7 +341,7 @@ client.placeholder      #0e101a #0c0c0c #ffffff #0e101a   #0c0c0c
 client.background       #0e101a
 
 # Override unfocused borders to match kitty theme background
-include /home/kantord/.config/i3/kitty-client-colors.conf
+include ~/.config/i3/kitty-client-colors.conf
 
 title_align center
 

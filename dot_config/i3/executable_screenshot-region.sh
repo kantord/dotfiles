@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-OUTPUT_DIR="/home/kantord/Pictures/Screenshots"
+OUTPUT_DIR="$HOME/Pictures/Screenshots"
 mkdir -p "$OUTPUT_DIR"
 
 # Region selection (single interaction). If canceled, bail out.

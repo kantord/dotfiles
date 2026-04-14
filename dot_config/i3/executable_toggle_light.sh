@@ -4,11 +4,11 @@
 # - If turning on and no previous brightness is known, defaults to 60%
 set -euo pipefail
 
-. /home/kantord/.config/i3/ha_light_common.sh
+. "$HOME/.config/i3/ha_light_common.sh"
 
 resolve_target
 
-HA_CLI="/home/kantord/.local/bin/ha-i3"
+HA_CLI="$HOME/.local/bin/ha-i3"
 
 get_state_and_brightness() {
   # Echo: state brightness(0-255 or empty)

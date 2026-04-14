@@ -124,7 +124,7 @@ mkdir -p "$out_dir"
 umask 077
 cat >"$bar_out_file" <<EOF
 bar {
-  status_command "bash /home/kantord/.config/i3/status_command.sh"
+  status_command "bash $HOME/.config/i3/status_command.sh"
 ${bar_outputs}  colors {
     background $kitty_bg
     statusline $kitty_fg

@@ -3,7 +3,7 @@
 # Reuses common helpers for target + notifications
 set -euo pipefail
 
-. /home/kantord/.config/i3/ha_light_common.sh
+. $HOME/.config/i3/ha_light_common.sh
 
 resolve_target
 
@@ -32,7 +32,7 @@ esac
 
 # Capability check: require hs or rgb support
 if command -v jq >/dev/null 2>&1; then
-  if ! /home/kantord/.local/bin/ha-i3 state "$ENTITY_ID" \
+  if ! $HOME/.local/bin/ha-i3 state "$ENTITY_ID" \
     | jq -e '.attributes.supported_color_modes // [] | map(ascii_downcase) | any(. == "hs" or . == "rgb")' >/dev/null; then
       notify-send -a "" -u low -t 1200 -h "$TAG" "Lights" "$LABEL: color not supported"
       exit 0
@@ -43,7 +43,7 @@ fi
 notify-send -a "" -u low -t 0 -h "$TAG" "Color" "$name_raw"
 
 # Apply via ha-i3 hs; do not touch brightness
-/home/kantord/.local/bin/ha-i3 hs "$ENTITY_ID" "$h" "$s"
+$HOME/.local/bin/ha-i3 hs "$ENTITY_ID" "$h" "$s"
 
 # Restore banner after a moment
 show_temp_then_restore "Lights" "$LABEL (space to pick)" 0.8
