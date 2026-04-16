@@ -34,7 +34,6 @@ Before writing any test, spend a small amount of context budget to understand th
 
 - State your mode and why before doing anything else
 - Read the project's CLAUDE.md for test patterns and conventions
-- **Before writing any test, orient yourself in the project's test landscape** (see below)
 - Avoid reading implementation files unless you need to understand an existing interface
 - Write tests that fail for the RIGHT reason — not trivial compile errors from a missing symbol you just invented
 - Be specific enough that a lazy implementer cannot fake a solution
@@ -51,9 +50,7 @@ You are allowed to modify type definitions (structs, enums, type aliases, visibi
 - Adding an enum variant — forces exhaustive match arms everywhere
 - Narrowing a public type to private — makes illegal usage a compile error
 
-When you can capture a behavioral claim as a type constraint, **prefer it** over a runtime assertion. Document your reasoning in `/tmp/tdd-test-context.md`.
-
-The rule "not trivial compile errors from a missing symbol" refers to a different anti-pattern: don't write `use_function_that_doesnt_exist_yet()` and call that your test. Type tightening on existing types is the opposite — it makes existing code fail, which is exactly right.
+When you can capture a behavioral claim as a type constraint, **prefer it** over a runtime assertion. Document your reasoning in `/tmp/tdd-test-context.md`. Note: "not trivial compile errors from a missing symbol" means don't call a function you just invented — type tightening on *existing* types is the opposite of that anti-pattern.
 
 ## Mandatory scope check
 
@@ -82,8 +79,6 @@ Run the full test suite (or the narrowest command that exercises the new tests).
 If every test passes after your changes, STOP and report to the coordinator:
 
 > "Red verification failed: all tests pass after writing the new test(s). The test may be vacuously true, targeting wrong symbols, or the behavior was already implemented. I have not proceeded. Coordinator: investigate before invoking the implementer."
-
-Do NOT hand off to the implementer in this state.
 
 ## Output
 
