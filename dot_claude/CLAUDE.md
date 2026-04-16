@@ -19,10 +19,11 @@ Agent: "Use the tdd-test-writer agent to write failing tests for [behavioral cla
 
 **The four mandatory stages — never skip any:**
 
-1. **tdd-test-writer** — writes failing test(s) for one behavioral claim; performs mandatory scope check
-2. **tdd-implementer** — makes tests pass with minimal implementation; stops and flags if any existing test would need modification
-3. **tdd-reviewer** — checks for correctness gaps the tests don't already cover; stands down quickly if tests are adequate
-4. **tdd-refactorer** — applies R-category review findings; reports whether tdd-simplicity should run
+1. **tdd-test-writer** — writes failing test(s) for one behavioral claim; performs mandatory scope check; runs tests and records red evidence in `/tmp/tdd-test-context.md`
+2. **[RED GATE]** — before invoking the implementer, confirm `/tmp/tdd-test-context.md` contains a `## Red evidence` section showing at least one failure. If it is absent or shows all tests passing, do NOT proceed — investigate and resolve with the test writer first.
+3. **tdd-implementer** — makes tests pass with minimal implementation; stops and flags if any existing test would need modification
+4. **tdd-reviewer** — checks for correctness gaps the tests don't already cover; stands down quickly if tests are adequate
+5. **tdd-refactorer** — applies R-category review findings; reports whether tdd-simplicity should run
 
 **What to pass each agent:** task-specific context only (file paths, behavioral claim, hson snapshot path, outputs from previous agents). The agents already know their roles and rules — do not re-explain them.
 

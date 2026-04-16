@@ -61,9 +61,19 @@ Do NOT delete, modify, or suppress any existing test. If a test seems incompatib
 
 Do NOT write function or method implementations. Do NOT modify control flow, algorithms, or logic in production files. The only production files you may touch are type definitions (struct fields, enum variants, type aliases) when the type change is itself the failing test. Everything else is the implementer's territory — if you find yourself writing `fn foo() { ... }` in a non-test file, stop.
 
+## Verify red before finishing
+
+Run the full test suite (or the narrowest command that exercises the new tests). Confirm that at least one of the tests you wrote or modified is **failing**. Append the failure output to `/tmp/tdd-test-context.md` under a `## Red evidence` heading.
+
+If every test passes after your changes, STOP and report to the coordinator:
+
+> "Red verification failed: all tests pass after writing the new test(s). The test may be vacuously true, targeting wrong symbols, or the behavior was already implemented. I have not proceeded. Coordinator: investigate before invoking the implementer."
+
+Do NOT hand off to the implementer in this state.
+
 ## Output
 
-Modified test file(s) + (optionally) modified type definitions + `/tmp/tdd-test-context.md`
+Modified test file(s) + (optionally) modified type definitions + `/tmp/tdd-test-context.md` (must include `## Red evidence` section with failure output)
 
 ## Self-Report
 
