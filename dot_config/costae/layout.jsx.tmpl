@@ -122,16 +122,6 @@ const NOTIF_GAP = 8;
 const NOTIF_MARGIN = 16;
 
 <root>
-  <panel id="topbar" anchor="top" output="HDMI-0" width={ctx.outputs?.find(o => o.name === "HDMI-0")?.screen_width ?? 1920} height={36}>
-    <container
-      tw="flex flex-row items-center justify-end h-full w-full px-4 gap-[16px]"
-      style={{ backgroundImage: "url(root-bg)", backgroundSize: "100% 100%" }}
-    >
-      <text tw="text-[14px] text-white">{poll(`date +"%b %-d"`)}</text>
-      <text tw="text-[14px] text-white">{poll(`date +"%H:%M"`)}</text>
-    </container>
-  </panel>
-
   <panel id="sidebar" anchor="left" width={250} height={ctx.screen_height} outer_gap={8}>
     <container
       tw="flex flex-col h-full w-full px-4 py-4"
