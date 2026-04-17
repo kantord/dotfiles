@@ -29,10 +29,11 @@ Agent: "Use the tdd-test-writer agent to write failing tests for [behavioral cla
 
 **hson snapshots** (pre-approved, no confirmation needed):
 ```bash
-HSON_TMP=$(~/.claude/scripts/hson-snapshot.sh <src_dir> 50000 "<weak_grep>")
+~/.claude/scripts/hson-snapshot.sh <src_dir> 50000 "<weak_grep>"
 # Hard-guarantee a symbol is present:
-HSON_TMP=$(~/.claude/scripts/hson-snapshot.sh <src_dir> 50000 "" "<grep_pattern>")
+~/.claude/scripts/hson-snapshot.sh <src_dir> 50000 "" "<grep_pattern>"
 ```
+The script prints the tmp file path on the last line of stdout — read it from the command output to pass to agents.
 
 See the `tdd` skill for full workflow details including divide-and-conquer, scope checks, and the simplicity agent.
 
