@@ -135,7 +135,7 @@ HSON_TMP=$(~/.claude/scripts/hson-snapshot.sh src 50000)
 HSON_TMP=$(~/.claude/scripts/hson-snapshot.sh src 50000 "" "pub fn my_function")
 ```
 
-The script writes to `/tmp`, prints a 3-line preview to stderr as a sanity check, and returns the path on stdout. Pre-approved via `Bash(~/.claude/scripts/hson-snapshot.sh:*)` in global settings.
+The script writes to `/tmp`, prints a 3-line preview to stderr as a sanity check, and returns the path on stdout. Pre-approved via `Bash(/home/kantord/.claude/scripts/hson-snapshot.sh:*)` in global settings (absolute path required — tilde expansion does not work in permission rules).
 
 Pass `$HSON_TMP` in the agent prompt. Brief the agent on what the snapshot provides:
 - State the budget and any grep patterns used
