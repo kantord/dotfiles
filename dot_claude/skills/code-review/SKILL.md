@@ -82,6 +82,22 @@ A function that takes `Order` when it only uses `order.customer.name` is falsely
 
 One place in the codebase — the orchestrator / entry point — knows the full shape of the outer type. Everything downstream receives pre-extracted pieces. If `order.customer.name.first` appears in more than one file, that's a signal drilling has escaped the boundary.
 
+### 11. Test structure: nested modules over banner comments
+
+Banner comments (`// -------`) used to divide test sections are a code smell. Use nested `mod` blocks instead — they create named, navigable scopes and make the test structure visible to tooling.
+
+**Smell**: `// --- Cycle 1: enter returning Err ---` dividing a flat list of `#[test]` functions.
+
+**Fix**: `mod enter_error { ... }` containing the relevant tests.
+
+### 12. Test structure: parametric helpers over duplicated test bodies
+
+When several `#[test]` functions share the same shape and differ only in inputs or expected values, extract a non-test helper that accepts those values as parameters. Each `#[test]` then calls the helper with one concrete scenario. This keeps test names as the specification and eliminates copy-paste drift.
+
+**Smell**: three `#[test]` functions with identical bodies except for one literal.
+
+**Fix**: `fn check(input: X, expected: Y) { ... }` called from three slim `#[test]` wrappers.
+
 ---
 
 ## Severity definitions
