@@ -11,10 +11,7 @@ const notifications = useJSONStream("~/.cargo/bin/costae-notify")?.notifications
 
 return <root>
   <panel id="sidebar" anchor="left" width={250} height={ctx.screen_height} outer_gap={8}>
-    <container
-      tw="flex flex-col h-full w-full px-4 py-4"
-      style={{ backgroundImage: "url(root-bg)", backgroundSize: "100% 100%" }}
-    >
+    <container tw="flex flex-col h-full w-full px-4 py-4 bg-[#1e1e1e]">
       <container tw="flex-1 flex flex-col w-full">
         <Module bin="~/.cargo/bin/costae-i3">
           {(data, events) => <WorkspaceList workspaces={data?.workspaces} events={events} />}
