@@ -5,9 +5,11 @@ import WorkspaceList from './components/WorkspaceList.jsx';
 import NotificationPanel from './components/NotificationPanel.jsx';
 import MonitorDot from './components/MonitorDot.jsx';
 
+export default function render() {
+
 const notifications = useJSONStream("~/.cargo/bin/costae-notify")?.notifications ?? [];
 
-<root>
+return <root>
   <panel id="sidebar" anchor="left" width={250} height={ctx.screen_height} outer_gap={8}>
     <container
       tw="flex flex-col h-full w-full px-4 py-4"
@@ -30,4 +32,6 @@ const notifications = useJSONStream("~/.cargo/bin/costae-notify")?.notifications
   {(useJSONStream("costae:outputs") ?? []).map(o => <MonitorDot o={o} />)}
 
   {notifications.map((n, i) => <NotificationPanel n={n} i={i} ctx={ctx} />)}
-</root>
+</root>;
+
+}
