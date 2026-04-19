@@ -1,8 +1,7 @@
-{{- /* chezmoi:template:left-delimiter=<% right-delimiter=%> */ -}}
 const poll = (cmd) => useStringStream("/usr/bin/bash", `while true; do ${cmd}; sleep 1; done`);
 const weather = useJSONStream("/usr/bin/bash", `while true; do data=$(curl -s --max-time 10 'wttr.in/Barcelona?format=%C|%t|%f|%h|%u' 2>/dev/null); cond=$(echo "$data"|cut -d'|' -f1); temp=$(echo "$data"|cut -d'|' -f2); feels=$(echo "$data"|cut -d'|' -f3); humidity=$(echo "$data"|cut -d'|' -f4); uv=$(echo "$data"|cut -d'|' -f5); printf '{"cond":"%s","temp":"%s","feels":"%s","humidity":"%s","uv":"%s"}\\n' "$cond" "$temp" "$feels" "$humidity" "$uv"; sleep 180; done`);
 
-const notifications = useJSONStream("<% .chezmoi.homeDir %>/.cargo/bin/costae-notify")?.notifications ?? [];
+const notifications = useJSONStream("~/.cargo/bin/costae-notify")?.notifications ?? [];
 const claudeUsage = useJSONStream("/usr/bin/bash", "while true; do ~/.local/bin/claude-usage-stream.sh; sleep 60; done");
 
 function Card({ label, content }) {
@@ -198,7 +197,7 @@ const NOTIF_MARGIN = 16;
       style={{ backgroundImage: "url(root-bg)", backgroundSize: "100% 100%" }}
     >
       <container tw="flex-1 flex flex-col w-full">
-        <Module bin="<% .chezmoi.homeDir %>/.cargo/bin/costae-i3">
+        <Module bin="~/.cargo/bin/costae-i3">
           {(data, events) => <WorkspaceList workspaces={data?.workspaces} notifications={notifications} events={events} />}
         </Module>
       </container>
