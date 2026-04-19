@@ -9,7 +9,7 @@ A structured, iterative quality pass. The goal is to move a codebase toward publ
 
 ## Phase 1 — Audit
 
-Invoke the `code-review` skill on the target scope (whole repo, a module, or a set of files). Collect all findings.
+Invoke the `style-review` skill on the target scope (whole repo, a module, or a set of files). Collect all findings.
 
 ## Phase 2 — Build the todo list
 

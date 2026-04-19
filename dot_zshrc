@@ -72,6 +72,8 @@ alias pass="EDITOR='nvim -u NONE' pass"
 alias task='go-task'
 alias t='/usr/bin/task'
 alias nested_sway='WLR_BACKENDS=x11 WLR_X11_OUTPUTS=1 WLR_NO_HARDWARE_CURSORS=1 sway --unsupported-gpu -c ~/.config/sway/nested.conf'
+alias ubuntu_box='~/.local/bin/ubuntu-box.sh'
+alias ubuntu_gnome='~/.local/bin/ubuntu-gnome.sh'
 
 # Claude Code ACP token for codecompanion.nvim
 export CLAUDE_CODE_OAUTH_TOKEN="$(secret-tool lookup service claude-acp type oauth 2>/dev/null)"

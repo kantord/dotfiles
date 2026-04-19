@@ -2,6 +2,7 @@
   "permissions": {
     "allow": [
       "Bash(~/.claude/scripts/hson-snapshot.sh:*)",
+      "Bash(/home/kantord/.claude/scripts/hson-snapshot.sh:*)",
       "Bash(python3 ~/.claude/skills/commit-msg-validate.py:*)",
       "Bash(git diff:*)",
       "Bash(git status:*)"

@@ -1,6 +1,6 @@
 ---
-name: code-review
-description: Review code for publish-readiness: precise types, named constants, guard clauses, extraction, narrow inputs, file structure, and coupling. Use when auditing a module, file, or PR for quality before publishing or merging. Returns a prioritized list of findings with file:line references.
+name: style-review
+description: Review code style and quality: precise types, named constants, guard clauses, extraction, narrow inputs, file structure, and coupling. Use when auditing a module, file, or PR for style and quality before publishing or merging. Returns a prioritized list of findings with file:line references.
 ---
 
 # Code Review: Publish-Readiness
