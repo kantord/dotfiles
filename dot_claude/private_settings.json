@@ -3,6 +3,12 @@
     "allow": [
       "Bash(~/.claude/scripts/hson-snapshot.sh:*)",
       "Bash(/home/kantord/.claude/scripts/hson-snapshot.sh:*)",
+      "Bash(~/.claude/scripts/grep-extensions.sh:*)",
+      "Bash(/home/kantord/.claude/scripts/grep-extensions.sh:*)",
+      "Bash(~/.claude/scripts/grep-raw.sh:*)",
+      "Bash(/home/kantord/.claude/scripts/grep-raw.sh:*)",
+      "Bash(~/.claude/scripts/grep-tree.sh:*)",
+      "Bash(/home/kantord/.claude/scripts/grep-tree.sh:*)",
       "Bash(python3 ~/.claude/skills/commit-msg-validate.py:*)",
       "Bash(git diff:*)",
       "Bash(git status:*)"

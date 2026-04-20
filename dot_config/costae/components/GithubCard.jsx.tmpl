@@ -28,13 +28,18 @@ export default function GithubCard() {
         <text tw="w-[24px] text-right text-[8px] text-[rgba(255,255,255,0.3)]">PR</text>
         <text tw="w-[24px] text-right text-[8px] text-[rgba(255,255,255,0.3)]">tsk</text>
       </container>
-      {items.map(item => (
-        <container tw="flex flex-row items-baseline">
-          {(() => { const n = item.repo.split('/')[1]; return <text tw="flex-1 text-[11px] text-[rgba(255,255,255,0.75)]">{n.length > 22 ? n.slice(0, 21) + '…' : n}</text>; })()}
-          <text tw="w-[24px] text-right text-[11px]" style={item.prs > 0 ? prStyle : dimStyle}>{item.prs > 0 ? item.prs : '—'}</text>
-          <text tw="w-[24px] text-right text-[11px]" style={item.issues > 0 ? issueStyle : dimStyle}>{item.issues > 0 ? item.issues : '—'}</text>
-        </container>
-      ))}
+      <Module bin="~/.local/bin/costae-github-open">
+        {(_, events) => items.map(item => (
+          <container
+            tw="flex flex-row items-baseline"
+            on_click={Object.assign({}, events.open, {url: `https://github.com/${item.repo}/issues?q=is%3Aopen+involves%3A%40me`})}
+          >
+            {(() => { const n = item.repo.split('/')[1]; return <text tw="flex-1 text-[11px] text-[rgba(255,255,255,0.75)]">{n.length > 22 ? n.slice(0, 21) + '…' : n}</text>; })()}
+            <text tw="w-[24px] text-right text-[11px]" style={item.prs > 0 ? prStyle : dimStyle}>{item.prs > 0 ? item.prs : '—'}</text>
+            <text tw="w-[24px] text-right text-[11px]" style={item.issues > 0 ? issueStyle : dimStyle}>{item.issues > 0 ? item.issues : '—'}</text>
+          </container>
+        ))}
+      </Module>
     </container>
   );
 }

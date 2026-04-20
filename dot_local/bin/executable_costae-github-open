@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+while IFS= read -r line; do
+  url=$(printf '%s' "$line" | jq -r '.data.url // empty' 2>/dev/null)
+  [ -n "$url" ] && xdg-open "$url" >/dev/null 2>&1 &
+done
