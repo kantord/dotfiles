@@ -1,4 +1,4 @@
-import BashCard from './components/BashCard.jsx';
+import DateTimeCard from './components/DateTimeCard.jsx';
 import WeatherCard from './components/WeatherCard.jsx';
 import ClaudeUsageCard from './components/ClaudeUsageCard.jsx';
 import GithubCard from './components/GithubCard.jsx';
@@ -22,8 +22,7 @@ return <root>
         <GithubCard />
         <WeatherCard />
         <ClaudeUsageCard />
-        <BashCard label="DATE" cmd={`date +"%b %-d"`} />
-        <BashCard label="TIME" cmd={`date +"%H:%M"`} />
+        <DateTimeCard />
       </container>
     </container>
   </panel>
