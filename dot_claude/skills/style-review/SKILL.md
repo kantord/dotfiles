@@ -45,6 +45,8 @@ A function body should read like a paragraph: what this operation *means*, not h
 
 **Smell**: a comment labeling a block (`// calculate subtotal`) — that comment is a function name in disguise.
 
+**Smell**: the same block repeated N≥2 times where only the bound variables differ — those variables are the parameters of a missing helper.
+
 ### 5. Names describe meaning, not mechanism
 
 - Functions: `calculate_subtotal`, not `process_items`
