@@ -1,4 +1,5 @@
 {{- $gitEmail := promptStringOnce . "email" "Default Git email address" -}}
+{{- $githubOrgList := promptStringOnce . "githubOrgList" "GitHub orgs to show in status bar (comma-separated, e.g. stacklok,StacklokLabs)" -}}
 {{ $platform := "mac" }}
 {{ $isWorkEnv := false }}
 
@@ -18,3 +19,4 @@ data:
   packageManager: {{ if eq $platform "arch" }}pacman{{ else if eq $platform "mac" }}brew{{ else }}apt{{ end }}
   isWorkEnv: {{ $isWorkEnv }}
   gitEmail: {{ $gitEmail }}
+  githubOrgList: {{ $githubOrgList }}

@@ -1,6 +1,7 @@
 import BashCard from './components/BashCard.jsx';
 import WeatherCard from './components/WeatherCard.jsx';
 import ClaudeUsageCard from './components/ClaudeUsageCard.jsx';
+import GithubCard from './components/GithubCard.jsx';
 import WorkspaceList from './components/WorkspaceList.jsx';
 import NotificationPanel from './components/NotificationPanel.jsx';
 import MonitorDot from './components/MonitorDot.jsx';
@@ -18,6 +19,7 @@ return <root>
         </Module>
       </container>
       <container tw="flex flex-col gap-[10px] w-full">
+        <GithubCard />
         <WeatherCard />
         <ClaudeUsageCard />
         <BashCard label="DATE" cmd={`date +"%b %-d"`} />

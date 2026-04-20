@@ -1,0 +1,36 @@
+export default function GithubCard() {
+  const items = useJSONStream("/usr/bin/bash", `while true; do \
+    three_months_ago=$(date -d '3 months ago' +%Y-%m-%d); \
+    { gh search prs --author @me --state open --updated ">$three_months_ago" \
+        {{ range (splitList "," .githubOrgList) }}--owner {{ . }} {{ end }}\
+        --json repository,url --limit 100; \
+      gh search issues --assignee @me --state open --updated ">$three_months_ago" \
+        {{ range (splitList "," .githubOrgList) }}--owner {{ . }} {{ end }}\
+        --json repository,url --limit 100; \
+    } | jq -cs '[.[][]] | group_by(.repository.nameWithOwner) | map({repo: .[0].repository.nameWithOwner, prs: [.[] | select(.url | test("/pull/"))] | length, issues: [.[] | select(.url | test("/issues/"))] | length}) | map(select(.prs > 0 or .issues > 0))'; \
+    sleep 300; \
+  done`) ?? [];
+
+  if (items.length === 0) return null;
+
+  const prStyle = {color: '#89b4fa'};
+  const issueStyle = {color: '#f9e2af'};
+  const dimStyle = {color: 'rgba(255,255,255,0.2)'};
+
+  return (
+    <container tw="flex flex-col gap-[4px] px-3 py-[8px]">
+      <container tw="flex flex-row items-baseline">
+        <text tw="flex-1 text-[10px] text-[rgba(255,255,255,0.5)]">GITHUB</text>
+        <text tw="w-[24px] text-right text-[8px] text-[rgba(255,255,255,0.3)]">PR</text>
+        <text tw="w-[24px] text-right text-[8px] text-[rgba(255,255,255,0.3)]">tsk</text>
+      </container>
+      {items.map(item => (
+        <container tw="flex flex-row items-baseline">
+          {(() => { const n = item.repo.split('/')[1]; return <text tw="flex-1 text-[11px] text-[rgba(255,255,255,0.75)]">{n.length > 22 ? n.slice(0, 21) + '…' : n}</text>; })()}
+          <text tw="w-[24px] text-right text-[11px]" style={item.prs > 0 ? prStyle : dimStyle}>{item.prs > 0 ? item.prs : '—'}</text>
+          <text tw="w-[24px] text-right text-[11px]" style={item.issues > 0 ? issueStyle : dimStyle}>{item.issues > 0 ? item.issues : '—'}</text>
+        </container>
+      ))}
+    </container>
+  );
+}
