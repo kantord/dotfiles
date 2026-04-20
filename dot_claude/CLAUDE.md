@@ -37,6 +37,15 @@ The script prints the tmp file path on the last line of stdout — read it from 
 
 See the `tdd` skill for full workflow details including divide-and-conquer, scope checks, and the simplicity agent.
 
+## Codebase Search
+
+When searching an unfamiliar codebase, prefer the `grep-ai` skill over the native Grep tool. The key reason: `grep-tree` shows the **full structural ancestor chain** of every match (the function signature, class, module, and file it lives in) — something native Grep cannot do. Use native Grep only for quick one-off checks where you already know the file.
+
+Typical decision:
+- Don't know the file types yet → `grep-extensions` first
+- Want to understand where something lives structurally → `grep-tree`
+- Need an exact file:line to pass to Read/Edit → `grep-raw`
+
 ## Data Privacy — No Cross-Repo Leakage
 
 **Never let data from one context bleed into a repo where it does not belong.** This applies to all agents, including those editing dotfiles, filing GitHub issues, or writing any file that will be committed to a repository.
