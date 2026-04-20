@@ -14,19 +14,22 @@ function KeyBadge({ label, focused, urgent }) {
   );
 }
 
-function WorkspaceName({ name, focused, urgent, subtitle }) {
-  const sub = <text tw="text-[11px] text-[rgba(255,255,255,0.55)] truncate">{subtitle ?? ""}</text>;
+function WorkspaceName({ name, focused, urgent, subtitle, displayLabel }) {
+  const sub = subtitle
+    ? <text tw="text-[11px] text-[rgba(255,255,255,0.55)] truncate">{subtitle}</text>
+    : null;
+  const textClass = focused ? "text-[13px] text-white font-bold truncate"
+    : urgent ? "text-[13px] text-[#f38ba8] truncate"
+    : "text-[13px] text-[rgba(255,255,255,0.95)] truncate";
   const sep = name.indexOf(': ');
   if (sep > 0) {
     const key = name.slice(0, sep);
-    const label = name.slice(sep + 2);
+    const label = displayLabel ?? name.slice(sep + 2);
     return (
       <container tw="flex flex-row items-center gap-[8px] w-full">
         <KeyBadge label={key} focused={focused} urgent={urgent} />
         <container tw="flex flex-col min-w-0 flex-1">
-          <text tw={focused ? "text-[13px] text-white font-bold truncate" : urgent ? "text-[13px] text-[#f38ba8] truncate" : "text-[13px] text-[rgba(255,255,255,0.95)] truncate"}>
-            {label}
-          </text>
+          <text tw={textClass}>{label}</text>
           {sub}
         </container>
       </container>
@@ -42,11 +45,10 @@ function WorkspaceName({ name, focused, urgent, subtitle }) {
       </container>
     );
   }
+  const label = displayLabel ?? name;
   return (
     <container tw="flex flex-col">
-      <text tw={focused ? "text-[13px] text-white font-bold truncate" : urgent ? "text-[13px] text-[#f38ba8] truncate" : "text-[13px] text-[rgba(255,255,255,0.95)] truncate"}>
-        {name}
-      </text>
+      <text tw={textClass}>{label}</text>
       {sub}
     </container>
   );
@@ -54,6 +56,7 @@ function WorkspaceName({ name, focused, urgent, subtitle }) {
 
 export default function WorkspaceList({ workspaces, events }) {
   const notifications = useJSONStream("~/.cargo/bin/costae-notify")?.notifications ?? [];
+  const meta = useJSONStream("~/.local/bin/enwiro-meta-stream.sh") ?? {};
   globals.unread_notifs ??= {};
 
   const focusedWs = (workspaces ?? []).find(ws => ws.focused);
@@ -74,10 +77,17 @@ export default function WorkspaceList({ workspaces, events }) {
   return (
     <container tw="flex flex-col gap-[8px] pt-[16px] w-full">
       {(workspaces ?? []).map(ws => {
+        const nameSep = ws.name.indexOf(': ');
+        const envName = nameSep > 0 ? ws.name.slice(nameSep + 2) : ws.name;
         const matchedEnv = Object.keys(globals.unread_notifs).find(env =>
           ws.name.endsWith(": " + env) || ws.name === env
         );
         const notifText = matchedEnv !== undefined ? globals.unread_notifs[matchedEnv] : null;
+        const envMeta = meta[envName] ?? {};
+        const rawDesc = envMeta.description ?? null;
+        const description = rawDesc ? rawDesc.replace(/^\[(issue|pr|PR|Issue)\]\s*/i, '') : null;
+        const displayLabel = description;
+        const subtitle = notifText ?? (description ? envName : null);
         const urgent = ws.urgent || notifText !== null;
         return (
           <container
@@ -89,7 +99,7 @@ export default function WorkspaceList({ workspaces, events }) {
             }
             on_click={{ ...events.switchWorkspace, workspace: ws.name }}
           >
-            <WorkspaceName name={ws.name} focused={ws.focused} urgent={urgent} subtitle={notifText} />
+            <WorkspaceName name={ws.name} focused={ws.focused} urgent={urgent} subtitle={subtitle} displayLabel={displayLabel} />
           </container>
         );
       })}
