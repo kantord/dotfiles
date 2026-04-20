@@ -1,13 +1,17 @@
 export default function GithubCard() {
   const items = useJSONStream("/usr/bin/bash", `while true; do \
     three_months_ago=$(date -d '3 months ago' +%Y-%m-%d); \
+    five_weeks_ago=$(date -d '5 weeks ago' +%Y-%m-%d); \
     { gh search prs --author @me --state open --updated ">$three_months_ago" \
         {{ range (splitList "," .githubOrgList) }}--owner {{ . }} {{ end }}\
         --json repository,url --limit 100; \
       gh search issues --assignee @me --state open --updated ">$three_months_ago" \
         {{ range (splitList "," .githubOrgList) }}--owner {{ . }} {{ end }}\
         --json repository,url --limit 100; \
-    } | jq -cs '[.[][]] | group_by(.repository.nameWithOwner) | map({repo: .[0].repository.nameWithOwner, prs: [.[] | select(.url | test("/pull/"))] | length, issues: [.[] | select(.url | test("/issues/"))] | length}) | map(select(.prs > 0 or .issues > 0))'; \
+      gh search prs --merged --updated ">$five_weeks_ago" \
+        {{ range (splitList "," .githubOrgList) }}--owner {{ . }} {{ end }}\
+        --json repository --limit 100; \
+    } | jq -cs '. as [$open_prs, $open_issues, $merged] | ($merged | [.[].repository.nameWithOwner] | unique) as $active | [$open_prs[], $open_issues[]] | group_by(.repository.nameWithOwner) | map(select(.[0].repository.nameWithOwner as $r | $active | index($r) != null)) | map({repo: .[0].repository.nameWithOwner, prs: [.[] | select(.url | test("/pull/"))] | length, issues: [.[] | select(.url | test("/issues/"))] | length}) | map(select(.prs > 0 or .issues > 0))'; \
     sleep 300; \
   done`) ?? [];
 
