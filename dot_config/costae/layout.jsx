@@ -4,7 +4,7 @@ import ClaudeUsageCard from './components/ClaudeUsageCard.jsx';
 import GithubCard from './components/GithubCard.jsx';
 import WorkspaceList from './components/WorkspaceList.jsx';
 import NotificationPanel from './components/NotificationPanel.jsx';
-import MonitorDot from './components/MonitorDot.jsx';
+// import MonitorDot from './components/MonitorDot.jsx';
 
 export default function render() {
 
@@ -27,7 +27,7 @@ return <root>
     </container>
   </panel>
 
-  {(useJSONStream("costae:outputs") ?? []).map(o => <MonitorDot o={o} />)}
+  {/* (useJSONStream("costae:outputs") ?? []).map(o => <MonitorDot o={o} />) */}
 
   {notifications.map((n, i) => <NotificationPanel n={n} i={i} ctx={ctx} />)}
 </root>;
