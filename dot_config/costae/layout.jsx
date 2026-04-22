@@ -2,6 +2,7 @@ import DateTimeCard from './components/DateTimeCard.jsx';
 import WeatherCard from './components/WeatherCard.jsx';
 import ClaudeUsageCard from './components/ClaudeUsageCard.jsx';
 import GithubCard from './components/GithubCard.jsx';
+import GithubReviewCard from './components/GithubReviewCard.jsx';
 import WorkspaceList from './components/WorkspaceList.jsx';
 import NotificationPanel from './components/NotificationPanel.jsx';
 // import MonitorDot from './components/MonitorDot.jsx';
@@ -20,6 +21,7 @@ return <root>
       </container>
       <container tw="flex flex-col gap-[10px] w-full">
         <GithubCard />
+        <GithubReviewCard />
         <WeatherCard />
         <ClaudeUsageCard />
         <DateTimeCard />

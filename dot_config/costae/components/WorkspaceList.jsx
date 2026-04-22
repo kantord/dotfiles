@@ -54,9 +54,17 @@ function WorkspaceName({ name, focused, urgent, subtitle, displayLabel }) {
   );
 }
 
+const REPO_ALIASES = { sep: 'stacklok-enterprise-platform' };
+
+function baseRepo(envName) {
+  const b = envName.replace(/#\d+$/, '').replace(/@.*$/, '');
+  return REPO_ALIASES[b] ?? b;
+}
+
 export default function WorkspaceList({ workspaces, events }) {
   const notifications = useJSONStream("~/.cargo/bin/costae-notify")?.notifications ?? [];
   const meta = useJSONStream("~/.local/bin/enwiro-meta-stream.sh") ?? {};
+  const repoColors = useJSONStream("~/.local/bin/costae-repo-colors.sh") ?? {};
   globals.unread_notifs ??= {};
 
   const focusedWs = (workspaces ?? []).find(ws => ws.focused);
@@ -89,14 +97,17 @@ export default function WorkspaceList({ workspaces, events }) {
         const displayLabel = description;
         const subtitle = notifText ?? (description ? envName : null);
         const urgent = ws.urgent || notifText !== null;
+        const hue = repoColors[baseRepo(envName)];
+        const cardBg = hue !== undefined ? `hsla(${hue}, 60%, 60%, 0.15)` : 'rgba(255,255,255,0.08)';
         return (
           <container
             tw={ws.focused
-              ? "flex flex-col justify-center px-3 h-[52px] rounded-lg border border-[#cba6f7] bg-[rgba(255,255,255,0.08)] backdrop-blur-md w-full"
+              ? "flex flex-col justify-center px-3 h-[52px] rounded-lg border border-[#cba6f7] backdrop-blur-md w-full"
               : urgent
-              ? "flex flex-col justify-center px-3 h-[52px] rounded-lg border border-[#f38ba8] bg-[rgba(255,255,255,0.08)] backdrop-blur-md w-full"
-              : "flex flex-col justify-center px-3 h-[52px] rounded-lg border border-[rgba(255,255,255,0.2)] bg-[rgba(255,255,255,0.08)] backdrop-blur-md w-full"
+              ? "flex flex-col justify-center px-3 h-[52px] rounded-lg border border-[#f38ba8] backdrop-blur-md w-full"
+              : "flex flex-col justify-center px-3 h-[52px] rounded-lg border border-[rgba(255,255,255,0.2)] backdrop-blur-md w-full"
             }
+            style={{ backgroundColor: cardBg }}
             on_click={{ ...events.switchWorkspace, workspace: ws.name }}
           >
             <WorkspaceName name={ws.name} focused={ws.focused} urgent={urgent} subtitle={subtitle} displayLabel={displayLabel} />
