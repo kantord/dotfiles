@@ -91,3 +91,12 @@ export PATH="$HOME/.toolhive/bin:$PATH"
 # Added by ToolHive UI - do not modify this block
 export PATH="$HOME/.toolhive/bin:$PATH"
 # End ToolHive UI
+
+# bun completions
+[ -s "/home/kantord/.bun/_bun" ] && source "/home/kantord/.bun/_bun"
+
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
+
+alias claude-mem='/home/kantord/.bun/bin/bun "/home/kantord/.claude/plugins/marketplaces/thedotmack/plugin/scripts/worker-service.cjs"'

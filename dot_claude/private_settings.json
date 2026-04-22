@@ -14,15 +14,24 @@
       "Bash(git status:*)"
     ]
   },
-  "enabledPlugins": {
-    "rust-analyzer-lsp@claude-plugins-official": true,
-    "clangd-lsp@claude-plugins-official": true,
-    "typescript-lsp@claude-plugins-official": true
-  },
-  "syntaxHighlightingDisabled": false,
-  "voiceEnabled": true,
   "statusLine": {
     "type": "command",
     "command": "bash ~/.local/bin/claude-statusline.sh"
-  }
+  },
+  "enabledPlugins": {
+    "rust-analyzer-lsp@claude-plugins-official": true,
+    "clangd-lsp@claude-plugins-official": true,
+    "typescript-lsp@claude-plugins-official": true,
+    "claude-mem@thedotmack": true
+  },
+  "extraKnownMarketplaces": {
+    "thedotmack": {
+      "source": {
+        "source": "github",
+        "repo": "thedotmack/claude-mem"
+      }
+    }
+  },
+  "syntaxHighlightingDisabled": false,
+  "voiceEnabled": true
 }
