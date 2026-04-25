@@ -1,0 +1,55 @@
+#!/usr/bin/env bash
+owners="{{ range (splitList "," .githubOrgList) }}user:{{ . }} {{ end }}"
+
+while true; do
+  three_months_ago=$(date -d '3 months ago' +%Y-%m-%d)
+  five_weeks_ago=$(date -d '5 weeks ago' +%Y-%m-%d)
+
+  result=$(gh api graphql \
+    -f query='
+      query($openPRs: String!, $openIssues: String!, $merged: String!, $reviewPRs: String!) {
+        openPRs:    search(query: $openPRs,    type: ISSUE, first: 100) {
+          nodes { ... on PullRequest { repository { nameWithOwner } } }
+        }
+        openIssues: search(query: $openIssues, type: ISSUE, first: 100) {
+          nodes { ... on Issue { repository { nameWithOwner } } }
+        }
+        mergedPRs:  search(query: $merged,     type: ISSUE, first: 100) {
+          nodes { ... on PullRequest { repository { nameWithOwner } } }
+        }
+        reviewPRs:  search(query: $reviewPRs,  type: ISSUE, first: 100) {
+          nodes { ... on PullRequest { repository { nameWithOwner } } }
+        }
+      }
+    ' \
+    -f "openPRs=is:pr is:open author:@me updated:>$three_months_ago $owners" \
+    -f "openIssues=is:issue is:open assignee:@me updated:>$three_months_ago $owners" \
+    -f "merged=is:pr is:merged updated:>$five_weeks_ago $owners" \
+    -f "reviewPRs=is:pr is:open review-requested:@me updated:>$three_months_ago $owners" \
+    2>/dev/null) && \
+  echo "$result" | jq -c '
+    .data as $d |
+    ($d.mergedPRs.nodes | map(select(.repository)) | [.[].repository.nameWithOwner] | unique) as $active |
+    {
+      wip: (
+        [
+          ($d.openPRs.nodes    | map(select(.repository)) | group_by(.repository.nameWithOwner) | map({repo: .[0].repository.nameWithOwner, prs: length, issues: 0})),
+          ($d.openIssues.nodes | map(select(.repository)) | group_by(.repository.nameWithOwner) | map({repo: .[0].repository.nameWithOwner, prs: 0, issues: length}))
+        ] | flatten |
+        group_by(.repo) |
+        map({repo: .[0].repo, prs: (map(.prs) | add), issues: (map(.issues) | add)}) |
+        map(select((.prs > 0 or .issues > 0) and (.repo as $r | $active | index($r) != null)))
+      ),
+      review: (
+        $d.reviewPRs.nodes |
+        map(select(.repository)) |
+        group_by(.repository.nameWithOwner) |
+        map(select(.[0].repository.nameWithOwner as $r | $active | index($r) != null)) |
+        map({repo: .[0].repository.nameWithOwner, count: length}) |
+        map(select(.count > 0))
+      )
+    }
+  ' 2>/dev/null
+
+  sleep 300
+done
