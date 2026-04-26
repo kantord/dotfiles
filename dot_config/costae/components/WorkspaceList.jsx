@@ -4,23 +4,23 @@ function KeyBadge({ label, focused, urgent }) {
   }
   return (
     <container tw={focused
-      ? "flex flex-col items-center justify-center flex-shrink-0 w-[26px] py-[2px] rounded bg-[rgba(203,166,247,0.45)] border border-[rgba(203,166,247,0.7)]"
+      ? "flex flex-col items-center justify-center flex-shrink-0 w-[26px] py-[2px] rounded bg-primary/45 border border-primary/70"
       : urgent
-      ? "flex flex-col items-center justify-center flex-shrink-0 w-[26px] py-[2px] rounded bg-[rgba(243,139,168,0.45)] border border-[rgba(243,139,168,0.7)]"
-      : "flex flex-col items-center justify-center flex-shrink-0 w-[26px] py-[2px] rounded bg-[rgba(0,0,0,0.35)] border border-[rgba(255,255,255,0.2)]"
+      ? "flex flex-col items-center justify-center flex-shrink-0 w-[26px] py-[2px] rounded bg-destructive/45 border border-destructive/70"
+      : "flex flex-col items-center justify-center flex-shrink-0 w-[26px] py-[2px] rounded bg-muted border border-border"
     }>
-      <text tw="text-[12px] text-white font-bold">{label}</text>
+      <text tw="text-[12px] text-foreground font-bold">{label}</text>
     </container>
   );
 }
 
 function WorkspaceName({ name, focused, urgent, subtitle, displayLabel }) {
   const sub = subtitle
-    ? <text tw="text-[11px] text-[rgba(255,255,255,0.55)] truncate">{subtitle}</text>
+    ? <text tw="text-[11px] text-muted-foreground truncate">{subtitle}</text>
     : null;
-  const textClass = focused ? "text-[13px] text-white font-bold truncate"
-    : urgent ? "text-[13px] text-[#f38ba8] truncate"
-    : "text-[13px] text-[rgba(255,255,255,0.95)] truncate";
+  const textClass = focused ? "text-[13px] text-foreground font-bold truncate"
+    : urgent ? "text-[13px] text-destructive truncate"
+    : "text-[13px] text-foreground truncate";
   const sep = name.indexOf(': ');
   if (sep > 0) {
     const key = name.slice(0, sep);
@@ -98,16 +98,17 @@ export default function WorkspaceList({ workspaces, events }) {
         const subtitle = notifText ?? (description ? envName : null);
         const urgent = ws.urgent || notifText !== null;
         const hue = repoColors[baseRepo(envName)];
-        const cardBg = hue !== undefined ? `hsla(${hue}, 60%, 60%, 0.15)` : 'rgba(255,255,255,0.08)';
+        const cardBg = hue !== undefined ? `hsla(${hue}, 60%, 60%, 0.15)` : undefined;
+        // THEME-GAP: cardBg (runtime-computed from repo hue — intentional, not themeable)
         return (
           <container
             tw={ws.focused
-              ? "flex flex-col justify-center px-3 h-[52px] rounded-lg border border-[#cba6f7] backdrop-blur-md w-full"
+              ? "flex flex-col justify-center px-3 h-[52px] rounded-lg bg-card border border-primary w-full"
               : urgent
-              ? "flex flex-col justify-center px-3 h-[52px] rounded-lg border border-[#f38ba8] backdrop-blur-md w-full"
-              : "flex flex-col justify-center px-3 h-[52px] rounded-lg border border-[rgba(255,255,255,0.2)] backdrop-blur-md w-full"
+              ? "flex flex-col justify-center px-3 h-[52px] rounded-lg bg-card border border-destructive w-full"
+              : "flex flex-col justify-center px-3 h-[52px] rounded-lg bg-card border border-border w-full"
             }
-            style={{ backgroundColor: cardBg }}
+            style={cardBg ? { backgroundColor: cardBg } : undefined}
             on_click={{ ...events.switchWorkspace, workspace: ws.name }}
           >
             <WorkspaceName name={ws.name} focused={ws.focused} urgent={urgent} subtitle={subtitle} displayLabel={displayLabel} />

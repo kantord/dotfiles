@@ -38,7 +38,8 @@ export default function CalendarSidebar() {
             paddingTop: 2,
           }}
         >
-          <text tw="text-[8px] text-white leading-none">{ev.title}</text>
+          {/* THEME-GAP: event colors (#818cf8 etc.) and backgroundColor/borderLeft are per-event semantic colors applied via inline style — not themeable as tw tokens */}
+          <text tw="text-[8px] text-foreground leading-none">{ev.title}</text>
         </container>
       ))}
       {nowPct !== null && (

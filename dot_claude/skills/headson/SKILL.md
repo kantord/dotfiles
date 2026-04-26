@@ -35,22 +35,31 @@ Install: `cargo install headson`
 --igrep <REGEX>          Case-insensitive --grep
 --weak-grep <REGEX>      SOFT: move matches to front of priority queue, no guarantee
 --weak-igrep <REGEX>     Case-insensitive --weak-grep
+--capped-grep <REGEX>    AUDITED: like --grep but budget is a hard cap; hidden matches are counted
+--capped-igrep <REGEX>   Case-insensitive --capped-grep
+--count-matches          Print "N shown, M hidden" summary to stderr (use with --capped-grep)
 -g, --glob <PATTERN>     Additional glob patterns to include
 ```
 
-## --grep vs --weak-grep: what they actually guarantee
+## --grep vs --capped-grep vs --weak-grep
 
 **`--grep` (hard guarantee):**
-- Every matching line AND all its indentation ancestors up to the file root are always included, regardless of budget
-- Even `--grep needle -n 1` will emit the match plus its structural ancestors
-- In filesets: files with zero matches are removed from output by default (use `--grep-show all` to keep them)
-- Use when you MUST see a specific symbol
+- Every matching line AND all its indentation ancestors are always included, regardless of budget
+- **The budget does NOT cap grep matches** — matches are "free" and added on top of whatever the budget covers
+- A broad pattern on a large codebase can produce output far exceeding the budget
+- In filesets: files with zero matches are dropped by default
+- Use when you MUST see a specific symbol and don't care about output size
+
+**`--capped-grep` (audited / best-effort):**
+- Matches are attempted in priority order against the budget — no forced inclusion past the cap
+- Always pair with `--count-matches` to get a `"N shown, M hidden"` summary on stderr
+- When `M = 0` you got everything; when `M > 0` you know to narrow the pattern or increase the budget
+- In filesets: files with zero matches are dropped (same as `--grep`)
+- **Use this as the default grep mode** — it's safe to use with any budget and tells you if it was enough
 
 **`--weak-grep` (soft priority boost):**
-- Matching nodes are moved to the front of the priority queue — they appear first and will be included unless the budget is near-zero
-- No forced inclusion — under very tight budgets, matches can still be cut
-- Does not filter files in filesets
-- Use when you want to bias toward an area without excluding everything else
+- Matches move to the front of the priority queue, no guarantee, no filtering of files
+- Use when you want to bias toward an area without excluding non-matching files
 
 ## Reading hson output as a map, not a complete view
 
@@ -102,19 +111,25 @@ hson --recursive src -C 50000 --tree --weak-grep "usage_stats|EnvStats"
 ```
 `--weak-grep` moves matching files/lines to the front — they appear first and are more likely to be fully included.
 
-### 4. Guarantee specific symbols are present
+### 4. Search within a budget (safe default for agents)
+```bash
+hson --recursive src -C 50000 --tree --capped-grep "Supervisor|Reconcile" --count-matches
+```
+All matches that fit within 50KB are included; `stderr` tells you how many were hidden. If hidden > 0, narrow the pattern. Use this instead of `--grep` when you can't predict how many matches exist.
+
+### 5. Guarantee specific symbols are present
 ```bash
 hson --recursive src -C 50000 --tree --grep "pub fn activation_percentile_scores"
 ```
-The function signature + all its ancestors are unconditionally included. Remaining budget covers everything else.
+The function signature + all its ancestors are unconditionally included. Remaining budget covers everything else. Only use `--grep` when the pattern is narrow and you're certain it won't flood the output.
 
-### 5. Combine hard and soft
+### 6. Combine hard and soft
 ```bash
 hson --recursive src -C 60000 --tree --grep "pub struct|pub trait" --weak-grep "frecency"
 ```
 Force-include all public type definitions; bias remaining budget toward frecency-related code.
 
-### 6. Single file, mostly complete
+### 7. Single file, mostly complete
 ```bash
 # For a 300-line file, -n 150 gives most bodies
 hson path/to/file.rs -n 150
@@ -131,7 +146,11 @@ HSON_TMP=$(~/.claude/scripts/hson-snapshot.sh src 50000 "<weak_grep_pattern>")
 # Without pattern:
 HSON_TMP=$(~/.claude/scripts/hson-snapshot.sh src 50000)
 
-# With hard grep guarantee (use when symbol MUST be present):
+# Audited search — safe default when pattern breadth is unknown:
+HSON_TMP=$(~/.claude/scripts/hson-snapshot.sh src 50000 "" "" "Supervisor|Reconcile")
+# stderr will print "N shown, M hidden" — check M before proceeding
+
+# With hard grep guarantee (use only for narrow, known-small patterns):
 HSON_TMP=$(~/.claude/scripts/hson-snapshot.sh src 50000 "" "pub fn my_function")
 ```
 

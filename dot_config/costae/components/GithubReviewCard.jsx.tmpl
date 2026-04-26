@@ -4,19 +4,17 @@ export default function GithubReviewCard() {
 
   if (items.length === 0) return null;
 
-  const countStyle = {color: '#cba6f7'};
-
   return (
     <container tw="flex flex-col gap-[4px] px-3 py-[8px]">
       <container tw="flex flex-row items-baseline">
-        <text tw="flex-1 text-[10px] text-[rgba(255,255,255,0.5)]">REVIEW</text>
-        <text tw="w-[24px] text-right text-[8px] text-[rgba(255,255,255,0.3)]">PR</text>
+        <text tw="flex-1 text-[10px] text-muted-foreground">REVIEW</text>
+        <text tw="w-[24px] text-right text-[8px] text-muted-foreground">PR</text>
       </container>
       <Module bin="~/.local/bin/costae-github-open">
         {(_, events) => items.map(item => (
           <container tw="flex flex-row items-baseline">
-            {(() => { const n = item.repo.split('/')[1]; return <text tw="flex-1 text-[11px] text-[rgba(255,255,255,0.75)]">{n.length > 22 ? n.slice(0, 21) + '…' : n}</text>; })()}
-            <text tw="w-[24px] text-right text-[11px]" style={countStyle} on_click={Object.assign({}, events.open, {url: `https://github.com/${item.repo}/pulls?q=is%3Aopen+review-requested%3A%40me`})}>{item.count}</text>
+            {(() => { const n = item.repo.split('/')[1]; return <text tw="flex-1 text-[11px] text-foreground">{n.length > 22 ? n.slice(0, 21) + '…' : n}</text>; })()}
+            <text tw="w-[24px] text-right text-[11px] text-foreground" on_click={Object.assign({}, events.open, {url: `https://github.com/${item.repo}/pulls?q=is%3Aopen+review-requested%3A%40me`})}>{item.count}</text>
           </container>
         ))}
       </Module>

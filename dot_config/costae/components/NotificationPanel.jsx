@@ -14,11 +14,11 @@ export default function NotificationPanel({ n, i, ctx }) {
       height={NOTIF_H}
     >
       <container
-        tw="flex flex-col justify-center h-full w-full px-4 gap-[3px] rounded-lg border border-[rgba(255,255,255,0.25)] bg-[rgba(10,10,10,0.75)] backdrop-blur-md"
+        tw="flex flex-col justify-center h-full w-full px-4 gap-[3px] rounded-lg border border-border bg-popover"
         style={{ backgroundImage: "url(root-bg)", backgroundSize: "100% 100%" }}
       >
-        <text tw="text-[13px] font-bold text-white">{n.summary}</text>
-        {n.body ? <text tw="text-[12px] text-[rgba(255,255,255,0.75)]">{n.body}</text> : <container />}
+        <text tw="text-[13px] font-bold text-foreground">{n.summary}</text>
+        {n.body ? <text tw="text-[12px] text-muted-foreground">{n.body}</text> : <container />}
       </container>
     </panel>
   );

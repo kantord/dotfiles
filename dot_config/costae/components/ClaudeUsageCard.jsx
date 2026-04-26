@@ -2,8 +2,9 @@ export default function ClaudeUsageCard() {
   const data = useJSONStream("/usr/bin/bash", "while true; do ~/.local/bin/claude-usage-stream.sh; sleep 60; done");
   const accounts = data?.accounts ?? [];
   if (accounts.length === 0) return null;
+  // THEME-GAP: status colors #f38ba8/#fab387/#a6e3a1 in inline style are semantic (high/medium/ok) — no theme token equivalent
   return (
-    <container tw="flex flex-col gap-[4px] rounded-lg border border-[rgba(255,255,255,0.2)] bg-[rgba(255,255,255,0.08)] backdrop-blur-md px-3 py-[8px]">
+    <container tw="flex flex-col gap-[4px] rounded-lg border border-border bg-card px-3 py-[8px]">
       {accounts.map(a => {
         const resetsStr = a.resetsIn < 3600
           ? `${Math.floor(a.resetsIn / 60)}m`
@@ -13,12 +14,12 @@ export default function ClaudeUsageCard() {
         const color = a.percent >= 90 ? '#f38ba8' : a.percent >= 70 ? '#fab387' : '#a6e3a1';
         return (
           <container tw="flex flex-col gap-[6px]">
-            <text tw="text-[10px] text-[rgba(255,255,255,0.6)]">Claude · {a.label}</text>
+            <text tw="text-[10px] text-muted-foreground">Claude · {a.label}</text>
             <container tw="flex flex-row items-baseline justify-between">
-              <text tw="text-[15px] text-white font-bold" style={{ color }}>{a.percent}%</text>
-              <text tw="text-[10px] text-[rgba(255,255,255,0.6)]">resets {resetsStr}</text>
+              <text tw="text-[15px] text-foreground font-bold" style={{ color }}>{a.percent}%</text>
+              <text tw="text-[10px] text-muted-foreground">resets {resetsStr}</text>
             </container>
-            <container tw="flex flex-row w-full h-[4px] rounded-full bg-[rgba(255,255,255,0.15)]">
+            <container tw="flex flex-row w-full h-[4px] rounded-full bg-muted">
               <container tw="h-[4px] rounded-full" style={{ flex: a.percent, backgroundColor: color }} />
               <container style={{ flex: 100 - a.percent }} />
             </container>

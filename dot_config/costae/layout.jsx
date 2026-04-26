@@ -19,14 +19,13 @@ const dp1Height = dp1Output ? Math.round(dp1Output.height / dpr) : ctx.screen_he
 
 return <root>
   <panel id="sidebar" anchor="left" width={250} height={ctx.screen_height} outer_gap={8}>
-    <container tw="flex flex-col h-full w-full px-4 py-4 bg-[#1e1e1e]">
+    <container tw="flex flex-col h-full w-full px-4 py-4 bg-background">
       <container tw="flex-1 flex flex-col w-full">
         <Module bin="~/.cargo/bin/costae-i3">
           {(data, events) => <WorkspaceList workspaces={data?.workspaces} events={events} />}
         </Module>
       </container>
-      <container tw="bg-primary w-full h-[4px] rounded-full" />
-      <container tw="flex flex-col gap-[10px] w-full">
+<container tw="flex flex-col gap-[10px] w-full">
         <GithubCard />
         <GithubReviewCard />
         <WeatherCard />
@@ -37,7 +36,7 @@ return <root>
   </panel>
 
   <panel id="calendar" anchor="right" output="DP-1" width={60} height={dp1Height}>
-    <container tw="h-full w-full py-4 px-1 bg-[#1e1e1e]">
+    <container tw="h-full w-full py-4 px-1 bg-background">
       <CalendarSidebar />
     </container>
   </panel>
