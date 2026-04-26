@@ -25,6 +25,7 @@ return <root>
           {(data, events) => <WorkspaceList workspaces={data?.workspaces} events={events} />}
         </Module>
       </container>
+      <container tw="bg-primary w-full h-[4px] rounded-full" />
       <container tw="flex flex-col gap-[10px] w-full">
         <GithubCard />
         <GithubReviewCard />
