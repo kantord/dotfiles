@@ -1,3 +1,5 @@
+import { Card } from '@ui/card';
+
 function Cell({ label, cmd }) {
   return (
     <container tw="flex-1 flex flex-col gap-1">
@@ -9,9 +11,9 @@ function Cell({ label, cmd }) {
 
 export default function DateTimeCard() {
   return (
-    <container tw="flex flex-row gap-[10px] rounded-lg border border-border bg-card px-3 py-[10px] w-full">
+    <Card tw="flex flex-row gap-[10px] w-full">
       <Cell label="DATE" cmd={`date +"%b %-d"`} />
       <Cell label="TIME" cmd={`date +"%H:%M"`} />
-    </container>
+    </Card>
   );
 }

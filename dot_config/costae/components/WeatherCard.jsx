@@ -1,3 +1,5 @@
+import { Card } from '@ui/card';
+
 function uvLabel(raw) {
   const n = parseInt(raw, 10);
   if (isNaN(n)) return "—";
@@ -21,7 +23,7 @@ export default function WeatherCard() {
   const w = useJSONStream("/usr/bin/bash", `while true; do data=$(curl -s --max-time 10 'wttr.in/Barcelona?format=%C|%t|%f|%h|%u' 2>/dev/null); cond=$(echo "$data"|cut -d'|' -f1); temp=$(echo "$data"|cut -d'|' -f2); feels=$(echo "$data"|cut -d'|' -f3); humidity=$(echo "$data"|cut -d'|' -f4); uv=$(echo "$data"|cut -d'|' -f5); printf '{"cond":"%s","temp":"%s","feels":"%s","humidity":"%s","uv":"%s"}\\n' "$cond" "$temp" "$feels" "$humidity" "$uv"; sleep 180; done`);
   // THEME-GAP: UV colors in inline style (semantic — low/moderate/high/extreme scale, no token equivalent)
   return (
-    <container tw="flex flex-col gap-[4px] rounded-lg border border-border bg-card px-3 py-[8px]">
+    <Card tw="flex flex-col gap-[4px] py-[8px]">
       <container tw="flex flex-row items-baseline justify-between">
         <text tw="text-[15px] text-foreground font-bold">{w?.temp ?? "…"}</text>
         <text tw="text-[10px] text-muted-foreground">feels {w?.feels ?? "…"}</text>
@@ -34,6 +36,6 @@ export default function WeatherCard() {
         <text tw="text-[10px]" style={{ color: uvColor(w?.uv) }}>UV {uvLabel(w?.uv)}</text>
         <container />
       </container>
-    </container>
+    </Card>
   );
 }
