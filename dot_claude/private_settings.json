@@ -33,5 +33,6 @@
     }
   },
   "syntaxHighlightingDisabled": false,
+  "theme": "dark-ansi",
   "voiceEnabled": true
 }

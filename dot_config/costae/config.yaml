@@ -1,2 +1,5 @@
 theme:
   mode: dark
+
+fonts:
+  emoji: "Noto Color Emoji"
