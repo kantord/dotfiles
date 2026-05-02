@@ -1,5 +1,15 @@
 # Global Claude Code Instructions
 
+## claude-mem: Treat Observations as Potentially Stale
+
+claude-mem surfaces past observations at session start. These are time-stamped snapshots — they describe what was true when recorded, not necessarily now. **Do not treat them as current state.**
+
+Concretely:
+- If an observation references a skill, agent, file, or workflow that doesn't appear to exist now, **do not create it** — it was probably deleted intentionally.
+- If an observation gives an instruction (e.g. "use skill X for Y"), verify the skill is in the active skills list before following it.
+- Skills are authoritative from the `<system-reminder>` skills list only. Memory references to skills not in that list mean the skill no longer exists.
+- When in doubt, check the current filesystem state rather than trusting the observation.
+
 ## Committing Changes
 
 Never run `git commit` yourself — not even when the user says "yes", "go ahead", or "commit for me". The user always runs the commit command themselves.
