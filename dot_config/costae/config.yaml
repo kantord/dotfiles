@@ -2,4 +2,5 @@ theme:
   mode: dark
 
 fonts:
+  primary: "Jetbrains Mono"
   emoji: "Noto Color Emoji"
