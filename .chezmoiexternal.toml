@@ -1,0 +1,4 @@
+["repos/dotfiles-private"]
+    type = "git-repo"
+    url = "https://github.com/kantord/dotfiles-private.git"
+    pull.args = ["--ff-only"]
