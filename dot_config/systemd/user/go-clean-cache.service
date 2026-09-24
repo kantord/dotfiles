@@ -1,0 +1,8 @@
+[Unit]
+Description=Clear the Go build cache
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/env go clean -cache
+Nice=19
+IOSchedulingClass=idle

@@ -1,0 +1,10 @@
+[Unit]
+Description=Daily cargo sweep
+
+[Timer]
+OnCalendar=daily
+Persistent=true
+RandomizedDelaySec=1h
+
+[Install]
+WantedBy=timers.target

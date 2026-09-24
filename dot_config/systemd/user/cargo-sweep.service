@@ -1,0 +1,8 @@
+[Unit]
+Description=Remove stale cargo build artifacts from worktrees
+
+[Service]
+Type=oneshot
+ExecStart=%h/.cargo/bin/cargo-sweep sweep --recursive --time 14 %h/.local/share/enwiro/worktrees
+Nice=19
+IOSchedulingClass=idle

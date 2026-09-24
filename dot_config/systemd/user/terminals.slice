@@ -1,0 +1,19 @@
+# All kitty shells (and everything they spawn: coding agents, test runners,
+# builds) live under this slice, split into one terminals-<task>.slice per
+# enwiro environment (see terminals-.slice.d/10-cpu.conf for the weights).
+#
+# GUI apps started from i3/rofi (Chromium, Slack, kitty itself) do NOT live
+# in app.slice: they stay in the login session's session-N.scope, a sibling
+# of the whole user@.service tree this slice sits in. The GUI-over-terminals
+# ratio is therefore set at system level, in
+# /etc/systemd/system/session-.scope.d/10-gui-priority.conf (maintained by
+# run_before_maintain_etc_files.sh). This CPUWeight only orders terminal
+# work against the few things that do live in app.slice/session.slice.
+#
+# No IOWeight: both NVMe drives use kyber, where it is inert.
+# No memory limits: /proc/pressure/memory shows no stalls; revisit if so.
+[Unit]
+Description=Terminal workloads (low priority vs GUI apps)
+
+[Slice]
+CPUWeight=20

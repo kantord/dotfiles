@@ -1,0 +1,14 @@
+#!/bin/sh
+# Reload the user manager whenever a unit file in this repo changes. chezmoi
+# re-runs a run_onchange_ script when its rendered content changes, so the
+# hashes below are what makes a unit edit trigger the reload. daemon-reload
+# re-applies cgroup weights to live slices; nothing needs restarting.
+{{ $units := joinPath .chezmoi.sourceDir "dot_config/systemd/user" -}}
+{{ range glob (joinPath $units "**/*") }}{{ if not (stat .).isDir -}}
+# {{ trimPrefix (printf "%s/" $units) . }} {{ include . | sha256sum }}
+{{ end }}{{ end -}}
+socket="${XDG_RUNTIME_DIR:-/run/user/$(id -u)}/systemd/private"
+if command -v systemctl >/dev/null 2>&1 && [ -S "$socket" ]; then
+  systemctl --user daemon-reload
+  systemctl --user enable --now cargo-sweep.timer go-clean-cache.timer
+fi
