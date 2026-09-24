@@ -1,0 +1,15 @@
+# mold as the linker for all local Rust builds (2026-08-30, toylang lane speedups):
+# linking is the one build phase sccache never caches, and mold cuts it several-fold.
+# Machine-local on purpose -- the repo's own config stays clean so `cargo build` works
+# for anyone without mold installed.
+[target.x86_64-unknown-linux-gnu]
+linker = "clang"
+rustflags = ["-C", "link-arg=-fuse-ld=mold"]
+
+# 2026-09-19: target dirs were 220 GB+ of stale test executables (368 MB median,
+# full debuginfo, one per integration-test file). Line tables keep backtrace
+# line numbers but shrink executables several-fold and speed up linking.
+# Applies to `test` and `bench` too, which inherit from dev.
+[profile.dev]
+debug = "line-tables-only"
+
