@@ -1,25 +1,39 @@
 ;; kanata configuration
 ;; ----------------------
-;; Smoke test: Caps Lock -> Escape.
-;;
-;; The point of starting this small is to prove the macOS plumbing works
-;; (Karabiner VirtualHID driver + root daemon + Input Monitoring permission).
-;; Once Caps -> Esc works, expanding this into full home row mods is just a
-;; config change here -- no re-plumbing.
+;; Caps Lock -> Escape, plus home row mods (so far: f / j held -> shift).
 ;;
 ;; `process-unmapped-keys yes` makes kanata handle the whole keyboard (required
-;; later for home row mods). Keys not remapped below are passed through as-is.
+;; for home row mods). Keys not remapped below are passed through as-is.
+;;
+;; `tap-hold-require-prior-idle`: if another key was pressed less than this
+;; many ms before a home row key, it is always a plain tap. Prevents accidental
+;; modifiers while typing fast.
 
 (defcfg
   process-unmapped-keys yes
+  tap-hold-require-prior-idle 150
+)
+
+;; Which hand types each key. A home row mod only becomes its modifier when the
+;; next key is on the opposite hand, e.g. hold f + press k -> K, but a quick
+;; f-d roll stays "fd".
+(defhands
+  (left  grv 1 2 3 4 5 tab q w e r t a s d f g z x c v b)
+  (right 6 7 8 9 0 - = y u i o p [ ] \ h j k l ; ' n m , . /))
+
+;; 200: ms before a held key counts as a hold even without another key press,
+;; so shift + click or a slow deliberate shift still works.
+(defalias
+  f (tap-hold-opposite-hand 200 f lsft (timeout hold))
+  j (tap-hold-opposite-hand 200 j rsft (timeout hold))
 )
 
 ;; Physical keys kanata watches.
 (defsrc
-  caps
+  caps f j
 )
 
-;; What they become. Position matches defsrc above: caps -> esc.
+;; What they become. Position matches defsrc above.
 (deflayer base
-  esc
+  esc @f @j
 )
