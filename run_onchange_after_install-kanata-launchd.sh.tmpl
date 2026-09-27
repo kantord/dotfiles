@@ -1,0 +1,108 @@
+{{- if eq .chezmoi.os "darwin" -}}
+#!/bin/bash
+# Runs kanata at boot as root LaunchDaemons (kanata + Karabiner VirtualHID daemon).
+#
+# The Homebrew kanata binary is only linker-signed, which macOS TCC won't honour
+# for a daemon, so we run a re-signed copy from /usr/local/bin instead.
+# After that copy changes, re-grant it in System Settings > Privacy & Security
+# under both Input Monitoring and Accessibility.
+#
+# Re-runs when this script changes or when Homebrew's kanata version changes:
+# {{ if stat "/opt/homebrew/bin/kanata" }}{{ output "/opt/homebrew/bin/kanata" "--version" | trim }}{{ end }}
+
+set -euo pipefail
+
+BREW_KANATA=/opt/homebrew/bin/kanata
+KANATA=/usr/local/bin/kanata
+VHID_DAEMON="/Library/Application Support/org.pqrs/Karabiner-DriverKit-VirtualHIDDevice/Applications/Karabiner-VirtualHIDDevice-Daemon.app/Contents/MacOS/Karabiner-VirtualHIDDevice-Daemon"
+DAEMONS=/Library/LaunchDaemons
+
+if [[ ! -x "$BREW_KANATA" || ! -x "$VHID_DAEMON" ]]; then
+    echo "kanata or Karabiner VirtualHID driver not installed; skipping kanata launchd setup"
+    exit 0
+fi
+
+kanata_changed=false
+if [[ ! -x "$KANATA" || "$("$KANATA" --version)" != "$("$BREW_KANATA" --version)" ]]; then
+    sudo mkdir -p "$(dirname "$KANATA")"
+    sudo cp "$BREW_KANATA" "$KANATA"
+    sudo codesign --force --sign - --identifier local.kanata "$KANATA"
+    kanata_changed=true
+    echo "kanata copied to $KANATA. Grant it Input Monitoring and Accessibility in"
+    echo "System Settings > Privacy & Security (remove stale kanata entries first)."
+fi
+
+# install_daemon <label>: installs the plist on stdin and (re)loads it if it
+# changed. Sets daemon_changed accordingly.
+install_daemon() {
+    local label=$1 tmp
+    tmp=$(mktemp)
+    cat >"$tmp"
+    daemon_changed=false
+    if cmp -s "$tmp" "$DAEMONS/$label.plist"; then
+        rm "$tmp"
+        return
+    fi
+    daemon_changed=true
+    sudo install -m 644 -o root -g wheel "$tmp" "$DAEMONS/$label.plist"
+    rm "$tmp"
+    sudo launchctl bootout "system/$label" 2>/dev/null || true
+    sudo launchctl bootstrap system "$DAEMONS/$label.plist"
+}
+
+install_daemon org.pqrs.karabiner-vhiddaemon <<EOF
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>org.pqrs.karabiner-vhiddaemon</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>$VHID_DAEMON</string>
+  </array>
+  <key>RunAtLoad</key>
+  <true/>
+  <key>KeepAlive</key>
+  <true/>
+  <key>ProcessType</key>
+  <string>Interactive</string>
+</dict>
+</plist>
+EOF
+
+install_daemon local.kanata <<EOF
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>local.kanata</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>$KANATA</string>
+    <string>--cfg</string>
+    <string>{{ .chezmoi.homeDir }}/.config/kanata/kanata.kbd</string>
+    <string>--nodelay</string>
+  </array>
+  <key>RunAtLoad</key>
+  <true/>
+  <key>KeepAlive</key>
+  <true/>
+  <key>ThrottleInterval</key>
+  <integer>10</integer>
+  <key>ProcessType</key>
+  <string>Interactive</string>
+  <key>StandardOutPath</key>
+  <string>/Library/Logs/kanata.log</string>
+  <key>StandardErrorPath</key>
+  <string>/Library/Logs/kanata.log</string>
+</dict>
+</plist>
+EOF
+
+# Plist unchanged, but a new binary still needs a restart to take effect.
+if $kanata_changed && ! $daemon_changed; then
+    sudo launchctl kickstart -k system/local.kanata
+fi
+{{ end -}}
