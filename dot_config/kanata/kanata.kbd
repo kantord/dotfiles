@@ -1,6 +1,7 @@
 ;; kanata configuration
 ;; ----------------------
-;; Caps Lock -> Escape, plus home row mods (so far: f / j held -> shift).
+;; Caps Lock -> Escape, plus home row mods: d / k held -> super, f / j -> shift,
+;; and space held -> home row becomes numbers (a s d f g h j k l ; -> 1..0).
 ;;
 ;; `process-unmapped-keys yes` makes kanata handle the whole keyboard (required
 ;; for home row mods). Keys not remapped below are passed through as-is.
@@ -21,19 +22,52 @@
   (left  grv 1 2 3 4 5 tab q w e r t a s d f g z x c v b)
   (right 6 7 8 9 0 - = y u i o p [ ] \ h j k l ; ' n m , . /))
 
-;; 200: ms before a held key counts as a hold even without another key press,
-;; so shift + click or a slow deliberate shift still works.
+;; macOS has no Super key, so "super" is ctrl+alt+cmd, which no app uses.
+;; AeroSpace binds its i3-style shortcuts to it.
 (defalias
-  f (tap-hold-opposite-hand 200 f lsft (timeout hold))
-  j (tap-hold-opposite-hand 200 j rsft (timeout hold))
+  super (multi lctl lalt lmet)
+)
+
+;; Home row mod: tap -> $tap, hold -> $mod.
+;; 200: ms before a held key counts as a hold even without another key press,
+;; so shift + click or a slow deliberate hold still works.
+;; `same-hand ignore`: a same-hand key doesn't decide tap vs hold, so mods on
+;; one hand stack (hold d + f, then press h -> super+shift+h).
+(deftemplate hrm (tap mod)
+  (tap-hold-opposite-hand 200 $tap $mod (timeout hold) (same-hand ignore))
+)
+
+;; The same mods on the base layer and on the numbers layer.
+(defalias
+  d (t! hrm d @super)
+  f (t! hrm f lsft)
+  j (t! hrm j rsft)
+  k (t! hrm k @super)
+  3 (t! hrm 3 @super)
+  4 (t! hrm 4 lsft)
+  7 (t! hrm 7 rsft)
+  8 (t! hrm 8 @super)
+)
+
+;; Space: tap -> space, hold -> numbers layer. `tap-hold-release` only picks
+;; hold once another key is pressed *and released* while space is down, so
+;; fast typing (space already released before the next key comes up) stays a
+;; space. First 200: tap then hold within it repeats space.
+(defalias
+  spc (tap-hold-release 200 200 spc (layer-while-held numbers))
 )
 
 ;; Physical keys kanata watches.
 (defsrc
-  caps f j
+  caps a s d f g h j k l ; spc
 )
 
 ;; What they become. Position matches defsrc above.
 (deflayer base
-  esc @f @j
+  esc  a s @d @f g h @j @k l ; @spc
+)
+
+;; While space is held. `_` = same as base.
+(deflayer numbers
+  _    1 2 @3 @4 5 6 @7 @8 9 0 _
 )
