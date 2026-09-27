@@ -2,3 +2,7 @@ README.md
 LICENSE
 CLAUDE.md
 .github/
+
+{{ if ne .chezmoi.os "darwin" }}
+.config/kanata
+{{ end }}

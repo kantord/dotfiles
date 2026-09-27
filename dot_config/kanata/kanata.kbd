@@ -1,0 +1,25 @@
+;; kanata configuration
+;; ----------------------
+;; Smoke test: Caps Lock -> Escape.
+;;
+;; The point of starting this small is to prove the macOS plumbing works
+;; (Karabiner VirtualHID driver + root daemon + Input Monitoring permission).
+;; Once Caps -> Esc works, expanding this into full home row mods is just a
+;; config change here -- no re-plumbing.
+;;
+;; `process-unmapped-keys yes` makes kanata handle the whole keyboard (required
+;; later for home row mods). Keys not remapped below are passed through as-is.
+
+(defcfg
+  process-unmapped-keys yes
+)
+
+;; Physical keys kanata watches.
+(defsrc
+  caps
+)
+
+;; What they become. Position matches defsrc above: caps -> esc.
+(deflayer base
+  esc
+)
