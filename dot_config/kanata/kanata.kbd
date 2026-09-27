@@ -29,12 +29,15 @@
 )
 
 ;; Home row mod: tap -> $tap, hold -> $mod.
+;; `-release`: an opposite-hand key only makes it a hold once that key is
+;; pressed *and released* while this one is still down. Fast rolls ("do": d
+;; up before o comes up) stay plain letters instead of firing super+o.
 ;; 200: ms before a held key counts as a hold even without another key press,
 ;; so shift + click or a slow deliberate hold still works.
 ;; `same-hand ignore`: a same-hand key doesn't decide tap vs hold, so mods on
 ;; one hand stack (hold d + f, then press h -> super+shift+h).
 (deftemplate hrm (tap mod)
-  (tap-hold-opposite-hand 200 $tap $mod (timeout hold) (same-hand ignore))
+  (tap-hold-opposite-hand-release 200 $tap $mod (timeout hold) (same-hand ignore))
 )
 
 ;; The same mods on the base layer and on the numbers layer.
