@@ -1,7 +1,10 @@
 ;; kanata configuration
 ;; ----------------------
 ;; Caps Lock -> Escape, plus home row mods: d / k held -> super, f / j -> shift,
-;; and space held -> home row becomes numbers (a s d f g h j k l ; -> 1..0).
+;; g / h -> ctrl,
+;; space held -> home row becomes numbers (a s d f g h j k l ; -> 1..0),
+;; Linux-style Ctrl (common ctrl shortcuts sent as their cmd versions),
+;; and the cmd keys next to space as enter (left) / backspace (right).
 ;;
 ;; `process-unmapped-keys yes` makes kanata handle the whole keyboard (required
 ;; for home row mods). Keys not remapped below are passed through as-is.
@@ -60,17 +63,76 @@
   spc (tap-hold-release 200 200 spc (layer-while-held numbers))
 )
 
+;; Linux-style Ctrl. Holding Ctrl keeps real ctrl down (so ctrl+r, ctrl+d,
+;; ctrl+tab... work as usual) and switches to the linux-ctrl layer, where the
+;; common app shortcuts are sent as their macOS versions instead:
+;;   ctrl+<key>           -> cmd+<key>    (copy, paste, new tab, find, ...)
+;;   ctrl+shift+<key>     -> unchanged    (kitty's ctrl+shift+c/v copy/paste)
+;;   ctrl+shift+t / n / z -> cmd+shift    (reopen tab, private window, redo)
+;;   ctrl+left / right    -> alt+arrow    (move by word)
+;;   ctrl+bspc / del      -> alt+bspc/del (delete by word)
+;; kitty turns the cmd+<key> ones back into terminal ctrl
+;; (~/.config/kitty/macos.conf).
+(defalias
+  lctl (multi lctl (layer-while-held linux-ctrl))
+)
+
+;; g / h held -> the same Linux-style Ctrl (home row mods, like d f j k).
+(defalias
+  g (t! hrm g @lctl)
+  h (t! hrm h @lctl)
+  5 (t! hrm 5 @lctl)
+  6 (t! hrm 6 @lctl)
+)
+
+(deftemplate cmd (key)
+  (fork (unmod (lctl) lmet $key) $key (lsft rsft))
+)
+(deftemplate cmd-shift-too (key)
+  (unmod (lctl) lmet $key)
+)
+(deftemplate alt (key)
+  (unmod (lctl) lalt $key)
+)
+
+(defalias
+  c-a (t! cmd a)  c-c (t! cmd c)  c-f (t! cmd f)  c-l (t! cmd l)
+  c-o (t! cmd o)  c-p (t! cmd p)  c-q (t! cmd q)  c-r (t! cmd r)
+  c-s (t! cmd s)  c-v (t! cmd v)  c-w (t! cmd w)  c-x (t! cmd x)
+  c-n (t! cmd-shift-too n)  c-t (t! cmd-shift-too t)  c-z (t! cmd-shift-too z)
+  c-left (t! alt left)  c-right (t! alt right)
+  c-bspc (t! alt bspc)  c-del (t! alt del)
+)
+
 ;; Physical keys kanata watches.
 (defsrc
-  caps a s d f g h j k l ; spc
+  q    w e r t y u i o p
+  caps a s d f g h j k l ;
+  z    x c v b n m
+  lctl lmet spc rmet bspc del left right
 )
 
 ;; What they become. Position matches defsrc above.
+;; Left cmd -> enter, right cmd -> backspace (thumb keys next to space).
 (deflayer base
-  esc  a s @d @f g h @j @k l ; @spc
+  q    w e r t y u i o p
+  esc  a s @d @f @g @h @j @k l ;
+  z    x c v b n m
+  @lctl ret @spc bspc bspc del left right
 )
 
 ;; While space is held. `_` = same as base.
 (deflayer numbers
-  _    1 2 @3 @4 5 6 @7 @8 9 0 _
+  _    _ _ _ _ _ _ _ _ _
+  _    1 2 @3 @4 @5 @6 @7 @8 9 0
+  _    _ _ _ _ _ _
+  _    _ _ _ _ _ _ _
+)
+
+;; While ctrl is held.
+(deflayer linux-ctrl
+  @c-q @c-w _ @c-r @c-t _ _ _ @c-o @c-p
+  _    @c-a @c-s _ @c-f _ _ _ _ @c-l _
+  @c-z @c-x @c-c @c-v _ @c-n _
+  _    _ _ @c-bspc @c-bspc @c-del @c-left @c-right
 )
