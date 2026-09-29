@@ -1,0 +1,11 @@
+{{- if eq .chezmoi.os "darwin" -}}
+#!/bin/bash
+# macOS system preferences. Re-runs whenever this script changes.
+# Apps read these at launch, so restart an app to see a change.
+
+set -euo pipefail
+
+# Holding a key repeats it (as on Linux) instead of opening the accent picker.
+# The picker also interferes with kanata's home row mods, which rely on holds.
+defaults write -g ApplePressAndHoldEnabled -bool false
+{{ end -}}
