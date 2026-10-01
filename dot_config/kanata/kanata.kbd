@@ -71,6 +71,7 @@
 ;;   ctrl+shift+t / n / z -> cmd+shift    (reopen tab, private window, redo)
 ;;   ctrl+left / right    -> alt+arrow    (move by word)
 ;;   ctrl+bspc / del      -> alt+bspc/del (delete by word)
+;;   ctrl+space           -> cmd+space    (Spotlight, like the Linux launcher)
 ;; kitty turns the cmd+<key> ones back into terminal ctrl
 ;; (~/.config/kitty/macos.conf).
 (defalias
@@ -102,6 +103,7 @@
   c-n (t! cmd-shift-too n)  c-t (t! cmd-shift-too t)  c-z (t! cmd-shift-too z)
   c-left (t! alt left)  c-right (t! alt right)
   c-bspc (t! alt bspc)  c-del (t! alt del)
+  c-spc (t! cmd-shift-too spc)
 )
 
 ;; Physical keys kanata watches.
@@ -134,5 +136,5 @@
   @c-q @c-w _ @c-r @c-t _ _ _ @c-o @c-p
   _    @c-a @c-s _ @c-f _ _ _ _ @c-l _
   @c-z @c-x @c-c @c-v _ @c-n _
-  _    _ _ @c-bspc @c-bspc @c-del @c-left @c-right
+  _    _ @c-spc @c-bspc @c-bspc @c-del @c-left @c-right
 )
