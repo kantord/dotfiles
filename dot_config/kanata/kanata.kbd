@@ -141,14 +141,15 @@
   _    _ @c-spc @c-bspc @c-bspc @c-del @c-left @c-right
 )
 
-;; j + k + l pressed together (within 40 ms) -> d is tab while they are held.
+;; j + k + l pressed together (within 40 ms) -> the jkl layer while held:
+;; d = tab, caps = shift+tab, e / s / c / f = up / left / down / right.
 (defchordsv2
   (j k l) (layer-while-held jkl) 40 all-released ()
 )
 
 (deflayer jkl
-  _    _ _ _ _ _ _ _ _ _
-  _    _ _ tab _ _ _ _ _ _ _
-  _    _ _ _ _ _ _
+  _    _ up _ _ _ _ _ _ _
+  S-tab _ left tab right _ _ _ _ _ _
+  _    _ down _ _ _ _
   _    _ _ _ _ _ _ _
 )
