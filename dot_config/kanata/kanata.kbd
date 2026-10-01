@@ -16,6 +16,8 @@
 (defcfg
   process-unmapped-keys yes
   tap-hold-require-prior-idle 150
+  concurrent-tap-hold yes
+  chords-v2-min-idle 150
 )
 
 ;; Which hand types each key. A home row mod only becomes its modifier when the
@@ -137,4 +139,16 @@
   _    @c-a @c-s _ @c-f _ _ _ _ @c-l _
   @c-z @c-x @c-c @c-v _ @c-n _
   _    _ @c-spc @c-bspc @c-bspc @c-del @c-left @c-right
+)
+
+;; j + k + l pressed together (within 40 ms) -> d is tab while they are held.
+(defchordsv2
+  (j k l) (layer-while-held jkl) 40 all-released ()
+)
+
+(deflayer jkl
+  _    _ _ _ _ _ _ _ _ _
+  _    _ _ tab _ _ _ _ _ _ _
+  _    _ _ _ _ _ _
+  _    _ _ _ _ _ _ _
 )
