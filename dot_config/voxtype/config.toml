@@ -1,0 +1,78 @@
+# Voxtype config — X11/i3 setup
+# Keybindings are handled by i3 (mod+grave to toggle dictation mode).
+# ydotool is the typing backend for X11.
+# Meant to run on the CPU ONNX build (`sudo voxtype setup variant --to
+# voxtype-onnx-avx2`), which holds no VRAM; the CUDA variant also works.
+
+state_file = "auto"
+
+# Parakeet is the only engine that types incrementally while you speak;
+# Whisper has no streaming support at all. Streaming needs the unified
+# cache-aware model, which is English-only.
+# Top-level key, not an [engine] table — it deserializes as a bare enum.
+engine = "parakeet"
+
+[hotkey]
+enabled = false
+# Unused (i3 sends explicit record start/stop) but streaming refuses
+# push_to_talk and warns on every start, so state the equivalent here.
+mode = "toggle"
+
+[audio]
+device = "default"
+sample_rate = 16000
+# At 60s a long dictation was silently cut off mid-sentence: capture closes
+# but i3 stays in the mode, so it just looks dead until you stop and restart.
+max_duration_secs = 600
+
+[parakeet]
+model = "parakeet-unified-en-0.6b"
+streaming = true
+# Each value in seconds maps to mel frames at a 10ms hop (x100) and must be
+# divisible by 8, the encoder's subsampling factor — otherwise init fails
+# with "must map to a mel-frame count divisible by 8".
+# Latency to first token is roughly chunk + right_context.
+streaming_chunk_secs = 0.4          # 40 frames
+streaming_left_context_secs = 4.0   # 400 frames — cached, so cheap to keep long
+streaming_right_context_secs = 0.16 # 16 frames — lookahead, dominates latency
+
+# Whisper stays configured as the multilingual fallback: switch back with
+# `voxtype config set engine whisper`. Note it runs CPU-native — the
+# Vulkan build is a different binary variant than the active ONNX one.
+[whisper]
+model = "large-v3-turbo"
+# Restricted candidate set rather than "auto" (100 langs) — fewer
+# misdetections on short utterances, which are mostly English.
+# Must be a TOML array. The comma-separated "en,hu" form works only for the
+# --language CLI flag; here it reaches whisper.cpp verbatim and is rejected
+# with `unknown language 'en,hu'`, silently degrading detection.
+# es/ca/pt are mutually confusable; drop "ca" first if detection misfires.
+language = ["en", "hu", "es", "ca", "pt", "tr"]
+on_demand_loading = false
+
+# Streaming must type directly — pasting each chunk would clobber the
+# clipboard repeatedly. ydotool is layout-unaware and assumes US QWERTY,
+# which is fine here: mylayout is us(basic) at levels 1-2, and the AltGr
+# accented chars it can't reach are only needed for non-English anyway.
+[output]
+mode = "type"
+fallback_to_clipboard = true
+# No post_output_command: under streaming it fires once per chunk, not once
+# per recording, so using it to leave the i3 dictation mode dropped the mode
+# ~1s into the first utterance. The mode-exit keybindings handle this instead.
+
+[output.notification]
+on_recording_start = false
+on_recording_stop = false
+on_transcription = true
+
+[text]
+spoken_punctuation = true
+
+[status]
+icon_theme = "nerd-font"
+
+# Both OSD frontends (gtk4-layer-shell and native/SCTK) are Wayland-only,
+# so the floating waveform can't render under X11. Notifications cover it.
+[osd]
+enabled = false

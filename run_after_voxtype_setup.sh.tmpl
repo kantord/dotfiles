@@ -1,0 +1,58 @@
+#!/usr/bin/env bash
+{{ if eq .platform "arch" -}}
+# Post-apply checks for the voxtype dictation stack.
+#
+# chezmoi carries the config and the mode scripts, but three
+# things live outside it and a fresh machine will not work without them: the
+# AUR package, the ONNX binary variant (root-owned, under /usr/lib), and the
+# ~2.4GB model. This enables what is safe to automate and prints the exact
+# command for what isn't.
+#
+# Never fails the apply — a missing dictation setup must not block the rest of
+# the dotfiles — so every branch ends in exit 0.
+set -uo pipefail
+
+note() { printf '  voxtype: %s\n' "$1" >&2; }
+
+if ! command -v voxtype >/dev/null 2>&1; then
+  note "not installed — run: yay -S aur/voxtype-bin"
+  exit 0
+fi
+
+# ydotool injects the transcribed keystrokes under X11. Installing the package
+# does not enable its user service, and without the service dictation captures
+# audio but types nothing.
+if ! systemctl --user is-enabled ydotool >/dev/null 2>&1; then
+  if systemctl --user enable --now ydotool >/dev/null 2>&1; then
+    note "enabled the ydotool user service"
+  else
+    note "could not enable the ydotool user service — dictation will not be able to type"
+  fi
+fi
+
+# Streaming is Parakeet-only, which the stock Whisper build cannot run. Match on
+# the binary path rather than the engine name: the engine comes from config and
+# would read as 'Parakeet' even on a build that cannot actually load it.
+# Captured rather than piped: `grep -q` exits on first match and closes the
+# pipe, voxtype then dies of SIGPIPE, and pipefail reports the pipeline as
+# failed — so piping here inverts the result, warning exactly when it matches.
+onnx_status=$(voxtype setup onnx --status 2>/dev/null || true)
+if ! grep -qE '^ *Binary:.*onnx' <<<"$onnx_status"; then
+  note "ONNX build not active — run: sudo voxtype setup onnx --enable"
+  note "  then pick the CPU variant: sudo voxtype setup variant --to voxtype-onnx-avx2"
+elif grep -qE '^ *Binary:.*cuda' <<<"$onnx_status"; then
+  note "CUDA variant active: it holds ~3.4GB of VRAM all day. For CPU: sudo voxtype setup variant --to voxtype-onnx-avx2"
+fi
+
+# Not downloaded automatically on purpose: at ~2.4GB it would stall every
+# `chezmoi apply` on a new machine for minutes with no progress output.
+model_dir="${XDG_DATA_HOME:-$HOME/.local/share}/voxtype/models/parakeet-unified-en-0.6b"
+if [ ! -f "$model_dir/encoder.onnx" ]; then
+  note "model missing — run: voxtype setup --download --model parakeet-unified-en-0.6b"
+fi
+
+exit 0
+{{- else -}}
+# Dictation stack is Arch/i3-only; nothing to do on {{ .platform }}.
+exit 0
+{{- end }}
