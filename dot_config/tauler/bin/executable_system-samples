@@ -1,0 +1,18 @@
+#!/usr/bin/bash
+# Prints one JSON line per interval: {"t": epoch seconds, "cpu": %, "mem": %}.
+# Usage: system-samples <interval-seconds>
+# A comma-decimal locale would make awk's printf emit `3,5`, which is not JSON.
+export LC_ALL=C
+interval=${1:?interval in seconds}
+
+cpu_counters() { awk '/^cpu /{print $2+$3+$4+$5+$6+$7+$8, $5+$6}' /proc/stat; }
+
+prev=$(cpu_counters)
+while :; do
+  sleep "$interval"
+  cur=$(cpu_counters)
+  cpu=$(echo "$prev $cur" | awk '{total=$3-$1; idle=$4-$2; printf "%.1f", (total>0 ? 100*(total-idle)/total : 0)}')
+  mem=$(awk '/MemTotal/{t=$2} /MemAvailable/{a=$2} END{printf "%.1f", 100*(t-a)/t}' /proc/meminfo)
+  printf '{"t":%s,"cpu":%s,"mem":%s}\n' "$(date +%s)" "$cpu" "$mem"
+  prev=$cur
+done
