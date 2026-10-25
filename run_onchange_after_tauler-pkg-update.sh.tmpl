@@ -1,0 +1,26 @@
+#!/bin/sh
+# Keep tauler-pkg.lock in sync with what the layout actually imports. A
+# layout/component file can start using a symbol (e.g. SidebarSection) that
+# only exists in a commit newer than the one currently pinned; tauler then
+# fails to compile the layout on every reload and silently keeps whatever
+# was already running (see docs/adr/0033 in the tauler repo) — invisible
+# unless someone goes looking at tracing output. Running `tauler pkg update`
+# after every relevant edit closes that gap automatically.
+#
+# chezmoi re-runs a run_onchange_ script when its rendered content changes,
+# so the hashes below are what makes a layout/component edit trigger this.
+{{ $taulerDir := joinPath .chezmoi.sourceDir "dot_config/tauler" -}}
+{{ range glob (joinPath $taulerDir "**/*") -}}
+{{ if not (stat .).isDir -}}
+{{ if or (hasSuffix ".jsx" .) (hasSuffix ".js" .) (hasSuffix ".mdx" .) -}}
+# {{ trimPrefix (printf "%s/" $taulerDir) . }} {{ include . | sha256sum }}
+{{ end -}}
+{{ end -}}
+{{ end -}}
+if command -v tauler >/dev/null 2>&1; then
+  tauler pkg update || echo "tauler pkg update failed (offline?) — will retry on the next relevant edit" >&2
+  # Nudge the running bar's file watcher so it retries compiling against the
+  # now-current pin, instead of waiting for the next unrelated layout edit.
+  layout="${XDG_CONFIG_HOME:-$HOME/.config}/tauler/layout.op.mdx"
+  [ -f "$layout" ] && touch "$layout"
+fi
