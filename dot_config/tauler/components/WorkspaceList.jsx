@@ -1,15 +1,15 @@
 import { EnwiroEnvs, ClaudeRecaps } from "@gh/kantord/dotfiles-tauler";
 import WorkspaceTree from "./WorkspaceTree.jsx";
-import { scrollView } from "../lib/listScroll.js";
+import FocusDetail from "./FocusDetail.jsx";
+import { scrollView, fitRows } from "../lib/listScroll.js";
+import { focusDetail } from "../lib/focusDetail.js";
+import { listViewportHeight } from "../lib/layout.js";
 import { newMemory, trackAgents, unreadNotifications, clearFocused, updateLinger, finishedAgents } from "../lib/workspaceMemory.js";
 import {
   fromTaulerInputs, buildTree, computeRows, defaultPolicies, findPath, nodeIdForWorkspace, PLACEHOLDER_DESC,
 } from "../lib/workspaceTree.js";
 
 const TICK_S = 1;
-// The list is the top ~two thirds of the sidebar; the cards sit below it.
-const LIST_HEIGHT_FRACTION = 2 / 3;
-const LIST_VERTICAL_RESERVE = 20;
 
 const usableDescription = (d) => (d && !PLACEHOLDER_DESC.test(d) ? d : null);
 
@@ -52,11 +52,23 @@ function Tree({ workspaces, envs, recaps, notifications, events }) {
   const lingerIds = updateLinger(mem, findPath(tree.roots, focusedId) ?? []);
 
   const { rows: raw, hiddenCount } = computeRows(tree, snapshot, { focusedId, lingerIds });
-  const rows = raw.map((r) => (r.type === "row" ? { ...r, switchTo: tree.byId.get(r.activateTarget)?.ws?.name ?? null } : r));
+  // Monitor names are deliberately never shown: a real row's status would only ever be its output name.
+  const all = raw.map((r) => (r.type === "row"
+    ? { ...r, status: r.kind === "real" ? null : r.status, switchTo: tree.byId.get(r.activateTarget)?.ws?.name ?? null }
+    : r));
 
-  const viewportH = Math.round(ctx.screen_height * LIST_HEIGHT_FRACTION) - LIST_VERTICAL_RESERVE;
-  const { scrollTop, edges } = scrollView(rows, viewportH, mem.scrollTop);
+  // Exact, because everything else in the sidebar has a fixed height (lib/layout.js).
+  const viewportH = listViewportHeight(ctx.screen_height);
+  const { rows } = fitRows(all, viewportH, hiddenCount);
+  const { scrollTop, edges } = scrollView(rows, viewportH, mem.scrollTop, hiddenCount);
   mem.scrollTop = scrollTop;
 
-  return <WorkspaceTree rows={rows} hiddenCount={hiddenCount} scrollTop={scrollTop} viewportH={viewportH} edges={edges} events={events} />;
+  const detail = focusDetail(focusedId ? tree.byId.get(focusedId) : null, snapshot.now);
+
+  return (
+    <div class="flex flex-col w-full flex-shrink-0">
+      <WorkspaceTree rows={rows} hiddenCount={hiddenCount} scrollTop={scrollTop} viewportH={viewportH} edges={edges} events={events} />
+      <FocusDetail detail={detail} />
+    </div>
+  );
 }

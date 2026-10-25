@@ -2,3 +2,11 @@
     type = "git-repo"
     url = "https://github.com/kantord/dotfiles-private.git"
     pull.args = ["--ff-only"]
+
+# Claude Code's statusLine command needs a stable path, so fetch it from the package
+# rather than keeping a copy that drifts.
+[".local/bin/tauler-claude-statusline"]
+    type = "file"
+    url = "https://raw.githubusercontent.com/kantord/dotfiles-tauler/main/bin/tauler-claude-statusline"
+    executable = true
+    refreshPeriod = "168h"
