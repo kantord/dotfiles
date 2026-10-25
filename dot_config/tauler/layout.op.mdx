@@ -1,0 +1,144 @@
+---
+theme:
+  name: gruvbox-material-dark
+
+fonts:
+  primary: "Jetbrains Mono"
+  emoji: "Noto Color Emoji"
+---
+/*
+# Desktop layout
+
+A sidebar next to an i3 workspace.
+
+- **sidebar** (left, 272px) — i3 workspaces on top, status cards below
+  (weather, Claude usage, volume, clock)
+
+This block is documentation only — plain JS, not rendered. Real markdown-as-
+content (a `<Markdown>` component parsing prose into HTML nodes at render
+time) is a deferred, opt-in feature; nothing here does that yet.
+*/
+import DateTimeCard from './components/DateTimeCard.jsx';
+import { Weather, WeatherSummary, OutputVolume, AudioChannels, SidebarSection, KittyConfig, KittyTheme, I3Theme, GtkTheme, ColorScheme, Gtk3Css, RofiConfig, RofiTheme, RecentFilesTheme } from "@gh/kantord/dotfiles-tauler";
+import { Slider } from "@ui/slider";
+import ClaudeUsageCard from './components/ClaudeUsageCard.jsx';
+
+export default function render() {
+
+// Panel sizes, in logical px. <I3Layout> derives the i3 gaps from these, so
+// there is nothing to keep in sync: each <Panel> eats from an edge in document
+// order, and what they ate becomes the reservation.
+const SIDEBAR_W = 272;
+
+
+// One wallpaper per connected output. `tauler:outputs` is tauler's built-in
+// RandR monitor list, so this needs no per-machine output names.
+const outputs = useJSONStream("tauler:outputs") ?? [];
+
+return <root>
+  {outputs.map(o => (
+    <wallpaper id={`desktop-${o.name}`} output={o.name}>
+      {/* The theme's background under a 20% black veil: the same hue, darker than the
+          workspace area (which is drawn in plain `background`), in light and dark. */}
+      <div class="relative flex w-full h-full bg-background">
+        <div class="absolute inset-0 bg-[#00000033]" />
+      </div>
+    </wallpaper>
+  ))}
+
+  <I3Layout module="~/.cargo/bin/tauler-i3">
+  <Panel id="sidebar" anchor="left" size={SIDEBAR_W}>
+    <div style={{position: "relative", width: "100%", height: "100%"}}>
+      {/* The wallpaper slice behind this panel. An <img> node rather than
+          `backgroundImage: url(root-bg)`: takumi's background path re-derives
+          per-pixel state and costs ~14ms here, the node path ~1ms. */}
+      <img src="tauler:root-bg" style={{position: "absolute", top: 0, left: 0, width: "100%", height: "100%"}} />
+      <div class="h-full w-full pl-[10px] pr-[16px] py-[10px] flex flex-col" style={{position: "relative"}}>
+        <div class="flex-1 min-h-0 flex flex-col w-full">
+          {/* No `gaps` here: <I3Layout> registers them for this same bin. */}
+          <Module bin="~/.cargo/bin/tauler-i3">
+            {(data, events) => <div class="flex-1 min-h-0 flex flex-col w-full">
+              {/* Workspace List goes here */}
+            </div>}
+          </Module>
+        </div>
+        <div class="flex flex-col w-full">
+          <Weather>
+            {w => (
+              <SidebarSection>
+                <WeatherSummary {...w} />
+              </SidebarSection>
+            )}
+          </Weather>
+          <ClaudeUsageCard />
+          <SidebarSection gap={10}>
+            <OutputVolume>
+              {(v, a) => (
+                <div class="flex flex-col gap-[6px] w-full">
+                  <div class="flex flex-row items-baseline justify-between w-full">
+                    <div on_click={[a.toggleMute()]}>
+                      <span class="text-[10px] text-muted-foreground">{v?.muted ? "Volume · muted" : "Volume"}</span>
+                    </div>
+                    <span class="text-[10px] text-muted-foreground">{v?.volume ?? 0}%</span>
+                  </div>
+                  <Slider value={v?.muted ? 0 : v?.volume ?? 0} min={0} max={100} step={5} on_change={a.setVolume} />
+                </div>
+              )}
+            </OutputVolume>
+            {/* One slider per app that is making sound right now, no label row. */}
+            <AudioChannels>
+              {(channels, a) => channels
+                .filter(ch => ch.type === "stream" && ch.kind === "output" && ch.state === "running")
+                .map(ch => (
+                  <Slider value={ch.muted ? 0 : ch.volume} min={0} max={100} step={5}
+                          on_change={v => a.setVolume(ch.id, v)} />
+                ))}
+            </AudioChannels>
+          </SidebarSection>
+          <DateTimeCard />
+        </div>
+      </div>
+    </div>
+  </Panel>
+
+  {/* Declared after the sidebar, so it frames the space beside it
+      rather than over it — the same corner rule <Panel> follows, just
+      for a frame instead of a single edge. Two boxes: an outer margin,
+      transparent on purpose, so the card's boxShadow has somewhere to
+      bleed into rather than getting clipped flush against its own edge;
+      then the card itself, which carries the fill, border and radius.
+      Frame thickness = outer margin (6px) + the card's own pt/pb (17px)
+      + its border (1px) = 24px total, of which 18px (pt/pb + border)
+      matches rounded-2xl's 18px radius exactly, so the corner's curve
+      never gets clipped mid-arc. Right gets the same margin, for the
+      same reason (room for the shadow) — the screen's right edge
+      gives no inset of its own, unlike the sidebar,
+      which already has enough margin of its own that the left corner's
+      shadow shows without <Workspaces> adding any there too. No left
+      margin on purpose (see above), but `px-[1px]` on the card itself —
+      a hair of breathing room between the border and the tiled windows
+      on both sides, small enough it doesn't need matching margin space
+      on the outer box the way pt/pb does. */}
+  <Workspaces>
+    {(Contents) => (
+      <div class="w-full h-full pt-[6px] pb-[6px] pr-[6px]">
+        <div class="relative w-full h-full rounded-2xl border bg-background px-[1px] pt-[17px] pb-[17px]" style={{borderColor: "rgba(128,128,128,0.15)", boxShadow: "0 0 12px rgba(0,0,0,0.35)"}}>
+          <Contents class="w-full h-full" />
+        </div>
+      </div>
+    )}
+  </Workspaces>
+  </I3Layout>
+
+  <RofiTheme />
+  <RecentFilesTheme />
+  <RofiConfig />
+  <KittyConfig />
+  <KittyTheme />
+  <I3Theme />
+  <GtkTheme />
+  <ColorScheme />
+  <Gtk3Css />
+</root>;
+
+}

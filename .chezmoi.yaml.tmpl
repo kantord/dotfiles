@@ -1,5 +1,4 @@
 {{- $gitEmail := promptStringOnce . "gitEmail" "Default Git email address" -}}
-{{- $githubOrgList := promptStringOnce . "githubOrgList" "GitHub orgs to show in the status bar (comma-separated)" -}}
 {{- $platform := "mac" -}}
 {{- if eq .chezmoi.os "linux" -}}
   {{- with .chezmoi.osRelease.id }}{{ $platform = . }}{{ end -}}
@@ -8,4 +7,3 @@ data:
   platform: {{ $platform }}
   packageManager: {{ if eq $platform "arch" }}pacman{{ else if eq $platform "mac" }}brew{{ else }}apt{{ end }}
   gitEmail: {{ $gitEmail }}
-  githubOrgList: {{ $githubOrgList }}
