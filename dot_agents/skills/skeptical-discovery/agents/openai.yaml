@@ -1,0 +1,6 @@
+interface:
+  display_name: "Skeptical Discovery"
+  short_description: "Challenge product value, audience, and framing"
+  default_prompt: "Use $skeptical-discovery to challenge this project's value and presentation, one question at a time."
+policy:
+  allow_implicit_invocation: false
