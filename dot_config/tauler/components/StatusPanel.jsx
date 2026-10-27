@@ -3,7 +3,7 @@
 // on the right and a 3px bar underneath. The CPU/memory chart sits bare above them, the time
 // anchors the bottom. Every part has a fixed height so PANEL_H is exact and the list above can
 // size itself without measuring.
-import { Weather, Clock, ClaudeUsage, OutputVolume, AudioChannels } from "@gh/kantord/dotfiles-tauler";
+import { Weather, Clock, ClaudeUsage, OutputVolume, AudioChannels, Plot, Area, Line, Scale } from "@gh/kantord/dotfiles-tauler";
 import { Slider } from "@ui/slider";
 import { PANEL_H, PANEL_PAD_X, PANEL_CONTENT_W, TAULER_ACCUMULATE } from "../lib/layout.js";
 import { formatDuration } from "../lib/formatDuration.js";
@@ -44,15 +44,18 @@ function Bar({ percent, color }) {
   );
 }
 
-function drawHistory(svg, d3, samples, now, colors) {
-  const x = d3.scaleLinear().domain([now - WINDOW_S, now]).range([0, PANEL_CONTENT_W]);
-  const y = d3.scaleLinear().domain([0, 100]).range([CHART_H - 1, 1]);
-  const line = (field) => d3.line().x((d) => x(d.t)).y((d) => y(d[field])).curve(d3.curveMonotoneX);
-  svg.append("path").datum(samples)
-    .attr("fill", colors["ansi-cyan"]).attr("fill-opacity", 0.18)
-    .attr("d", d3.area().x((d) => x(d.t)).y0(CHART_H).y1((d) => y(d.cpu)).curve(d3.curveMonotoneX));
-  svg.append("path").datum(samples).attr("fill", "none").attr("stroke", colors["ansi-cyan"]).attr("stroke-width", 1.5).attr("d", line("cpu"));
-  svg.append("path").datum(samples).attr("fill", "none").attr("stroke", colors["ansi-magenta"]).attr("stroke-width", 1.2).attr("stroke-opacity", 0.8).attr("d", line("mem"));
+// CPU (filled) and memory over the sample window, edge to edge, no axes. Plot keys the figure by
+// what it draws, so it redraws exactly when a sample or the theme's colours change.
+function History({ samples, now, colors }) {
+  return (
+    <Plot width={PANEL_CONTENT_W} height={CHART_H} margin={{ top: 1, right: 0, bottom: 1, left: 0 }} data={samples} x="t">
+      <Scale channel="x" domain={[now - WINDOW_S, now]} />
+      <Scale channel="y" domain={[0, 100]} />
+      <Area y="cpu" curve="monotone" fill={colors["ansi-cyan"]} fillOpacity={0.18} />
+      <Line y="cpu" curve="monotone" stroke={colors["ansi-cyan"]} strokeWidth={1.5} />
+      <Line y="mem" curve="monotone" stroke={colors["ansi-magenta"]} strokeWidth={1.2} opacity={0.8} />
+    </Plot>
+  );
 }
 
 function SystemChart() {
@@ -67,8 +70,7 @@ function SystemChart() {
         <span class="text-[10px]"><span style={{ color: muted() }}>mem </span><span style={{ color: colors["ansi-magenta"] }}>{latest ? Math.round(latest.mem) : "–"}%</span></span>
       </div>
       {latest
-        ? <D3Figure key={`system/${latest.t}/${colors.background}`} width={PANEL_CONTENT_W} height={CHART_H}
-                    draw={(svg, d3) => drawHistory(svg, d3, samples, latest.t, colors)} />
+        ? <History samples={samples} now={latest.t} colors={colors} />
         : <div style={{ height: CHART_H }} />}
     </div>
   );
