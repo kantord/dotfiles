@@ -13,11 +13,13 @@ A sidebar next to an i3 workspace.
 
 - **sidebar** (left) — i3 workspaces on top with a strip about the focused one, one status panel below
   (status panel: CPU/memory, Claude usage, volume, time and weather)
+- **i3-mode** (floating, bottom centre) — i3's binding mode, shown only outside the default mode
 */
 import Wallpapers from "./components/Wallpapers.jsx";
 import Sidebar from "./components/Sidebar.jsx";
 import WorkspaceFrame from "./components/WorkspaceFrame.jsx";
 import ThemeUnits from "./components/ThemeUnits.jsx";
+import ModeIndicator from "./components/ModeIndicator.jsx";
 import { SIDEBAR_W, TAULER_I3 } from "./lib/layout.js";
 
 export default function render() {
@@ -33,6 +35,7 @@ export default function render() {
           {(Contents) => <WorkspaceFrame Contents={Contents} />}
         </Workspaces>
       </I3Layout>
+      <ModeIndicator />
       <ThemeUnits />
     </root>
   );

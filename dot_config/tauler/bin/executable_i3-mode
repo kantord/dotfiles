@@ -1,0 +1,12 @@
+#!/usr/bin/bash
+# Prints i3's binding mode as one JSON line, {"mode": "default"}: once at start, then on every
+# mode change (i3's "mode" event). Ignores whatever tauler writes to stdin.
+# tauler never restarts a stream whose process exits, so an i3 restart (which ends the
+# subscription) loops back to resubscribe instead of exiting.
+set -uo pipefail
+
+while :; do
+  i3-msg -t get_binding_state | jq -c '{mode: .name}'
+  i3-msg -t subscribe -m '["mode"]' | jq --unbuffered -c '{mode: .change}'
+  sleep 1
+done
