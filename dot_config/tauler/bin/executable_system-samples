@@ -1,9 +1,16 @@
 #!/usr/bin/bash
-# Prints one JSON line per interval: {"t": epoch seconds, "cpu": %, "mem": %}.
+# Prints one JSON line per interval:
+#   {"t": epoch seconds, "cpu": %, "mem": %, "gpu": %, "vram": %}
+# gpu/vram are null when there is no NVIDIA GPU (nvidia-smi missing or failing).
 # Usage: system-samples <interval-seconds>
 # A comma-decimal locale would make awk's printf emit `3,5`, which is not JSON.
 export LC_ALL=C
 interval=${1:?interval in seconds}
+
+gpu_usage() {
+  nvidia-smi --query-gpu=utilization.gpu,memory.used,memory.total --format=csv,noheader,nounits 2>/dev/null |
+    awk -F', *' 'NR==1 && $3>0 {printf "%.1f %.1f", $1, 100*$2/$3; ok=1} END{if(!ok) print "null null"}'
+}
 
 cpu_counters() { awk '/^cpu /{print $2+$3+$4+$5+$6+$7+$8, $5+$6}' /proc/stat; }
 
@@ -13,6 +20,7 @@ while :; do
   cur=$(cpu_counters)
   cpu=$(echo "$prev $cur" | awk '{total=$3-$1; idle=$4-$2; printf "%.1f", (total>0 ? 100*(total-idle)/total : 0)}')
   mem=$(awk '/MemTotal/{t=$2} /MemAvailable/{a=$2} END{printf "%.1f", 100*(t-a)/t}' /proc/meminfo)
-  printf '{"t":%s,"cpu":%s,"mem":%s}\n' "$(date +%s)" "$cpu" "$mem"
+  read -r gpu vram <<<"$(gpu_usage)"
+  printf '{"t":%s,"cpu":%s,"mem":%s,"gpu":%s,"vram":%s}\n' "$(date +%s)" "$cpu" "$mem" "$gpu" "$vram"
   prev=$cur
 done

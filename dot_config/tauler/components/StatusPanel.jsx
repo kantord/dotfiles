@@ -1,6 +1,6 @@
 // Everything below the workspace list, in one "meters" layout: no card, no dividers.
 // Spacing and a shared rhythm do the grouping: every meter is a label on the left, its value
-// on the right and a 3px bar underneath. The CPU/memory chart sits bare above them, the time
+// on the right and a 3px bar underneath. The CPU/memory and GPU/VRAM charts sit bare above them, the time
 // anchors the bottom. Every part has a fixed height so PANEL_H is exact and the list above can
 // size itself without measuring.
 import { Weather, Clock, ClaudeUsage, OutputVolume, AudioChannels, Plot, Area, Line, Scale } from "@gh/kantord/dotfiles-tauler";
@@ -44,34 +44,48 @@ function Bar({ percent, color }) {
   );
 }
 
-// CPU (filled) and memory over the sample window, edge to edge, no axes. Plot keys the figure by
-// what it draws, so it redraws exactly when a sample or the theme's colours change.
-function History({ samples, now, colors }) {
+const CHART_GAP = 12;        // between the CPU and GPU charts
+
+// A load (filled) and a memory line over the sample window, edge to edge, no axes. Plot keys the
+// figure by what it draws, so it redraws exactly when a sample or the theme's colours change.
+function History({ samples, now, load, memory, colors }) {
   return (
     <Plot width={PANEL_CONTENT_W} height={CHART_H} margin={{ top: 1, right: 0, bottom: 1, left: 0 }} data={samples} x="t">
       <Scale channel="x" domain={[now - WINDOW_S, now]} />
       <Scale channel="y" domain={[0, 100]} />
-      <Area y="cpu" curve="monotone" fill={colors["ansi-cyan"]} fillOpacity={0.18} />
-      <Line y="cpu" curve="monotone" stroke={colors["ansi-cyan"]} strokeWidth={1.5} />
-      <Line y="mem" curve="monotone" stroke={colors["ansi-magenta"]} strokeWidth={1.2} opacity={0.8} />
+      <Area y={load} curve="monotone" fill={colors["ansi-cyan"]} fillOpacity={0.18} />
+      <Line y={load} curve="monotone" stroke={colors["ansi-cyan"]} strokeWidth={1.5} />
+      <Line y={memory} curve="monotone" stroke={colors["ansi-magenta"]} strokeWidth={1.2} opacity={0.8} />
     </Plot>
   );
 }
 
-function SystemChart() {
-  const samples = useJSONStream("/usr/bin/bash",
-    `"${SAMPLER}" ${SAMPLE_INTERVAL_S} | ${TAULER_ACCUMULATE} -n ${SAMPLE_COUNT}`) ?? [];
+const percentText = (value) => (value == null ? "–" : Math.round(value));
+
+// One header line ("cpu 12%   mem 30%") over its chart; `load`/`memory` are sample keys.
+function Chart({ samples, load, memory, loadLabel, memoryLabel }) {
   const latest = samples.at(-1);
   const colors = ctx.theme.colors;
   return (
     <div class="flex flex-col w-full gap-[6px] flex-shrink-0">
       <div class="flex flex-row justify-between items-baseline w-full" style={{ height: LINE_H }}>
-        <span class="text-[10px]"><span style={{ color: muted() }}>cpu </span><span style={{ color: colors["ansi-cyan"] }}>{latest ? Math.round(latest.cpu) : "–"}%</span></span>
-        <span class="text-[10px]"><span style={{ color: muted() }}>mem </span><span style={{ color: colors["ansi-magenta"] }}>{latest ? Math.round(latest.mem) : "–"}%</span></span>
+        <span class="text-[10px]"><span style={{ color: muted() }}>{loadLabel} </span><span style={{ color: colors["ansi-cyan"] }}>{percentText(latest?.[load])}%</span></span>
+        <span class="text-[10px]"><span style={{ color: muted() }}>{memoryLabel} </span><span style={{ color: colors["ansi-magenta"] }}>{percentText(latest?.[memory])}%</span></span>
       </div>
       {latest
-        ? <History samples={samples} now={latest.t} colors={colors} />
+        ? <History samples={samples} now={latest.t} load={load} memory={memory} colors={colors} />
         : <div style={{ height: CHART_H }} />}
+    </div>
+  );
+}
+
+function SystemCharts() {
+  const samples = useJSONStream("/usr/bin/bash",
+    `"${SAMPLER}" ${SAMPLE_INTERVAL_S} | ${TAULER_ACCUMULATE} -n ${SAMPLE_COUNT}`) ?? [];
+  return (
+    <div class="flex flex-col w-full flex-shrink-0" style={{ gap: CHART_GAP }}>
+      <Chart samples={samples} load="cpu" memory="mem" loadLabel="cpu" memoryLabel="mem" />
+      <Chart samples={samples} load="gpu" memory="vram" loadLabel="gpu" memoryLabel="vram" />
     </div>
   );
 }
@@ -149,7 +163,7 @@ export default function StatusPanel() {
   return (
     <div class="flex flex-col justify-end w-full flex-shrink-0 overflow-hidden"
          style={{ height: PANEL_H, paddingLeft: PANEL_PAD_X, paddingRight: PANEL_PAD_X }}>
-      <SystemChart />
+      <SystemCharts />
       <div class="flex flex-col w-full flex-shrink-0" style={{ marginTop: 18, gap: METER_GAP }}>
         <UsageMeters />
         <VolumeMeter />

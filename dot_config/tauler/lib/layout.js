@@ -8,7 +8,7 @@ export const SIDEBAR_CONTENT_W = SIDEBAR_W - SIDEBAR_PAD.left - SIDEBAR_PAD.righ
 
 // Everything below the list has a fixed height, so the list's height is arithmetic, not a guess.
 export const DETAIL_H = 88;   // focused-workspace strip (FocusDetail.jsx)
-export const PANEL_H = 236;   // status panel (StatusPanel.jsx)
+export const PANEL_H = 312;   // status panel (StatusPanel.jsx)
 export const listViewportHeight = (screenHeight) => screenHeight - 2 * SIDEBAR_PAD.y - DETAIL_H - PANEL_H;
 
 // Status panel: no card, just the row inset the list uses.
