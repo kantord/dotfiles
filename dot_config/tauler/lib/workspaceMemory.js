@@ -1,5 +1,5 @@
 // What the workspace list remembers between ticks. Every function takes the memory object
-// (tauler keeps it in `globals`), so none of this touches tauler's runtime.
+// (tauler keeps it in a Store), so none of this touches tauler's runtime.
 import { defaultPolicies } from "./workspaceTree.js";
 
 export const LINGER_MS = 4000;

@@ -1,3 +1,4 @@
+import { store } from "tauler";
 import { EnwiroEnvs, ClaudeRecaps } from "@gh/kantord/dotfiles-tauler";
 import WorkspaceTree from "./WorkspaceTree.jsx";
 import FocusDetail from "./FocusDetail.jsx";
@@ -15,7 +16,7 @@ const usableDescription = (d) => (d && !PLACEHOLDER_DESC.test(d) ? d : null);
 
 const envNameOf = (ws) => defaultPolicies.parseName(ws.name).env;
 
-const memory = () => (globals.workspaceTree ??= newMemory());
+const memory = store(newMemory());
 
 export default function WorkspaceList({ workspaces, events }) {
   // Its only job is to re-render once a second so a lingering branch collapses on time.
@@ -37,7 +38,7 @@ export default function WorkspaceList({ workspaces, events }) {
 }
 
 function Tree({ workspaces, envs, recaps, notifications, events }) {
-  const mem = memory();
+  const mem = memory;
   const focusedWs = workspaces.find((w) => w.focused);
   trackAgents(mem, workspaces);
   clearFocused(mem, focusedWs, notifications);
