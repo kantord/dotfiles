@@ -1,0 +1,49 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+OUTPUT_DIR="$HOME/Videos"
+# Per-user runtime dir (mode 0700), not world-writable /tmp: stop.sh kills the PID stored here.
+RUNTIME_DIR="${XDG_RUNTIME_DIR:?XDG_RUNTIME_DIR is not set}"
+PIDFILE="$RUNTIME_DIR/ffmpeg-recording.pid"
+LOGFILE="$RUNTIME_DIR/ffmpeg-recording.log"
+
+# If already recording, don't start a new one
+if [[ -f "$PIDFILE" ]] && kill -0 "$(cat "$PIDFILE")" 2>/dev/null; then
+  notify-send "🎥 Already recording" "Use recording mode exit to stop."
+  exit 0
+fi
+
+mkdir -p "$OUTPUT_DIR"
+
+# Region selection (single interaction). If canceled, bail out.
+if ! region="$(slop -f '%x,%y %wx%h')"; then
+  notify-send "🎥 Recording canceled" "No region selected."
+  exit 0
+fi
+
+timestamp="$(date +'%Y-%m-%d_%H-%M-%S')"
+outfile="$OUTPUT_DIR/recording-${timestamp}.mp4"
+
+# Parse region: "X,Y WxH" -> extract W and H, ensure even dimensions for H.264
+size="${region#* }"  # "WxH"
+width="${size%x*}"
+height="${size#*x}"
+
+# Round down to even numbers (H.264 requires dimensions divisible by 2)
+width=$(( width & ~1 ))
+height=$(( height & ~1 ))
+
+# Start ffmpeg (no audio), backgrounded; store PID
+# -INT (stop) will finalize the file cleanly
+# Using H.264 NVENC hardware encoding with high quality settings for compatibility
+ffmpeg -y \
+  -f x11grab -framerate 60 -video_size "${width}x${height}" -i "${DISPLAY:-:0}.0+${region%% *}" \
+  -c:v h264_nvenc -preset p7 -tune hq -rc vbr -cq 19 -b:v 0 -pix_fmt yuv420p \
+  -profile:v high -multipass fullres -spatial-aq 1 -temporal-aq 1 -rc-lookahead 32 \
+  "$outfile" >"$LOGFILE" 2>&1 &
+
+echo $! > "$PIDFILE"
+
+notify-send "🎥 Recording started" "Saving to: $(basename "$outfile")"
+# Enter i3 recording mode only if ffmpeg started
+i3-msg 'mode "recording"'
