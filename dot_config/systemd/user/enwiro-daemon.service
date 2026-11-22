@@ -3,10 +3,9 @@ Description=Enwiro workspace environment daemon
 After=default.target
 
 [Service]
+# No GH_TOKEN: the gh processes the daemon spawns read the keyring themselves.
 ExecStart=%h/.cargo/bin/enwiro-daemon
 Environment=PATH=%h/.local/bin:/usr/local/bin:/usr/bin:/var/lib/snapd/snap/bin
-# Optional (the `-`): credentials such as GH_TOKEN, supplied per machine.
-EnvironmentFile=-%h/.config/enwiro/env
 Restart=always
 RestartSec=5
 
