@@ -1,16 +1,11 @@
 import { I3Config, Bindcode, Bindsym, Blank, Comment, Exec, FloatingModifier, Font, ForWindow, Include, Mode, Set, SmartBorders, TitleAlign, WorkspaceOutput } from "@gh/kantord/dotfiles-tauler";
 
-// The i3 config, ported from the hand-written one. Written to `config.tauler` beside the live
-// `~/.config/i3/config` so the two can be diffed before this takes over the real path; it
-// never touches the live config and never reloads i3.
+// The i3 config. `~/.config/i3/config` itself is a short chezmoi-managed stub that starts
+// tauler and includes the file written here, so i3 has a config (and tauler gets started)
+// before tauler has ever run. i3 reloads after every write.
 export default function I3ConfigUnit() {
   return (
-    <I3Config path="~/.config/i3/config.tauler">
-      <Comment text={"i3 config — managed by chezmoi (dot_config/i3/config in the dotfiles source). Edit the"} />
-      <Comment text={"source and run `chezmoi apply` (which restarts i3); do not edit ~/.config/i3/config."} />
-      <Blank />
-      <Comment text={"i3 config file (v4)"} />
-      <Comment text={""} />
+    <I3Config path="~/.config/i3/tauler-config.conf" apply={() => sh`i3-msg reload`}>
       <Comment text={"Please see https://i3wm.org/docs/userguide.html for a complete reference!"} />
       <Blank />
       <Set name={"$mod"} value={"Mod4"} />
@@ -26,7 +21,6 @@ export default function I3ConfigUnit() {
       <Comment text={"and nm-applet is a desktop environment-independent system tray GUI for it."} />
       <Exec command={"nm-applet"} noStartupId />
       <Exec command={"/usr/lib/mate-polkit/polkit-mate-authentication-agent-1"} noStartupId />
-      <Exec command={"~/.cargo/bin/tauler"} noStartupId />
       <Comment text={"Dictation daemon. Started via the script so the capture-device pin lives in one place."} />
       <Exec command={"bash $HOME/.config/i3/voxtype_daemon.sh start"} noStartupId />
       <Blank />
